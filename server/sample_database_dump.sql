@@ -27,7 +27,7 @@ CREATE TABLE `code_snippet` (
   `language` varchar(20) NOT NULL,
   `code` varchar(2000) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +36,7 @@ CREATE TABLE `code_snippet` (
 
 LOCK TABLES `code_snippet` WRITE;
 /*!40000 ALTER TABLE `code_snippet` DISABLE KEYS */;
-INSERT INTO `code_snippet` VALUES (1,'C++','for (int i = 0; i < 10; ++i)\nu00a0u00a0u00a0u00a0cout << i << endl;\n}');
+INSERT INTO `code_snippet` VALUES (1,'C++','for (int i = 0; i < 10; ++i)\nu00a0u00a0u00a0u00a0cout << i << endl;\n}'),(2,'Python','for i in range(10):\nu00a0u00a0u00a0u00a0print(\"number\", i)\nu00a0u00a0u00a0u00a0print(\"number squared\": i ** 2)');
 /*!40000 ALTER TABLE `code_snippet` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-19  1:52:43
+-- Dump completed on 2021-05-19 21:58:47

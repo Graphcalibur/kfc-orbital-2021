@@ -1,22 +1,24 @@
-var mysql = require('mysql2');
-
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "[PLACEHOLDER]",
-    password: "[PLACEHOLDER]",
-    database: "[PLACEHOLDER]"
-});
+const database = require('../utils/database');
+const random = require('../utils/random');
 
 exports.code_snippet = function (req, res) {
-    process_sql_result = function(err, result) {
+    const con = database.get_connection();
+
+    con.query("SELECT COUNT(*) FROM code_snippet;", process_count_query);
+    
+    function process_count_query(err, result) {
         if (err) throw err;
-        res.send(result);
+        const code_snippet_count = result[0]["COUNT(*)"];
+        const id_to_retrieve = random.randint(0, code_snippet_count - 1);
+        con.query("SELECT * FROM code_snippet LIMIT ?, 1", [id_to_retrieve], 
+            process_query_result);
     };
 
-    con.connect(function(err) {
+
+    function process_query_result(err, result) {
         if (err) throw err;
-        con.query("SELECT * FROM code_snippet;", process_sql_result);
-    });
+        res.json(result);
+    };
 };
 
 
