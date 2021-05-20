@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
+import Code from "./SoloTyping/Code";
+import Timer from "./SoloTyping/Timer";
+import TypingStats from "./SoloTyping/TypingStats";
 
 class App extends Component {
   state = {
@@ -8,33 +11,34 @@ class App extends Component {
       "\u00a0\u00a0\u00a0\u00a0cout << i << endl;",
       "}",
     ],
+
     curr_line_num: 0,
     curr_input: "",
+
     first_wrong: 0,
+    typed_wrong: 0,
+
     typing: false,
     started: false,
-    startTime: 0,
-    currTime: 0,
+
+    start_time: 0,
+    elapsed_time: 0,
     timer: null,
   };
 
   startTyping = () => {
     const timer = setInterval(() => {
-      this.setState({ currTime: Date.now() - this.state.startTime });
+      this.setState({ elapsed_time: Date.now() - this.state.start_time });
     }, 200);
 
     this.setState({
       typing: true,
       started: true,
-      startTime: Date.now(),
+      start_time: Date.now(),
       timer: timer,
     });
 
     this.text_input.focus();
-  };
-
-  stopTyping = () => {
-    clearInterval(this.state.timer);
   };
 
   reset = () => {
@@ -44,12 +48,17 @@ class App extends Component {
       curr_line_num: 0,
       curr_input: "",
       first_wrong: 0,
+      typed_wrong: 0,
       typing: false,
       started: false,
-      startTime: 0,
-      currTime: 0,
+      start_time: 0,
+      elapsed_time: 0,
       timer: null,
     });
+  };
+
+  stopTyping = () => {
+    clearInterval(this.state.timer);
   };
 
   /* When pressing enter, check if the text in the input
@@ -76,36 +85,6 @@ class App extends Component {
     }
   };
 
-  /* Adds underline to the line if it's the current line */
-  formatLine = (line, i) => {
-    return i === this.state.curr_line_num ? this.colorLine(line) : line;
-  };
-
-  /* Color letters in the current line based on whether they
-    were typed correctly or wrongly */
-  colorLine = (line) => {
-    // Start at first non-whitespace character
-    const non_whitespace = line.length - line.trim().length;
-
-    const first_wrong = non_whitespace + this.state.first_wrong;
-    const end_wrong = non_whitespace + this.state.curr_input.length;
-
-    return (
-      <span>
-        {line.substring(0, non_whitespace)}
-        <u>
-          <span style={{ color: "#009933" }}>
-            {line.substring(non_whitespace, first_wrong)}
-          </span>
-          <span style={{ color: "#ff0000" }}>
-            {line.substring(first_wrong, end_wrong)}
-          </span>
-          {line.substring(end_wrong)}
-        </u>
-      </span>
-    );
-  };
-
   /* Get first wrong character in input */
   getFirstWrong = (line, curr_input) => {
     const trimmed_line = line.trim();
@@ -122,15 +101,24 @@ class App extends Component {
 
   /* Check for wrong inputs whenever the input changes */
   handleInputChange = (event) => {
-    const { code, curr_line_num } = this.state;
-    const first_wrong = this.getFirstWrong(
-      code[curr_line_num],
-      event.target.value
-    );
+    const { code, curr_line_num, curr_input } = this.state;
+
+    const new_input = event.target.value;
+    const new_first_wrong = this.getFirstWrong(code[curr_line_num], new_input);
+    let new_typed_wrong = this.state.typed_wrong;
+
+    /* Only count wrong characters if user added characters to the input */
+    if (
+      curr_input.length < new_input.length &&
+      new_first_wrong < new_input.length
+    ) {
+      new_typed_wrong++;
+    }
 
     this.setState({
-      first_wrong: first_wrong,
-      curr_input: event.target.value,
+      typed_wrong: new_typed_wrong,
+      first_wrong: new_first_wrong,
+      curr_input: new_input,
     });
   };
 
@@ -141,28 +129,15 @@ class App extends Component {
       : {};
   };
 
-  padZeroes = (num) => {
-    return num < 10 ? "0" + num.toString() : num;
-  };
-
-  getMinutes = () => {
-    return this.padZeroes(Math.floor(this.state.currTime / 60000));
-  };
-
-  getSeconds = () => {
-    return this.padZeroes(Math.floor(this.state.currTime / 1000) % 60);
-  };
-
   render() {
     return (
       <div className="container-xl gap-3">
-        <div>
-          {this.state.code.map((line, i) => (
-            <label htmlFor="textInput" className="form-label code" key={line}>
-              {this.formatLine(line, i)}
-            </label>
-          ))}
-        </div>
+        <Code
+          code={this.state.code}
+          curr_line_num={this.state.curr_line_num}
+          first_wrong={this.state.first_wrong}
+          curr_input_len={this.state.curr_input.length}
+        />
 
         <input
           type="text"
@@ -196,9 +171,14 @@ class App extends Component {
           Reset
         </button>
 
-        <b>
-          Time Taken: {this.getMinutes()}:{this.getSeconds()}
-        </b>
+        <Timer elapsed_time={this.state.elapsed_time} />
+
+        <TypingStats
+          ended={this.state.started && !this.state.typing}
+          code={this.state.code}
+          typed_wrong={this.state.typed_wrong}
+          elapsed_time={this.state.elapsed_time}
+        />
       </div>
     );
   }
