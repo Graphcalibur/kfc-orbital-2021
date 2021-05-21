@@ -36,7 +36,7 @@ CREATE TABLE `code_snippet` (
 
 LOCK TABLES `code_snippet` WRITE;
 /*!40000 ALTER TABLE `code_snippet` DISABLE KEYS */;
-INSERT INTO `code_snippet` VALUES (1,'C++','for (int i = 0; i < 10; ++i)\nu00a0u00a0u00a0u00a0cout << i << endl;\n}'),(2,'Python','for i in range(10):\nu00a0u00a0u00a0u00a0print(\"number\", i)\nu00a0u00a0u00a0u00a0print(\"number squared\": i ** 2)');
+INSERT INTO `code_snippet` VALUES (1,'C++','for (int i = 0; i < 10; ++i)\n    cout << i << endl;\n}'),(2,'Python','for i in range(10):\n    print(\"number\", i)\n    print(\"number squared\": i ** 2)');
 /*!40000 ALTER TABLE `code_snippet` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
