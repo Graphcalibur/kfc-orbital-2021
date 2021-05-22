@@ -6,11 +6,7 @@ import TypingStats from "./SoloTyping/TypingStats";
 
 class App extends Component {
   state = {
-    code: [
-      "for (int i = 0; i < 10; i++) {",
-      "\u00a0\u00a0\u00a0\u00a0cout << i << endl;",
-      "}",
-    ],
+    code: [""],
 
     curr_line_num: 0,
     curr_input: "",
@@ -24,6 +20,20 @@ class App extends Component {
     start_time: 0,
     elapsed_time: 0,
     timer: null,
+  };
+
+  componentDidMount() {
+    this.getCode();
+  }
+
+  getCode = () => {
+    fetch("http://localhost:9000/api/code")
+      .then((res) => res.json())
+      .then((res) => res[0]["code"].split("\n"))
+      .then((code) => {
+        console.log(code);
+        this.setState({ code: code });
+      });
   };
 
   startTyping = () => {
