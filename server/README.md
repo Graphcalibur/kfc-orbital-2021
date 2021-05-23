@@ -21,3 +21,5 @@ This returns an array with a single element. This is an object containing:
     - `language`: a string, the language the code is written in
     - `code`: the code itself.
 
+Supports the optional parameter `?lang=` to indicate a language for the snippet to fetch.
+
