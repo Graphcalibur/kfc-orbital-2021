@@ -37,6 +37,10 @@
   }
 }
 
+.text {
+  color: white;
+}
+
 .code {
   display: block;
   font-family: monospace;

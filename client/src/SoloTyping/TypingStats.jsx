@@ -16,7 +16,7 @@ const TypingStats = (props) => {
     const wpm = Math.round(code_length / 5 / (props.elapsed_time / 60000));
 
     return (
-      <p>
+      <p className="text mt-3">
         Accuracy: {accuracy}% <br />
         Speed: {wpm} WPM
       </p>

@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import "./App.css";
 import Code from "./SoloTyping/Code";
+import Header from "./SoloTyping/Header";
 import Timer from "./SoloTyping/Timer";
 import TypingStats from "./SoloTyping/TypingStats";
 
 class App extends Component {
   state = {
     code: [""],
+    language: "",
 
     curr_line_num: 0,
     curr_input: "",
@@ -29,10 +31,13 @@ class App extends Component {
   getCode = () => {
     fetch("http://localhost:9000/api/code")
       .then((res) => res.json())
-      .then((res) => res[0]["code"].split("\n"))
-      .then((code) => {
-        console.log(code);
-        this.setState({ code: code });
+      .then((res) => res[0])
+      .then((data) => {
+        console.log(data);
+        this.setState({
+          code: data["code"].split("\n"),
+          language: data["language"],
+        });
       });
   };
 
@@ -135,13 +140,18 @@ class App extends Component {
   /* Change bg color of the input to red when there is a wrong input */
   getInputStyle = () => {
     return this.state.first_wrong < this.state.curr_input.length
-      ? { backgroundColor: "#ff6666" }
-      : {};
+      ? { backgroundColor: "#800000", color: "white" }
+      : { backgroundColor: "#233243", color: "white" };
   };
 
   render() {
     return (
-      <div className="container-xl gap-3">
+      <div
+        className="shadow p-3 container-xl gap-3 mt-3"
+        style={{ backgroundColor: "#0d141b" }}
+      >
+        <Header language={this.state.language} />
+
         <Code
           code={this.state.code}
           curr_line_num={this.state.curr_line_num}
