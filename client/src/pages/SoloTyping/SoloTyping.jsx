@@ -142,13 +142,16 @@ class SoloTyping extends Component {
     /* Change bg color of the input to red when there is a wrong input */
     getInputStyle = () => {
       return this.state.first_wrong < this.state.curr_input.length
-        ? { backgroundColor: "#ff6666" }
-        : {};
+        ? { backgroundColor: "#800000", color: "white" }
+        : { backgroundColor: "#233243", color: "white" };
     };
   
     render() {
       return (
-        <div className="container-xl gap-3">
+        <div
+          className="shadow p-3 container-xl gap-3 mt-3"
+          style={{ backgroundColor: "#0d141b" }}
+        >
           <Code
             code={this.state.code}
             curr_line_num={this.state.curr_line_num}
