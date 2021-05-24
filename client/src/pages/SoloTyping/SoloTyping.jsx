@@ -87,7 +87,7 @@ class SoloTyping extends Component {
       matches the current line being typed. If it does, clear
       the input and move on to the next line */
     handleSubmit = (event) => {
-      if (event.key === "Enter") {
+      if (event.key === "Enter" && this.state.typing) {
         const { curr_input, code, curr_line_num } = this.state;
   
         if (curr_input === code[curr_line_num].trim()) {
