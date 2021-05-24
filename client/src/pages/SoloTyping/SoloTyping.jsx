@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import "./SoloTyping.css";
 import Code from "./components/Code";
+import Header from "./components/Header";
 import Timer from "./components/Timer";
 import TypingStats from "./components/TypingStats";
 
 class SoloTyping extends Component {
     state = {
       code: [""],
+      languagae: "",
   
       curr_line_num: 0,
       curr_input: "",
@@ -27,19 +29,22 @@ class SoloTyping extends Component {
       this.getCode();
     }
   
+    /* Fetches code from backend */
     getCode = () => {
       const { lang } = this.props.match.params;
       let url = "http://localhost:9000/api/code"
 
       console.log(lang);
-      if (lang !== undefined) url += "?lang=" + lang;
+      if (lang !== undefined) {
+        url += "?lang=" + lang;
+      }
 
       fetch(url)
         .then((res) => res.json())
-        .then((res) => res[0]["code"].split("\n"))
-        .then((code) => {
-          console.log(code);
-          this.setState({ code: code });
+        .then((res) => res[0])
+        .then((data) => {
+          this.setState({ code: data["code"].split("\n"),
+                          language: data["language"] });
         });
     };
   
@@ -152,6 +157,8 @@ class SoloTyping extends Component {
           className="shadow p-3 container-xl gap-3 mt-3"
           style={{ backgroundColor: "#0d141b" }}
         >
+          <Header language={this.state.language} />
+
           <Code
             code={this.state.code}
             curr_line_num={this.state.curr_line_num}
