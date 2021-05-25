@@ -7,7 +7,7 @@ const Timer = (props) => {
     const mins = padZeroes(Math.floor(elapsed_time / 60000));
     const secs = padZeroes(Math.floor(elapsed_time / 1000) % 60);
 
-    return <b>
+    return <b className="text">
         Time Taken: {mins}:{secs}
     </b>
 }

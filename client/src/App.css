@@ -37,7 +37,6 @@
   }
 }
 
-.code {
-  display: block;
-  font-family: monospace;
+.text {
+  color: white;
 }
