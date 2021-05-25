@@ -154,8 +154,7 @@ class SoloTyping extends Component {
     render() {
       return (
         <div
-          className="shadow p-3 container-xl gap-3 mt-3"
-          style={{ backgroundColor: "#0d141b" }}
+          className="shadow p-3 container-xl gap-3 mt-3 box"
         >
           <Header language={this.state.language} />
 
