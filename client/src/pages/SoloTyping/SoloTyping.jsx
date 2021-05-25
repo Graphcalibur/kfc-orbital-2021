@@ -26,6 +26,7 @@ class SoloTyping extends Component {
   
     componentDidMount() {
       this.getCode();
+      this.text_input.focus();
     }
   
     /* Fetches code from backend */
@@ -58,14 +59,9 @@ class SoloTyping extends Component {
         start_time: Date.now(),
         timer: timer,
       });
-  
-      this.text_input.focus();
     };
   
     reset = () => {
-      console.log("rofl");
-      this.stopTyping();
-  
       this.setState({
         curr_line_num: 0,
         curr_input: "",
@@ -77,6 +73,8 @@ class SoloTyping extends Component {
         elapsed_time: 0,
         timer: null,
       });
+
+      this.text_input.focus();
     };
   
     stopTyping = () => {
