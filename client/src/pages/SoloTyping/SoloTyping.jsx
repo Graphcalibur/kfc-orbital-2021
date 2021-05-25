@@ -156,51 +156,53 @@ class SoloTyping extends Component {
       const ended = this.state.started && !this.state.typing;
 
       return (
-        <div
-          className="shadow p-3 container-sm gap-3 mt-3 box"
-        >
-          <Header
-            language={this.state.language}
-            elapsed_time={this.state.elapsed_time}
-            typing={this.state.typing}
-          />
+        <div>
+          <div
+            className="shadow p-3 container-sm gap-3 mt-3 box"
+          >
+            <Header
+              language={this.state.language}
+              elapsed_time={this.state.elapsed_time}
+              typing={this.state.typing}
+            />
 
-          <Code
-            code={this.state.code}
-            curr_line_num={this.state.curr_line_num}
-            first_wrong={this.state.first_wrong}
-            curr_input_len={this.state.curr_input.length}
-          />
-  
-          <input
-            type="text"
-            className="form-control code mb-4"
-            autoComplete="off"
-            placeholder="Start typing here..."
-            style={this.getInputStyle()}
-            value={this.state.curr_input}
-            readOnly={ended}
-            onKeyPress={this.handleSubmit}
-            ref={(input) =>
-              (this.text_input = input)
-            } /* for autofocusing after clicking start */
-            onChange={(event) => this.handleInputChange(event)}
-          />
-          
-          <Link to={`/lang`}>
-            <button className="btn me-2 btn-primary">
-              Back to Language Selection
-            </button>
-          </Link>
-  
+            <Code
+              code={this.state.code}
+              curr_line_num={this.state.curr_line_num}
+              first_wrong={this.state.first_wrong}
+              curr_input_len={this.state.curr_input.length}
+            />
+    
+            <input
+              type="text"
+              className="form-control code mb-4"
+              autoComplete="off"
+              placeholder="Start typing here..."
+              style={this.getInputStyle()}
+              value={this.state.curr_input}
+              readOnly={ended}
+              onKeyPress={this.handleSubmit}
+              ref={(input) =>
+                (this.text_input = input)
+              } /* for autofocusing after clicking start */
+              onChange={(event) => this.handleInputChange(event)}
+            />
+            
+            <Link to={`/lang`}>
+              <button className="btn me-2 btn-primary">
+                Back to Language Selection
+              </button>
+            </Link>
+          </div>
+
           <TypingStats
-            ended={ended}
-            code={this.state.code}
-            typed_wrong={this.state.typed_wrong}
-            elapsed_time={this.state.elapsed_time}
-            reset={this.reset}
-            getCode={this.getCode}
-          />
+              ended={ended}
+              code={this.state.code}
+              typed_wrong={this.state.typed_wrong}
+              elapsed_time={this.state.elapsed_time}
+              reset={this.reset}
+              getCode={this.getCode}
+            />
         </div>
       );
     }

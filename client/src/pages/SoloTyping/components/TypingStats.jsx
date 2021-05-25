@@ -16,8 +16,7 @@ const TypingStats = (props) => {
     const wpm = Math.round(code_length / 5 / (props.elapsed_time / 60000));
 
     return (
-      <div className="mt-3">
-        <hr className="text"/>
+      <div className="shadow p-3 container-sm gap-3 mt-3 box">
         <h3 className="text">Your Typing Stats:</h3>
 
         <p className="text">
