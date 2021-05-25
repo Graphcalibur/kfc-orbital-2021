@@ -5,7 +5,7 @@ const CodeLinkBtn = (props) => {
     const history = useHistory();
     const lang = props.language;
 
-    return <button className="btn me-2 btn-primary" onClick={() => history.push(`/code/${lang}`)}>
+    return <button className="btn me-2 btn-primary" onClick={() => history.push(`/solotyping/${lang}`)}>
         {lang}
     </button>
 }
