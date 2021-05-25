@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import "./SoloTyping.css";
 import Code from "./components/Code";
 import Header from "./components/Header";
-import Timer from "./components/Timer";
 import TypingStats from "./components/TypingStats";
 
 class SoloTyping extends Component {
@@ -64,6 +63,7 @@ class SoloTyping extends Component {
     };
   
     reset = () => {
+      console.log("rofl");
       this.stopTyping();
   
       this.setState({
@@ -123,6 +123,9 @@ class SoloTyping extends Component {
   
     /* Check for wrong inputs whenever the input changes */
     handleInputChange = (event) => {
+      if (!this.state.started) {
+        this.startTyping();
+      }
       const { code, curr_line_num, curr_input } = this.state;
   
       const new_input = event.target.value;
@@ -152,11 +155,17 @@ class SoloTyping extends Component {
     };
   
     render() {
+      const ended = this.state.started && !this.state.typing;
+
       return (
         <div
           className="shadow p-3 container-xl gap-3 mt-3 box"
         >
-          <Header language={this.state.language} />
+          <Header
+            language={this.state.language}
+            elapsed_time={this.state.elapsed_time}
+            typing={this.state.typing}
+          />
 
           <Code
             code={this.state.code}
@@ -172,38 +181,27 @@ class SoloTyping extends Component {
             placeholder="Start typing here..."
             style={this.getInputStyle()}
             value={this.state.curr_input}
-            readOnly={!this.state.typing}
+            readOnly={ended}
             onKeyPress={this.handleSubmit}
             ref={(input) =>
               (this.text_input = input)
             } /* for autofocusing after clicking start */
             onChange={(event) => this.handleInputChange(event)}
           />
-  
-          <button
-            onClick={this.startTyping}
-            type="button"
-            className="btn btn-primary me-4"
-            disabled={this.state.started}
-          >
-            Start
-          </button>
-  
-          <button
-            onClick={this.reset}
-            type="button"
-            className="btn btn-primary me-4"
-          >
-            Reset
-          </button>
-  
-          <Timer elapsed_time={this.state.elapsed_time} />
+          
+          <Link to={`/lang`}>
+            <button className="btn me-2 btn-primary">
+              Back to Language Selection
+            </button>
+          </Link>
   
           <TypingStats
-            ended={this.state.started && !this.state.typing}
+            ended={ended}
             code={this.state.code}
             typed_wrong={this.state.typed_wrong}
             elapsed_time={this.state.elapsed_time}
+            reset={this.reset}
+            getCode={this.getCode}
           />
         </div>
       );
