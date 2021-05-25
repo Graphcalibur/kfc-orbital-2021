@@ -157,7 +157,7 @@ class SoloTyping extends Component {
 
       return (
         <div
-          className="shadow p-3 container-xl gap-3 mt-3 box"
+          className="shadow p-3 container-sm gap-3 mt-3 box"
         >
           <Header
             language={this.state.language}
