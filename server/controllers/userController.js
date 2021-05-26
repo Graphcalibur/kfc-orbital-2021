@@ -1,9 +1,10 @@
 const mysql = require('mysql2');
 const argon2 = require('argon2');
+const passport = require('passport');
+const {Strategy: LocalStrategy} = require('passport-local');
 
 const database = require('../utils/database');
 const random = require('../utils/random');
-
 
 exports.code_snippet = function (req, res) {
     const con = database.get_connection();
@@ -34,7 +35,7 @@ exports.register = async function(req, res) {
     const existing_usernames_count = existing_usernames[0]["COUNT(*)"];
     if (existing_usernames_count > 0) {
         res.status(409); // Conflict due to existing username
-        res.json({"reason": "Username already exists"});
+        res.json({"error_msg": "Username already exists"});
     } else {
         const insert_user_result = await database.con_pool.query("INSERT INTO user SET username=?", username);
         const new_user_id = insert_user_result.insertId;
@@ -44,4 +45,66 @@ exports.register = async function(req, res) {
     }
 };
 
+// Promises an object with a `success` attribute, set to True iff the authentication succeeds.
+// If this is false, it will contain a `message` attribute, detailing the reason why.
+// If this is true, it will contain a `user` attribute, containing the authenticated user.
+async function authenticateUser(username, password) {
+    const user_id_results = await database.con_pool.query("SELECT id FROM user WHERE username = ?", username);
+    if (user_id_results.length === 0) {
+        return {success: false, message: "No such user"};
+    } else {
+        const userid = user_id_results[0].id;
+        const saved_hash = await database.con_pool.query("SELECT password_hash FROM user_password WHERE userid = ?", userid)
+        if (saved_hash.length !== 1) {
+            return {success: false, message: "Internal error occurred"};
+        } else if (await argon2.verify(saved_hash[0].password_hash, password)) {
+            return {success: true, user: username};
+        } else {
+            return {success: false, message: "Incorrect password"};
+        }
+    }
+}
+
+passport.serializeUser(function (user, cb) {
+    cb(null, user);
+});
+
+passport.deserializeUser(function(id, cb) {
+    cb(null, id);
+});
+
+passport.use(new LocalStrategy(
+    function(username, password, cb) {
+        authenticateUser(username, password).then((result) => {
+            if (result.success) {
+                cb(null, result.user);
+            } else {
+                cb(null, false, {message: result.message});
+            }
+        });
+    }
+));
+
+exports.auth_username_password_middleware = function(req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+        if (user) {
+            req.logIn(user, function(err) {
+                if (err) return next(err);
+                return next();
+            });
+        } else {
+            res.status("401");
+            res.json(info);
+        }
+    })(req, res, next);
+};
+
+exports.authenticate = function(req, res) {
+    res.json({username: req.user});
+};
+
+exports.logout = function(req, res) {
+    req.logout();
+    res.send("Logged out");
+};
 
