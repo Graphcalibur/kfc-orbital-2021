@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS `code_snippet`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `code_snippet` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `language` varchar(20) NOT NULL,
-  `code` varchar(2000) NOT NULL,
+  `language` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `code` varchar(2000) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -39,6 +39,57 @@ LOCK TABLES `code_snippet` WRITE;
 INSERT INTO `code_snippet` VALUES (1,'C++','for (int i = 0; i < 10; ++i)\n    cout << i << endl;\n}'),(2,'Python','for i in range(10):\n    print(\"number\", i)\n    print(\"number squared\": i ** 2)');
 /*!40000 ALTER TABLE `code_snippet` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'abacaba123');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_password`
+--
+
+DROP TABLE IF EXISTS `user_password`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_password` (
+  `userid` int NOT NULL,
+  `password_hash` varchar(200) NOT NULL,
+  PRIMARY KEY (`userid`),
+  UNIQUE KEY `userid_UNIQUE` (`userid`),
+  CONSTRAINT `fk_userid` FOREIGN KEY (`userid`) REFERENCES `code_snippet` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_password`
+--
+
+LOCK TABLES `user_password` WRITE;
+/*!40000 ALTER TABLE `user_password` DISABLE KEYS */;
+INSERT INTO `user_password` VALUES (1,'$argon2i$v=19$m=4096,t=3,p=1$xab4nXTRrjj4rI8h7ZFwrg$ppi7zEuNI+O1tHYWaa+y2y2jrNkH1JtI/7u7YurBcbs');
+/*!40000 ALTER TABLE `user_password` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -49,4 +100,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-19 21:58:47
+-- Dump completed on 2021-05-26 18:01:00
