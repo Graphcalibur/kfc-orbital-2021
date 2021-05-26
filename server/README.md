@@ -12,6 +12,11 @@ needed information. `sample_database_dump.sql` is a file SQL can read that initi
 
 All endpoints should be prefixed with `/api`, and return JSON data.
 
+The server might set the `connect.sid` cookie sometimes. If you are not a browser, keep track of this,
+as this is how the server identifies you, and therefore lets you access protected endpoints.
+
+The sample SQL database lets you test user authentication with user `abacaba123` and pass `SpeedIAmSpeed`.
+
 ### `GET` `/code`
 
 Fetch a code snippet. 
@@ -29,6 +34,25 @@ Register a new user to the website. Accepts `username` and `password` parameters
 
 If there already exists a user in the database, the return code will be `409`. Otherwise, return
 a placeholder JSON object indicating the request succeeded.
+
+### `POST` `/authuser`
+
+Login. Accepts `username` and `password` parameters via form-encoded input.
+
+If the authentication succeeds, returns a single object of the form `{username: [username]}`. 
+Otherwise, the return code is `401`, and the return value is an object of the
+form `{message: [error message]}`
+
+### `GET` `/user/[username]/testauth`
+
+This is a protected endpoint.
+
+If you are not logged in as `[username]`, the return code is `401`,  and the return value is an object of the
+form `{message: [error message]}`. If you are, return a single string containing `Auth OK`.
+
+### `POST` `/logout`
+
+Destroy the current session, if there exists one.
 
 ---
 
