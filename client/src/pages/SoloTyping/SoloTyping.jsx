@@ -35,7 +35,6 @@ class SoloTyping extends Component {
     const { lang } = this.props.match.params;
     let url = "http://localhost:9000/api/code";
 
-    console.log(lang);
     if (lang !== undefined) {
       url += "?lang=" + lang;
     }
