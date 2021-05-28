@@ -1,16 +1,17 @@
 import React from "react";
 import CodeLinkBtn from "./components/CodeLinkBtn.jsx";
+import { Container, Row } from "react-bootstrap";
 
 const ChooseLanguage = () => {
     const langs = ["Python", "C++", "All Languages"];
-    return <div className="shadow p-4 container-sm mt-3 box">
+    return <Container fluid="sm" className="shadow p-4 mt-3 box">
         <b className="text">
             Select the language to practice on:
         </b>
-        <div className="row mt-3 justify-content-evenly">
+        <Row className="mt-3 justify-content-evenly">
             {langs.map((lang) => <CodeLinkBtn language={lang} key={lang}/>)}
-        </div>
-    </div>
+        </Row>
+    </Container>
 }
 
 export default ChooseLanguage;

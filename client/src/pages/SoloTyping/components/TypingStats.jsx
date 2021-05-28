@@ -1,4 +1,5 @@
 import React from 'react';
+import { Container, Button } from "react-bootstrap";
 
 const TypingStats = (props) => {
     /* Show no stats if typing test hasn't ended */
@@ -20,7 +21,7 @@ const TypingStats = (props) => {
     const wpm = Math.round(code_length / 5 / (props.elapsed_time / 60000));
 
     return (
-      <div className="shadow p-3 container-sm gap-3 mt-3 box">
+      <Container fluid="sm" className="shadow p-3 gap-3 mt-3 box">
         <h3 className="text">Your Typing Stats:</h3>
 
         <p className="text">
@@ -28,22 +29,17 @@ const TypingStats = (props) => {
           Speed: {wpm} WPM
         </p>
 
-        <button
-          onClick={props.reset}
-          type="button"
-          className="btn btn-primary me-4"
-        >
+        <Button onClick={props.reset} variant="primary" className="me-4">
           Try Again
-        </button>
+        </Button>
 
-        <button
+        <Button
           onClick={() => {props.getCode(); props.reset();}}
-          type="button"
-          className="btn btn-primary me-4"
+          variant="primary" className="me-4"
         >
           New Practice
-        </button>
-      </div>
+        </Button>
+      </Container>
     );
 }
 

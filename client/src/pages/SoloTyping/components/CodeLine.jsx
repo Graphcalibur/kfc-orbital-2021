@@ -18,13 +18,7 @@ const CodeLine = (props) => {
 
     const first_wrong = starting_whitespace + props.first_wrong;
     const end_wrong = starting_whitespace + props.curr_input_len;
-
-    /*
-      Starting whitespace chars - Not underlined
-      Correct chars - Underlined, green
-      Wrong chars - Underlined, red
-      Other chars - Underlined, default color
-    */
+    
     return (
       <span>
         {"\u00a0".repeat(starting_whitespace)}

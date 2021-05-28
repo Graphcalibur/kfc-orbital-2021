@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
+import { Container } from "react-bootstrap";
 import "./SoloTyping.css";
 import Code from "./components/Code";
 import Header from "./components/Header";
@@ -157,9 +158,7 @@ class SoloTyping extends Component {
 
       return (
         <div>
-          <div
-            className="shadow p-3 container-sm gap-3 mt-3 box"
-          >
+          <Container fluid="sm" className="shadow p-3 gap-3 mt-3 box">
             <Header
               language={this.state.language}
               elapsed_time={this.state.elapsed_time}
@@ -193,7 +192,7 @@ class SoloTyping extends Component {
                 Back to Language Selection
               </button>
             </Link>
-          </div>
+          </Container>
 
           <TypingStats
               ended={ended}

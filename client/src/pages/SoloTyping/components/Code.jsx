@@ -4,7 +4,7 @@ import CodeLine from "./CodeLine";
 const Code = (props) => {
     return <div className="mt-3">
         {props.code.map((line, i) => (
-        <label htmlFor="textInput" className="form-label code text" key={line}>
+        <label className="form-label code text" key={line}>
             <CodeLine
                 is_curr_line={props.curr_line_num === i}
                 line={line}

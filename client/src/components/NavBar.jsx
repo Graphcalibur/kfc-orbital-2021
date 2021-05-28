@@ -9,7 +9,7 @@ const NavBar = () => {
     const [showLogin, setShowLogin] = useState(false);
     const [showSignUp, setShowSignUp] = useState(false);
 
-    return <Navbar variant="dark" bg="dark" expand="sm" className="mb-auto">
+    return <Navbar variant="dark" bg="dark" expand="sm" className="mb-3">
         <Container fluid>
             <Link className="navbar-brand" to="/">CodeRacer</Link>
             <Navbar.Toggle aria-controls="navbar-nav"/>
