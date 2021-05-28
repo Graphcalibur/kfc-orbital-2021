@@ -16,10 +16,30 @@ const TypingStats = (props) => {
     const wpm = Math.round(code_length / 5 / (props.elapsed_time / 60000));
 
     return (
-      <p className="text">
-        Accuracy: {accuracy}% <br />
-        Speed: {wpm} WPM
-      </p>
+      <div className="shadow p-3 container-sm gap-3 mt-3 box">
+        <h3 className="text">Your Typing Stats:</h3>
+
+        <p className="text">
+          Accuracy: {accuracy}% <br />
+          Speed: {wpm} WPM
+        </p>
+
+        <button
+          onClick={props.reset}
+          type="button"
+          className="btn btn-primary me-4"
+        >
+          Try Again
+        </button>
+
+        <button
+          onClick={() => {props.getCode(); props.reset();}}
+          type="button"
+          className="btn btn-primary me-4"
+        >
+          New Practice
+        </button>
+      </div>
     );
 }
 
