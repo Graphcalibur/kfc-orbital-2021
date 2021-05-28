@@ -8,23 +8,29 @@ import React from 'react';
   and color all correct chars green and all wrong chars red */
 const CodeLine = (props) => {
     const { line } = props;
-    const non_whitespace = line.length - line.trim().length;
+    const starting_whitespace = line.length - line.trim().length;
 
     if (!props.is_curr_line) {
-      return "\u00a0".repeat(non_whitespace) + line.substring(non_whitespace);
+      return "\u00a0".repeat(starting_whitespace) + line.substring(starting_whitespace);
     }
 
-    console.log(non_whitespace);
+    console.log(starting_whitespace);
 
-    const first_wrong = non_whitespace + props.first_wrong;
-    const end_wrong = non_whitespace + props.curr_input_len;
+    const first_wrong = starting_whitespace + props.first_wrong;
+    const end_wrong = starting_whitespace + props.curr_input_len;
 
+    /*
+      Starting whitespace chars - Not underlined
+      Correct chars - Underlined, green
+      Wrong chars - Underlined, red
+      Other chars - Underlined, default color
+    */
     return (
       <span>
-        {"\u00a0".repeat(non_whitespace)}
+        {"\u00a0".repeat(starting_whitespace)}
         <u>
           <span style={{ color: "#00cc44" }}>
-            {line.substring(non_whitespace, first_wrong)}
+            {line.substring(starting_whitespace, first_wrong)}
           </span>
           <span style={{ color: "#ff1a1a" }}>
             {line.substring(first_wrong, end_wrong)}

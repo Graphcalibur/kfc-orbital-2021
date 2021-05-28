@@ -8,11 +8,15 @@ const TypingStats = (props) => {
     let code_length = 0;
 
     for (let i = 0; i < code.length; i++) {
-      code_length += code[i].trim().length;
+      code_length += code[i].trim().length; /* Don't count starting whitespace */
     }
 
+    /* Accuracy = (# of chars in code / # of chars typed including wrong) * 100
+       Formula does * 1000 / 10 so that it's accurate to the first decimal place */
     const accuracy =
       Math.round((code_length / (typed_wrong + code_length)) * 1000) / 10;
+
+    /* WPM = (# of chars in code / 5) / time in minutes */
     const wpm = Math.round(code_length / 5 / (props.elapsed_time / 60000));
 
     return (
