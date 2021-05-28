@@ -1,19 +1,21 @@
-import React from 'react';
+import React from "react";
 import CodeLine from "./CodeLine";
 
 const Code = (props) => {
-    return <div className="mt-3">
-        {props.code.map((line, i) => (
+  return (
+    <div className="mt-3">
+      {props.code.map((line, i) => (
         <label className="form-label code text" key={line}>
-            <CodeLine
-                is_curr_line={props.curr_line_num === i}
-                line={line}
-                first_wrong={props.first_wrong}
-                curr_input_len={props.curr_input_len}
-            />
+          <CodeLine
+            is_curr_line={props.curr_line_num === i}
+            line={line}
+            first_wrong={props.first_wrong}
+            curr_input_len={props.curr_input_len}
+          />
         </label>
-        ))}
-  </div>
-}
+      ))}
+    </div>
+  );
+};
 
 export default Code;
