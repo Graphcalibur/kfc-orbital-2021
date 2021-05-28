@@ -58,12 +58,26 @@ Destroy the current session, if there exists one.
 
 # Database Layout
 
-
 ```
 CREATE TABLE `code_snippet` (
   `id` int NOT NULL AUTO_INCREMENT,
   `language` varchar(20) NOT NULL,
   `code` varchar(2000) NOT NULL,
   PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+)
+
+CREATE TABLE `user_password` (
+  `userid` int NOT NULL,
+  `password_hash` varchar(200) NOT NULL,
+  PRIMARY KEY (`userid`),
+  UNIQUE KEY `userid_UNIQUE` (`userid`),
+  CONSTRAINT `fk_userid` FOREIGN KEY (`userid`) REFERENCES `code_snippet` (`id`) ON DELETE CASCADE
 )
 ```

@@ -6,6 +6,8 @@ const {Strategy: LocalStrategy} = require('passport-local');
 const database = require('../utils/database');
 const random = require('../utils/random');
 
+
+/* Controllers for the respective endpoints */
 exports.code_snippet = function (req, res) {
     const con = database.get_connection();
     
@@ -45,6 +47,19 @@ exports.register = async function(req, res) {
     }
 };
 
+exports.authuser = function(req, res) {
+    res.json({username: req.user});
+};
+
+exports.testauth = function(req, res) {
+    res.send("Auth OK");
+};
+
+exports.logout = function(req, res) {
+    req.logout();
+    res.send("Logged out");
+};
+
 // Promises an object with a `success` attribute, set to True iff the authentication succeeds.
 // If this is false, it will contain a `message` attribute, detailing the reason why.
 // If this is true, it will contain a `user` attribute, containing the authenticated user.
@@ -65,6 +80,7 @@ async function authenticateUser(username, password) {
     }
 }
 
+/* Help passport handle authentication */
 passport.serializeUser(function (user, cb) {
     cb(null, user);
 });
@@ -85,10 +101,14 @@ passport.use(new LocalStrategy(
     }
 ));
 
-exports.auth_username_password_middleware = function(req, res, next) {
+/* Middleware for a login endpoint.
+ * Checks that the given credentials are correct. Returns a 401 if they are not correct.
+ * Only passes control to the next handler if authentication is correct.
+ */
+exports.check_authentication = function(req, res, next) {
     passport.authenticate('local', function (err, user, info) {
         if (user) {
-            req.logIn(user, function(err) {
+            req.login(user, function(err) {
                 if (err) return next(err);
                 return next();
             });
@@ -99,12 +119,16 @@ exports.auth_username_password_middleware = function(req, res, next) {
     })(req, res, next);
 };
 
-exports.authenticate = function(req, res) {
-    res.json({username: req.user});
-};
-
-exports.logout = function(req, res) {
-    req.logout();
-    res.send("Logged out");
+/* Middleware for a protected endpoint.
+ * Checks that the session has a given login. Returns a 401 if not.
+ * Only passes control to the next handler if there is a valid login.
+ */
+exports.require_auth = function(req, res, next) {
+    if (req.user && req.params.username === req.user) {
+        next();
+    } else {
+        res.status(401);
+        res.json({message: "No valid login found"});
+    }
 };
 

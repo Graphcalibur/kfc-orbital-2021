@@ -14,18 +14,12 @@ router.get('/code', code_snippet_controller.code_snippet);
 router.post('/register', user_controller.register);
 
 router.post('/authuser',
-    user_controller.auth_username_password_middleware,
-    user_controller.authenticate);
+    user_controller.check_authentication,
+    user_controller.authuser);
 
 router.get('/user/:username/testauth',
-    function(req, res) {
-        if (req.user && req.params.username === req.user) {
-            res.json("Auth OK");
-        } else {
-            res.status(401);
-            res.json({"message": "No valid login found"});
-        }
-    }
+    user_controller.require_auth,
+    user_controller.testauth
 );
 
 router.post('/logout', user_controller.logout);
