@@ -16,8 +16,6 @@ const CodeLine = (props) => {
     );
   }
 
-  console.log(starting_whitespace);
-
   const first_wrong = starting_whitespace + props.first_wrong;
   const end_wrong = starting_whitespace + props.curr_input_len;
 
