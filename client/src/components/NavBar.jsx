@@ -1,22 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { Button, Container, Navbar, Nav} from "react-bootstrap";
+
+import Login from "./Login";
+import SignUp from "./SignUp";
 
 const NavBar = () => {
-    return <nav className="navbar navbar-expand-sm navbar-dark box mb-3">
-        <div className="container-fluid">
+    const [showLogin, setShowLogin] = useState(false);
+    const [showSignUp, setShowSignUp] = useState(false);
+
+    return <Navbar variant="dark" bg="dark" expand="sm" className="mb-3">
+        <Container fluid>
             <Link className="navbar-brand" to="/">CodeRacer</Link>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div className="navbar-nav">
+            <Navbar.Toggle aria-controls="navbar-nav"/>
+            <Navbar.Collapse id="navbar-nav">
+                <Nav>
                     <Link className="nav-link" to="/">Home</Link>
                     <Link className="nav-link" to="/lang">Race</Link>
                     <Link className="nav-link" to="/lang">Practice</Link>
-                </div>
-            </div>
-        </div>
-    </nav>
+                </Nav>
+
+                <Nav className="ms-auto">
+                    <Button variant="primary" onClick={() => setShowLogin(true)} className="me-3" >
+                        Login
+                    </Button>
+                    <Button variant="primary" onClick={() => setShowSignUp(true)}>
+                        Sign Up
+                    </Button>
+                </Nav>
+
+                <Login show={showLogin} close={() => setShowLogin(false)}/>
+                <SignUp show={showSignUp} close={() => setShowSignUp(false)} />
+            </Navbar.Collapse>
+        </Container>
+    </Navbar>
 }
 
 export default NavBar;
