@@ -28,7 +28,7 @@ This returns an array with a single element. This is an object containing:
 
 Supports the optional parameter `?lang=` to indicate a language for the snippet to fetch.
 
-### `POST` `/user/register`
+### `POST` `/register`
 
 Register a new user to the website. Accepts `username` and `password` parameters via form-encoded input.
 
