@@ -7,7 +7,7 @@ const ChooseLanguage = () => {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "same-origin",
+      credentials: "include",
       body: JSON.stringify({
         username: "abacaba123",
         password: "SpeedIAmSpeed",
@@ -18,7 +18,9 @@ const ChooseLanguage = () => {
   };
 
   const click2 = () => {
-    fetch("http://localhost:9000/api/user/abacaba123/testauth");
+      fetch("http://localhost:9000/api/user/abacaba123/testauth", {credentials: "include"})
+          .then(response => response.json())
+          .then(data => console.log(data));
   };
   return (
     <div>
