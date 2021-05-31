@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./components.css";
 import { Button, Form, Modal } from "react-bootstrap";
 
 class SignUp extends Component {
