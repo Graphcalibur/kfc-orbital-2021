@@ -4,7 +4,7 @@
     "version": "0.0.1",
     "engines": {
         "node": "15.x"
-    }
+    },
     "scripts": {
         "heroku-prebuild": "cd client && npm install && npm run build && cd .. && cd server && npm install"
     }
