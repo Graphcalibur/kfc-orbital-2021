@@ -8,6 +8,8 @@ class SignUp extends Component {
     password: "",
     confirm_password: "",
     validated: false,
+    signed_up: false,
+    failed_sign_up: false,
   };
 
   handleUsernameChange = (event) => {
@@ -28,12 +30,60 @@ class SignUp extends Component {
 
   handleSubmit = (event) => {
     const form = event.currentTarget;
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
+    event.preventDefault();
+    event.stopPropagation();
     this.setState({ validated: true });
+
+    if (
+      !form.checkValidity() ||
+      this.state.password !== this.state.confirm_password
+    )
+      return;
+
+    this.registerUser();
+  };
+
+  registerUser = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password,
+      }),
+    };
+
+    const requestOptions2 = {
+      ...requestOptions,
+      credentials: "include",
+    };
+
+    fetch("http://localhost:9000/api/register", requestOptions).then((res) => {
+      if (res.status !== 409) {
+        this.setState({
+          username: "",
+          email: "",
+          password: "",
+          confirm_password: "",
+          validated: false,
+          registered: true,
+          failed_sign_up: false,
+        });
+      } else {
+        this.setState({ failed_sign_up: true });
+      }
+    });
+  };
+
+  failedSignUpText = () => {
+    return this.state.failed_sign_up ? (
+      <p style={{ fontSize: "80%", color: "#ff1a1a" }}>
+        Sign up has failed. Someone with that username already exists. Please
+        choose a different username.
+      </p>
+    ) : (
+      <></>
+    );
   };
 
   render() {
@@ -47,7 +97,9 @@ class SignUp extends Component {
         className="modal"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Sign Up</Modal.Title>
+          <Modal.Title>
+            {this.state.registered ? "You have signed up!" : "Sign Up"}
+          </Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -70,9 +122,8 @@ class SignUp extends Component {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="email">
-              <Form.Label>Email</Form.Label>
+              <Form.Label>Email (Optional)</Form.Label>
               <Form.Control
-                required
                 type="email"
                 placeholder="Email"
                 value={this.state.email}
@@ -97,7 +148,7 @@ class SignUp extends Component {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="confirmPassword">
+            <Form.Group className="mb-3" controlId="confirm" id="confirm">
               <Form.Label>Confirm Password</Form.Label>
               <Form.Control
                 required
@@ -105,14 +156,14 @@ class SignUp extends Component {
                 placeholder="Confirm Password"
                 value={confirm_password}
                 onChange={(event) => this.handleConfirmChange(event)}
-                isValid={
-                  confirm_password !== "" && password === confirm_password
-                }
+                isInvalid={password !== confirm_password}
               />
               <Form.Control.Feedback type="invalid">
                 This must be the same as your password.
               </Form.Control.Feedback>
             </Form.Group>
+
+            {this.failedSignUpText()}
 
             <Button variant="primary" type="submit" className="float-end">
               Sign Up

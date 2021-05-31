@@ -7,6 +7,7 @@ class Login extends Component {
     username: "",
     password: "",
     validated: false,
+    failedLogin: false,
   };
 
   handleUsernameChange = (event) => {
@@ -19,12 +20,52 @@ class Login extends Component {
 
   handleSubmit = (event) => {
     const form = event.currentTarget;
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
 
+    event.preventDefault();
+    event.stopPropagation();
     this.setState({ validated: true });
+
+    if (!form.checkValidity()) return;
+
+    this.loginUser();
+  };
+
+  loginUser = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password,
+      }),
+    };
+
+    fetch("http://localhost:9000/api/authuser", requestOptions).then((res) => {
+      if (res.status !== 401) {
+        this.props.login();
+        this.props.close();
+        this.setState({
+          username: "",
+          password: "",
+          validated: false,
+          failedLogin: false,
+        });
+      } else {
+        this.setState({ failedLogin: true });
+      }
+    });
+  };
+
+  failedLoginText = () => {
+    return this.state.failedLogin ? (
+      <p style={{ fontSize: "80%", color: "#ff1a1a" }}>
+        Login has failed. Check that you typed your username and password
+        correctly and try again.
+      </p>
+    ) : (
+      <></>
+    );
   };
 
   render() {
@@ -72,6 +113,8 @@ class Login extends Component {
                 Please enter your password.
               </Form.Control.Feedback>
             </Form.Group>
+
+            {this.failedLoginText()}
 
             <div className="d-flex align-items-center gap-3 float-end">
               <Link style={{ fontSize: "80%" }} to="/">
