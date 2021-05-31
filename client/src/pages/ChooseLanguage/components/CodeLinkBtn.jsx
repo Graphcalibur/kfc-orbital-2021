@@ -5,7 +5,8 @@ import { Button, Col } from "react-bootstrap";
 const CodeLinkBtn = (props) => {
   const history = useHistory();
   const lang = props.language;
-  const link = lang === "All Languages" ? "" : lang;
+  const link =
+    lang === "All Languages" ? "" : lang === "C++" ? "C%2B%2B" : lang;
 
   return (
     <Col md="4" className="d-grid">
