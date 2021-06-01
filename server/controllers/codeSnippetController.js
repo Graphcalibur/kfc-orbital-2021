@@ -1,5 +1,5 @@
 const mysql = require('mysql2');
-const database = require('../utils/database');
+const {con_pool} = require('../utils/database');
 const random = require('../utils/random');
 
 function build_conditions(params) {
@@ -15,26 +15,14 @@ function build_conditions(params) {
         values: values};
 }
 
-exports.code_snippet = function (req, res) {
-    const con = database.get_connection();
+exports.code_snippet = async function (req, res) {
     
     const {conditions: cond, values: vals} = build_conditions(req.query);
-    con.query("SELECT COUNT(*) FROM code_snippet WHERE " + cond, vals, process_count_query);
+    const count_query_result = await con_pool.query("SELECT COUNT(*) FROM code_snippet WHERE " + cond, vals);
     
-    function process_count_query(err, result) {
-        if (err) throw err;
-        const code_snippet_count = result[0]["COUNT(*)"];
-        const id_to_retrieve = random.randint(0, code_snippet_count - 1);
-        con.query("SELECT * FROM code_snippet WHERE " + cond + " LIMIT ?, 1", vals.concat([id_to_retrieve]), 
-            process_query_result);
-    };
+    const code_snippet_count = count_query_result[0]["COUNT(*)"];
+    const id_to_retrieve = random.randint(0, code_snippet_count - 1);
+    const code_snippet = await con_pool.query("SELECT * FROM code_snippet WHERE " + cond + " LIMIT ?, 1", vals.concat([id_to_retrieve]));
 
-
-    function process_query_result(err, result) {
-        if (err) throw err;
-        con.end();
-        res.json(result);
-    };
+    res.json(code_snippet);
 };
-
-

@@ -24,4 +24,9 @@ router.get('/user/:username/testauth',
 
 router.post('/logout', user_controller.logout);
 
+router.use('*', function(req, res) {
+    res.status(404);
+    res.json({message: "API path not found", called_endpoint: req.originalUrl});
+});
+
 module.exports = router;
