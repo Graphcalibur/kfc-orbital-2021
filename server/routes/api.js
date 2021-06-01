@@ -22,6 +22,13 @@ router.get('/user/:username/testauth',
     user_controller.testauth
 );
 
+router.get('/current-login', user_controller.current_login);
+
 router.post('/logout', user_controller.logout);
+
+router.use('*', function(req, res) {
+    res.status(404);
+    res.json({message: "API path not found", called_endpoint: req.originalUrl});
+});
 
 module.exports = router;

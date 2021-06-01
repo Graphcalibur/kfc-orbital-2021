@@ -3,52 +3,31 @@ const argon2 = require('argon2');
 const passport = require('passport');
 const {Strategy: LocalStrategy} = require('passport-local');
 
-const database = require('../utils/database');
+const {con_pool} = require('../utils/database');
 const random = require('../utils/random');
-
+const User = require('../models/User.js');
 
 /* Controllers for the respective endpoints */
-exports.code_snippet = function (req, res) {
-    const con = database.get_connection();
-    
-    const {conditions: cond, values: vals} = build_conditions(req.query);
-    con.query("SELECT COUNT(*) FROM code_snippet WHERE " + cond, vals, process_count_query);
-    
-    function process_count_query(err, result) {
-        if (err) throw err;
-        const code_snippet_count = result[0]["COUNT(*)"];
-        const id_to_retrieve = random.randint(0, code_snippet_count - 1);
-        con.query("SELECT * FROM code_snippet WHERE " + cond + " LIMIT ?, 1", vals.concat([id_to_retrieve]), 
-            process_query_result);
-    };
-
-
-    function process_query_result(err, result) {
-        if (err) throw err;
-        con.end();
-        res.json(result);
-    };
-};
-
 exports.register = async function(req, res) {
     const {username, password} = req.body;
-    const existing_usernames = await database.con_pool.query("SELECT COUNT(*) FROM user WHERE username = ?", username);
-    console.log(existing_usernames);
-    const existing_usernames_count = existing_usernames[0]["COUNT(*)"];
-    if (existing_usernames_count > 0) {
-        res.status(409); // Conflict due to existing username
-        res.json({"error_msg": "Username already exists"});
-    } else {
-        const insert_user_result = await database.con_pool.query("INSERT INTO user SET username=?", username);
-        const new_user_id = insert_user_result.insertId;
-        const hashed_pw = await argon2.hash(password);
-        const insert_pw_result = await database.con_pool.query("INSERT INTO user_password SET userid=?, password_hash=?", [new_user_id, hashed_pw]);
-        res.json({"status": "OK"});
+    try {
+        let new_user = await User.register(username, password);
+        console.log(new_user);
+        res.json(new_user);
+    } catch (e) {
+        console.log("caught");
+        console.log(e);
+        if (e instanceof User.errors.UsernameAlreadyExistsError) {
+            res.status(409);
+            res.json({message: "User already exists"});
+        } else {
+            throw e;
+        }
     }
 };
 
 exports.authuser = function(req, res) {
-    res.json({username: req.user});
+    res.json(req.user);
 };
 
 exports.testauth = function(req, res) {
@@ -60,44 +39,29 @@ exports.logout = function(req, res) {
     res.send("Logged out");
 };
 
-// Promises an object with a `success` attribute, set to True iff the authentication succeeds.
-// If this is false, it will contain a `message` attribute, detailing the reason why.
-// If this is true, it will contain a `user` attribute, containing the authenticated user.
-async function authenticateUser(username, password) {
-    const user_id_results = await database.con_pool.query("SELECT id FROM user WHERE username = ?", username);
-    if (user_id_results.length === 0) {
-        return {success: false, message: "No such user"};
+exports.current_login = function(req, res) {
+    if (req.user) {
+        res.json(req.user);
     } else {
-        const userid = user_id_results[0].id;
-        const saved_hash = await database.con_pool.query("SELECT password_hash FROM user_password WHERE userid = ?", userid)
-        if (saved_hash.length !== 1) {
-            return {success: false, message: "Internal error occurred"};
-        } else if (await argon2.verify(saved_hash[0].password_hash, password)) {
-            return {success: true, user: username};
-        } else {
-            return {success: false, message: "Incorrect password"};
-        }
+        res.json(null);
     }
-}
+};
 
 /* Help passport handle authentication */
 passport.serializeUser(function (user, cb) {
-    cb(null, user);
+    cb(null, JSON.stringify(user));
 });
 
-passport.deserializeUser(function(id, cb) {
-    cb(null, id);
+passport.deserializeUser(function(user, cb) {
+    const {id, username} = JSON.parse(user);
+    cb(null, new User(id, username));
 });
 
 passport.use(new LocalStrategy(
     function(username, password, cb) {
-        authenticateUser(username, password).then((result) => {
-            if (result.success) {
-                cb(null, result.user);
-            } else {
-                cb(null, false, {message: result.message});
-            }
-        });
+        User.from_authentication(username, password)
+            .then((user) => cb(null, user))
+            .catch((error) => cb(null, false, {message: error.message}));
     }
 ));
 
@@ -124,7 +88,7 @@ exports.check_authentication = function(req, res, next) {
  * Only passes control to the next handler if there is a valid login.
  */
 exports.require_auth = function(req, res, next) {
-    if (req.user && req.params.username === req.user) {
+    if (req.user && req.params.username === req.user.username) {
         next();
     } else {
         res.status(401);

@@ -30,12 +30,14 @@ app.use(session({secret: process.env.SESSION_SECRET, resave: false, saveUninitia
 app.use(passport.initialize());
 app.use(passport.session());
 
+/* Middleware for panic debugging when sessions go wrong
 app.use(function(req, res, next) {
     console.log(req.sessionID);
     console.log(req.cookies);
     console.log(req.headers.cookie);
     next();
 });
+*/
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -62,3 +64,4 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+
