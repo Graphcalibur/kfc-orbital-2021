@@ -43,14 +43,7 @@ class Login extends Component {
 
     fetch("http://localhost:9000/api/authuser", requestOptions).then((res) => {
       if (res.status !== 401) {
-        this.props.login();
-        this.props.close();
-        this.setState({
-          username: "",
-          password: "",
-          validated: false,
-          failedLogin: false,
-        });
+        window.location.reload();
       } else {
         this.setState({ failedLogin: true });
       }
