@@ -3,7 +3,7 @@ import CodeLinkBtn from "./components/CodeLinkBtn.jsx";
 import { Container, Row } from "react-bootstrap";
 
 const ChooseLanguage = () => {
-/* ===Example user authentication code===
+  /* ===Example user authentication code===
   const langs = ["Python", "C++", "Java"];
   const click = () => {
     const requestOptions = {
@@ -24,14 +24,6 @@ const ChooseLanguage = () => {
           .then(response => response.json())
           .then(data => console.log(data));
   };
-  return (
-    <div>
-      {langs.map((lang) => (
-        <CodeLinkBtn language={lang} />
-      ))}
-      <button onClick={click}>login as abacaba123</button>
-      <button onClick={click2}>check if abacaba123 is logged in</button>
-    </div>
 */
   const langs = ["Python", "C++", "All Languages"];
   return (
@@ -43,7 +35,6 @@ const ChooseLanguage = () => {
         ))}
       </Row>
     </Container>
-
   );
 };
 

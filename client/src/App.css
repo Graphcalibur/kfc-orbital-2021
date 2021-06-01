@@ -50,7 +50,7 @@
   color: white;
 }
 
-.form-control {
+.form-group .form-control {
   background-color: #233243 !important;
   color: white !important;
 }
