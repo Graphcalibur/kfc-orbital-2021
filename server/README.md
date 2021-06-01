@@ -21,7 +21,7 @@ The sample SQL database lets you test user authentication with user `abacaba123`
 
 Fetch a code snippet. 
 
-This returns an array with a single element. This is an object containing:
+This returns an array with a single element, representing a code snippet object. This is an object containing:
     - `id`: an integer, the ID of the code snippet,
     - `language`: a URL-encoded string, the language the code is written in
     - `code`: the code itself.
@@ -33,13 +33,14 @@ Supports the optional parameter `?lang=` to indicate a language for the snippet 
 Register a new user to the website. Accepts `username` and `password` parameters via form-encoded input.
 
 If there already exists a user in the database, the return code will be `409`. Otherwise, return
-a placeholder JSON object indicating the request succeeded.
+a User object corresponding to the newly registered user. This is an object containing:
+    - `username`: the username of the user.
 
 ### `POST` `/authuser`
 
 Login. Accepts `username` and `password` parameters via form-encoded input.
 
-If the authentication succeeds, returns a single object of the form `{username: [username]}`. 
+If the authentication succeeds, return a User object.
 Otherwise, the return code is `401`, and the return value is an object of the
 form `{message: [error message]}`
 
@@ -49,6 +50,10 @@ This is a protected endpoint.
 
 If you are not logged in as `[username]`, the return code is `401`,  and the return value is an object of the
 form `{message: [error message]}`. If you are, return a single string containing `Auth OK`.
+
+### `GET` `/current-login`
+
+If there is a valid login, return the User that login corresponds to. If not, return `null`.
 
 ### `POST` `/logout`
 

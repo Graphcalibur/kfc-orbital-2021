@@ -22,6 +22,8 @@ router.get('/user/:username/testauth',
     user_controller.testauth
 );
 
+router.get('/current-login', user_controller.current_login);
+
 router.post('/logout', user_controller.logout);
 
 router.use('*', function(req, res) {

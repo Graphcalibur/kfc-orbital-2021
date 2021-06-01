@@ -39,6 +39,14 @@ exports.logout = function(req, res) {
     res.send("Logged out");
 };
 
+exports.current_login = function(req, res) {
+    if (req.user) {
+        res.json(req.user);
+    } else {
+        res.json(null);
+    }
+};
+
 /* Help passport handle authentication */
 passport.serializeUser(function (user, cb) {
     cb(null, JSON.stringify(user));
