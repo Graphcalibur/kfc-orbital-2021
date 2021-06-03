@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.22, for macos10.15 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
 --
 -- Host: localhost    Database: testdb
 -- ------------------------------------------------------
@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS `code_snippet`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `code_snippet` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `language` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `code` varchar(2000) COLLATE utf8mb4_general_ci NOT NULL,
+  `language` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `code` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -41,6 +41,38 @@ INSERT INTO `code_snippet` VALUES (1,'C++','for (int i = 0; i < 10; ++i)\n    co
 UNLOCK TABLES;
 
 --
+-- Table structure for table `score`
+--
+
+DROP TABLE IF EXISTS `score`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `score` (
+  `playid` int NOT NULL AUTO_INCREMENT,
+  `userid` int DEFAULT NULL,
+  `snippetid` int NOT NULL,
+  `speed` int NOT NULL,
+  `accuracy` decimal(10,5) NOT NULL,
+  PRIMARY KEY (`playid`),
+  UNIQUE KEY `playid_UNIQUE` (`playid`),
+  KEY `fk_userid_idx` (`userid`),
+  KEY `fk_snippetid_idx` (`snippetid`),
+  CONSTRAINT `fk__scores__code_snippet` FOREIGN KEY (`snippetid`) REFERENCES `code_snippet` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk__scores__user` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `score`
+--
+
+LOCK TABLES `score` WRITE;
+/*!40000 ALTER TABLE `score` DISABLE KEYS */;
+INSERT INTO `score` VALUES (1,NULL,2,100,97.21000),(2,1,1,84,96.40000);
+/*!40000 ALTER TABLE `score` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -49,7 +81,7 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(45) NOT NULL,
+  `username` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -74,10 +106,10 @@ DROP TABLE IF EXISTS `user_password`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_password` (
   `userid` int NOT NULL,
-  `password_hash` varchar(200) NOT NULL,
+  `password_hash` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`userid`),
   UNIQUE KEY `userid_UNIQUE` (`userid`),
-  CONSTRAINT `fk_userid` FOREIGN KEY (`userid`) REFERENCES `code_snippet` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_userid` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -100,4 +132,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-26 18:01:00
+-- Dump completed on 2021-06-03 16:25:36

@@ -34,6 +34,11 @@ let errors = {
     IncorrectPasswordError: IncorrectPasswordError
 };
 
+errors.is_user_error = function(err) {
+    return Object.keys(errors)
+        .some((err_type) => err instanceof errors[err_type]);
+};
+
 let User = class User {
     constructor(id, username) {
         this.id = id;
@@ -56,27 +61,52 @@ let User = class User {
             return new User(new_user_id, username);
         }
     }
-    /* Instantiate a User object from the given credentials.
-     * If successful, return the User object corresponding to the authenticated user.
-     * Throws NoUserExistsError, IncorrectPasswordError, and Error (in case of unknown database error).
+    /* Instantiate a User object.
+     * If successful, return the User.
+     * Throws NoUserExistsError.
      */
-    static async from_authentication(username, password) {
+    static async from_username(username) {
         const user_id_results = await con_pool.query("SELECT id FROM user WHERE username = ?", username);
         if (user_id_results.length === 0) {
             throw new NoUserExistsError(username);
         } else {
             const userid = user_id_results[0].id;
-            const saved_hash = await con_pool.query("SELECT password_hash FROM user_password WHERE userid = ?", userid)
-            if (saved_hash.length !== 1) {
-                throw new Error("Internal error occurred");
-            } else if (await argon2.verify(saved_hash[0].password_hash, password)) {
-                return new User(userid, username);
-            } else {
-                throw new IncorrectPasswordError(username);
-            }
+            return new User(userid, username);
+        }
+    }
+    /* Instantiate a User object from the given credentials.
+     * If successful, return the User object corresponding to the authenticated user.
+     * Throws NoUserExistsError, IncorrectPasswordError, and Error (in case of unknown database error).
+     */
+    static async from_authentication(username, password) {
+        const user = await User.from_username(username);
+        const saved_hash = await con_pool.query("SELECT password_hash FROM user_password WHERE userid = ?", user.id);
+        if (saved_hash.length !== 1) {
+            throw new Error("Internal error occurred");
+        } else if (await argon2.verify(saved_hash[0].password_hash, password)) {
+            return user;
+        } else {
+            throw new IncorrectPasswordError(username);
         }
     }
 };
 
+let Score = class Score {
+    constructor(playid, snippetid, speed, acc, userid = null) {
+        this.playid = playid;
+        this.speed = speed;
+        this.acc = acc;
+        this.snippetid = snippetid;
+        this.userid = userid;
+    }
+    static async register(snippetid, speed, acc, userid = null) {
+        // INSERT INTO score SET snippetid=? speed=? acc=? userid=? 
+        const insert_score_result = await con_pool.query("INSERT INTO score SET snippetid=?, speed=?, accuracy=?, userid=?",
+            [snippetid, speed, acc, userid]);
+        return new Score(insert_score_result.insertId, snippetid, speed, acc, userid);
+    }
+};
+
 User.errors = errors;
-module.exports = User;
+module.exports.User = User;
+module.exports.Score = Score;

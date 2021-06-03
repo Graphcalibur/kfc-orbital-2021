@@ -28,6 +28,18 @@ This returns an array with a single element, representing a code snippet object.
 
 Supports the optional parameter `?lang=` to indicate a language for the snippet to fetch.
 
+### `POST` `/stats/upload/[snippetid]/[speed]wpm/[accuracy]`
+
+Upload a performance on the snippet with ID `snippetid`, with `speed` WPM and an accuracy of `accuracy`.
+If the request is made with a valid login, associate this performance with the currently logged-in User.
+Return the resulting Score object. This is an object containing:
+
+    - `snippetid`: an integer, the ID of the code snippet,
+    - `playid`: an integer, the ID of the performance,
+    - `acc`: a decimal, the accuracy of the performance,
+    - `speed`: an integer, the WPM of the performance,
+    - `userid`, the user ID of the associated user. If one does not exist, output `null`.
+
 ### `POST` `/register`
 
 Register a new user to the website. Accepts `username` and `password` parameters via form-encoded input.

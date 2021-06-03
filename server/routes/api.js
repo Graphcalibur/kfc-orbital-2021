@@ -7,10 +7,15 @@ var router = express.Router();
 var code_snippet_controller = require('../controllers/codeSnippetController');
 var database = require('../utils/database');
 var user_controller = require('../controllers/userController');
+var stat_controller = require('../controllers/statController');
 
 /* GET code snippet. */
 router.get('/code', code_snippet_controller.code_snippet);
 
+/* POST play */
+router.post('/stats/upload/:snippetid(\\d+)/:speed(\\d+)wpm/:acc/', stat_controller.upload);
+
+/* Registration and authentication endpoints */
 router.post('/register', user_controller.register);
 
 router.post('/authuser',
@@ -18,7 +23,7 @@ router.post('/authuser',
     user_controller.authuser);
 
 router.get('/user/:username/testauth',
-    user_controller.require_auth,
+    user_controller.require_auth(true),
     user_controller.testauth
 );
 
@@ -26,6 +31,7 @@ router.get('/current-login', user_controller.current_login);
 
 router.post('/logout', user_controller.logout);
 
+/* 404 for API */
 router.use('*', function(req, res) {
     res.status(404);
     res.json({message: "API path not found", called_endpoint: req.originalUrl});
