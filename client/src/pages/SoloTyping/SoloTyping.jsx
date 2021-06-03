@@ -9,7 +9,7 @@ import TypingStats from "./components/TypingStats";
 class SoloTyping extends Component {
   state = {
     code: [""],
-    languagae: "",
+    language: "",
 
     curr_line_num: 0,
     curr_input: "",

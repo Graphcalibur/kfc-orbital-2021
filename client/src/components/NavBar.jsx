@@ -19,7 +19,6 @@ class NavBar extends Component {
       .then((res) => res.json())
       .then((data) => {
         const new_curr_user = data === null ? data : data["username"];
-        console.log(new_curr_user);
         this.setState({ curr_user: new_curr_user });
       });
   }
@@ -52,7 +51,7 @@ class NavBar extends Component {
       </Nav>
     ) : (
       <Nav className="ms-auto">
-        <Link className="nav-link" to="/">
+        <Link className="nav-link" to={"/user/" + this.state.curr_user}>
           {this.state.curr_user}
         </Link>
         <Button variant="primary" onClick={() => this.logout()}>
