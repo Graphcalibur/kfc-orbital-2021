@@ -77,7 +77,7 @@ CREATE TABLE `user_password` (
   `password_hash` varchar(200) NOT NULL,
   PRIMARY KEY (`userid`),
   UNIQUE KEY `userid_UNIQUE` (`userid`),
-  CONSTRAINT `fk_userid` FOREIGN KEY (`userid`) REFERENCES `code_snippet` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_userid` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

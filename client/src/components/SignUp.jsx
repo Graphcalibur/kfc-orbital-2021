@@ -8,7 +8,6 @@ class SignUp extends Component {
     password: "",
     confirm_password: "",
     validated: false,
-    signed_up: false,
     failed_sign_up: false,
   };
 
@@ -58,17 +57,15 @@ class SignUp extends Component {
       credentials: "include",
     };
 
+    /* Automatically logs the user in after successful sign up. If sign up is
+      not successful, displays an error message */
     fetch("http://localhost:9000/api/register", requestOptions).then((res) => {
       if (res.status !== 409) {
-        this.setState({
-          username: "",
-          email: "",
-          password: "",
-          confirm_password: "",
-          validated: false,
-          registered: true,
-          failed_sign_up: false,
-        });
+        fetch("http://localhost:9000/api/authuser", requestOptions2).then(
+          (res) => {
+            window.location.reload();
+          }
+        );
       } else {
         this.setState({ failed_sign_up: true });
       }
