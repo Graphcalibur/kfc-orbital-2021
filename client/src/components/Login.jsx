@@ -18,11 +18,18 @@ class Login extends Component {
     this.setState({ password: event.target.value });
   };
 
+  /* Checks if all input fields are valid and if so,
+  attempts to login the user */
   handleSubmit = (event) => {
     const form = event.currentTarget;
 
+    /* Stop form from reloading the page before updating
+      necessary data */
     event.preventDefault();
     event.stopPropagation();
+
+    /* Gets the form to check the validity of each input
+    field */
     this.setState({ validated: true });
 
     if (!form.checkValidity()) return;
@@ -30,6 +37,8 @@ class Login extends Component {
     this.loginUser();
   };
 
+  /* Logs in the user and refrshes the page if it was successful,
+  or triggers the failed login message if it is not. */
   loginUser = () => {
     const requestOptions = {
       method: "POST",
