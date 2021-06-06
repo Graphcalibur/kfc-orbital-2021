@@ -12,8 +12,10 @@ var stat_controller = require('../controllers/statController');
 /* GET code snippet. */
 router.get('/code', code_snippet_controller.code_snippet);
 
-/* POST play */
+/* Endpoints for registering and viewing statistics */
 router.post('/stats/upload/:snippetid(\\d+)/:speed(\\d+)wpm/:acc/', stat_controller.upload);
+
+router.get('/stats/summary/:username/', stat_controller.summary);
 
 /* Registration and authentication endpoints */
 router.post('/register', user_controller.register);
@@ -32,7 +34,7 @@ router.get('/current-login', user_controller.current_login);
 router.post('/logout', user_controller.logout);
 
 /* 404 for API */
-router.use('*', function(req, res) {
+router.use(function(req, res) {
     res.status(404);
     res.json({message: "API path not found", called_endpoint: req.originalUrl});
 });

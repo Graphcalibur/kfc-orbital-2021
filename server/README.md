@@ -17,28 +17,46 @@ as this is how the server identifies you, and therefore lets you access protecte
 
 The sample SQL database lets you test user authentication with user `abacaba123` and pass `SpeedIAmSpeed`.
 
+## Gameplay
+
 ### `GET` `/code`
 
 Fetch a code snippet. 
 
 This returns an array with a single element, representing a code snippet object. This is an object containing:
-    - `id`: an integer, the ID of the code snippet,
-    - `language`: a URL-encoded string, the language the code is written in
-    - `code`: the code itself.
+
+- `id`: an integer, the ID of the code snippet,
+- `language`: a URL-encoded string, the language the code is written in
+- `code`: the code itself.
 
 Supports the optional parameter `?lang=` to indicate a language for the snippet to fetch.
 
+## User Statistics
+
 ### `POST` `/stats/upload/[snippetid]/[speed]wpm/[accuracy]`
 
-Upload a performance on the snippet with ID `snippetid`, with `speed` WPM and an accuracy of `accuracy`.
+Upload a score on the snippet with ID `snippetid`, with `speed` WPM and an accuracy of `accuracy`.
 If the request is made with a valid login, associate this performance with the currently logged-in User.
 Return the resulting Score object. This is an object containing:
 
-    - `snippetid`: an integer, the ID of the code snippet,
-    - `playid`: an integer, the ID of the performance,
-    - `acc`: a decimal, the accuracy of the performance,
-    - `speed`: an integer, the WPM of the performance,
-    - `userid`, the user ID of the associated user. If one does not exist, output `null`.
+- `snippetid`: an integer, the ID of the code snippet,
+- `playid`: an integer, the ID of the performance,
+- `acc`: a decimal, the accuracy of the performance,
+- `speed`: an integer, the WPM of the performance,
+- `userid`, the user ID of the associated user. If one does not exist, output `null`.
+
+### `GET` `/stats/summary/[username]`
+
+Returns an object representing summary statistics for the games played by `username`.
+This is an object containing:
+
+- `speed`: an object containing 2 attributes: `average` and `maximum`, indicating the average and maximum 
+    WPM of the user's plays over time.
+- `accuracy`: an object containing 2 attributes: `average` and `maximum`, indicating the average
+    and maximum accuracy of the user's plays over time.
+- `playcount`: an integer: the total amount of plays by the user.
+
+## Authentication
 
 ### `POST` `/register`
 

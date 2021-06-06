@@ -89,6 +89,14 @@ let User = class User {
             throw new IncorrectPasswordError(username);
         }
     }
+    async get_summary_data() {
+        const speed_query = await con_pool.query("SELECT AVG(speed), MAX(speed), AVG(accuracy), MAX(accuracy), COUNT(*) FROM score WHERE userid=?", [this.id]);
+        return {speed: {average: Number(speed_query[0]["AVG(speed)"]),
+                        maximum: Number(speed_query[0]["MAX(speed)"])},
+                accuracy: {average: Number(speed_query[0]["AVG(accuracy)"]),
+                           maximum: Number(speed_query[0]["MAX(accuracy)"])},
+                playcount: Number(speed_query[0]["COUNT(*)"])};
+    }
 };
 
 let Score = class Score {
