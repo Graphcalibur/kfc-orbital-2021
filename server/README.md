@@ -57,6 +57,23 @@ This is an object containing:
     and maximum accuracy of the user's plays over time.
 - `playcount`: an integer: the total amount of plays by the user.
 
+### `GET` `/stats/scorelist/[username]`
+
+Obtain a partial list of the user's scores. This endpoint takes two optional parameters, `?from=` (default 0) and
+`?count=` (default 20). Returns an object containing:
+
+- `playcount`: an integer: the total amount of plays by the user.
+- `score_window`: the requested scores. This is a list containing `count` Score objects, the `i`th of which
+    is the `from + i`th most recent play by the user. This list may be filtered by some other
+    parameters this endpoint accepts, which are described in detail below.
+
+Accepts the following optional parameters:
+- `?from=` (default 0) The starting point from which to enumerate `score_window`.
+- `?count=` (default 20, maximum 20 (subject to change)) The number of scores to list in `score_window`.
+- `?lang=` Filter for plays that were made only using snippets in this language.
+- `?context=` (Only accepts either `solo` or `multi`) Filter for plays made in either solo mode or multiplayer mode. (Not currently implemented.)
+
+
 ## Authentication
 
 ### `POST` `/register`

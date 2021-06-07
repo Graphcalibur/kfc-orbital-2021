@@ -97,6 +97,32 @@ let User = class User {
                            maximum: Number(speed_query[0]["MAX(accuracy)"])},
                 playcount: Number(speed_query[0]["COUNT(*)"])};
     }
+    build_scorelist_query_conditions(filters) {
+        let query = ['userid = ?'];
+        let params = [this.id];
+        if (filters.lang) {
+            query.push('language = ?');
+            params.push(filters.lang);
+        }
+        return {conditions: query.join(' AND '), params: params};
+    };
+    async get_scorecount(filters) {
+        const {conditions, params} = this.build_scorelist_query_conditions(filters);
+        const query_results = await con_pool.query("SELECT COUNT(*) AS count FROM score " +
+            " INNER JOIN code_snippet ON score.snippetid = code_snippet.id " +
+            " WHERE " + conditions,
+            params);
+        return query_results[0].count;
+    }
+    async get_scorelist(filters, from, count) {
+        const {conditions, params} = this.build_scorelist_query_conditions(filters);
+        const query_results = await con_pool.query("SELECT * FROM score " +
+            " INNER JOIN code_snippet ON score.snippetid = code_snippet.id " +
+            " WHERE " + conditions
+            + " ORDER BY time DESC LIMIT ?, ?",
+            params.concat([from, count]));
+        return query_results.map(res => new Score(res.playid, res.id, res.speed, Number(res.accuracy), Date.parse(res.time), res.userid));
+    }
 };
 
 let Score = class Score {

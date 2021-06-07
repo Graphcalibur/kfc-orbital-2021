@@ -17,6 +17,8 @@ router.post('/stats/upload/:snippetid(\\d+)/:speed(\\d+)wpm/:acc/', stat_control
 
 router.get('/stats/summary/:username/', stat_controller.summary);
 
+router.get('/stats/scorelist/:username', stat_controller.scorelist);
+
 /* Registration and authentication endpoints */
 router.post('/register', user_controller.register);
 
