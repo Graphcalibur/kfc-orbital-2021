@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.22, for macos10.15 (x86_64)
 --
 -- Host: localhost    Database: testdb
 -- ------------------------------------------------------
@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -53,13 +53,14 @@ CREATE TABLE `score` (
   `snippetid` int NOT NULL,
   `speed` int NOT NULL,
   `accuracy` decimal(10,5) NOT NULL,
+  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`playid`),
   UNIQUE KEY `playid_UNIQUE` (`playid`),
   KEY `fk_userid_idx` (`userid`),
   KEY `fk_snippetid_idx` (`snippetid`),
   CONSTRAINT `fk__scores__code_snippet` FOREIGN KEY (`snippetid`) REFERENCES `code_snippet` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk__scores__user` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +69,7 @@ CREATE TABLE `score` (
 
 LOCK TABLES `score` WRITE;
 /*!40000 ALTER TABLE `score` DISABLE KEYS */;
-INSERT INTO `score` VALUES (1,NULL,2,100,97.21000),(2,1,1,84,96.40000);
+INSERT INTO `score` VALUES (1,NULL,2,100,97.21000,'2021-06-04 13:25:44'),(2,1,1,84,96.40000,'2021-06-03 13:13:07'),(3,1,2,66,99.23000,'2021-06-07 20:45:57'),(4,1,2,68,98.24000,'2021-06-07 21:01:55');
 /*!40000 ALTER TABLE `score` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +85,7 @@ CREATE TABLE `user` (
   `username` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +94,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'abacaba123');
+INSERT INTO `user` VALUES (1,'abacaba123'),(2,'abacaba1234'),(3,'testuser');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,7 +120,7 @@ CREATE TABLE `user_password` (
 
 LOCK TABLES `user_password` WRITE;
 /*!40000 ALTER TABLE `user_password` DISABLE KEYS */;
-INSERT INTO `user_password` VALUES (1,'$argon2i$v=19$m=4096,t=3,p=1$xab4nXTRrjj4rI8h7ZFwrg$ppi7zEuNI+O1tHYWaa+y2y2jrNkH1JtI/7u7YurBcbs');
+INSERT INTO `user_password` VALUES (1,'$argon2i$v=19$m=4096,t=3,p=1$xab4nXTRrjj4rI8h7ZFwrg$ppi7zEuNI+O1tHYWaa+y2y2jrNkH1JtI/7u7YurBcbs'),(2,'$argon2i$v=19$m=4096,t=3,p=1$UdWdK3H9Sr9X1CETg45dRw$qLRYoWt73giHe8wz1PtgszC8JKKgt0iXBZKK5GF2E6c'),(3,'$argon2i$v=19$m=4096,t=3,p=1$rsOluG4gtCjam9y5EykaKw$0wYIvD2YSW+5mJc5H5WH/WjZuuPkJ+hBmZ4o9Mrr7Qw');
 /*!40000 ALTER TABLE `user_password` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -132,4 +133,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-03 16:25:36
+-- Dump completed on 2021-06-07 21:06:35
