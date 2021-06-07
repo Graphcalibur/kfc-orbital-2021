@@ -33,7 +33,7 @@ class SoloTyping extends Component {
   /* Fetches code from backend */
   getCode = () => {
     const { lang } = this.props.match.params;
-    let url = "http://localhost:9000/api/code";
+    let url = "/api/code";
 
     if (lang !== undefined) {
       url += "?lang=" + lang;

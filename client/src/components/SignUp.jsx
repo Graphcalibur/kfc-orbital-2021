@@ -62,13 +62,13 @@ class SignUp extends Component {
       credentials: "include",
     };
 
-    fetch("http://localhost:9000/api/register", requestOptions).then((res) => {
+    /* Automatically logs the user in after successful sign up. If sign up is
+      not successful, displays an error message */
+    fetch("/api/register", requestOptions).then((res) => {
       if (res.status !== 409) {
-        fetch("http://localhost:9000/api/authuser", requestOptions2).then(
-          (res) => {
-            window.location.reload();
-          }
-        );
+        fetch("/api/authuser", requestOptions2).then((res) => {
+          window.location.reload();
+        });
       } else {
         this.setState({ failed_sign_up: true });
       }

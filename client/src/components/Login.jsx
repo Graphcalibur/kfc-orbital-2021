@@ -50,7 +50,7 @@ class Login extends Component {
       }),
     };
 
-    fetch("http://localhost:9000/api/authuser", requestOptions).then((res) => {
+    fetch("/api/authuser", requestOptions).then((res) => {
       if (res.status !== 401) {
         window.location.reload();
       } else {

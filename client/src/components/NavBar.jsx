@@ -14,20 +14,19 @@ class NavBar extends Component {
 
   /* Get logged in user when the component first appears */
   componentDidMount() {
-    fetch("http://localhost:9000/api/current-login", {
+    fetch("/api/current-login", {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
         const new_curr_user = data === null ? data : data["username"];
-        console.log(new_curr_user);
         this.setState({ curr_user: new_curr_user });
       });
   }
 
   /* Logs out and refreshes the page */
   logout = () => {
-    fetch("http://localhost:9000/api/logout", {
+    fetch("/api/logout", {
       method: "POST",
       credentials: "include",
     }).then((res) => {
