@@ -40,7 +40,10 @@ class SoloTyping extends Component {
     }
 
     fetch(url)
-      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        res.json();
+      })
       .then((res) => res[0])
       .then((data) => {
         this.setState({
