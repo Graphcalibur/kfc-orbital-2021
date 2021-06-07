@@ -27,6 +27,8 @@ class SignUp extends Component {
     this.setState({ confirm_password: event.target.value });
   };
 
+  /* Checks if all input fields in the form are valid and if so,
+  attempts to register the user. */
   handleSubmit = (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -42,6 +44,9 @@ class SignUp extends Component {
     this.registerUser();
   };
 
+  /* Registers the user. If sign up was successful, then it automatically
+  logins the user and refreshes the page. Otherwise, it triggers the
+  failed sign up message. */
   registerUser = () => {
     const requestOptions = {
       method: "POST",
