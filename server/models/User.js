@@ -126,20 +126,21 @@ let User = class User {
 };
 
 let Score = class Score {
-    constructor(playid, snippetid, speed, acc, time, userid = null) {
+    constructor(playid, snippetid, speed, acc, time, context, userid = null) {
         this.playid = playid;
         this.speed = speed;
         this.acc = acc;
         this.snippetid = snippetid;
         this.time = time;
         this.userid = userid;
+        this.context = context;
     }
-    static async register(snippetid, speed, acc, userid = null) {
+    static async register(snippetid, speed, acc, isMultiplayer, userid = null) {
         // INSERT INTO score SET snippetid=? speed=? acc=? userid=? 
-        const insert_score_result = await con_pool.query("INSERT INTO score SET snippetid=?, speed=?, accuracy=?, userid=?",
-            [snippetid, speed, acc, userid]);
+        const insert_score_result = await con_pool.query("INSERT INTO score SET snippetid=?, speed=?, accuracy=?, userid=?, context=?",
+            [snippetid, speed, acc, userid, (isMultiplayer ? "Multiplayer" : "Solo")]);
         const server_timestamp = await con_pool.query("SELECT UNIX_TIMESTAMP(time) AS time FROM score WHERE playid=?", insert_score_result.insertId);
-        return new Score(insert_score_result.insertId, snippetid, speed, acc, server_timestamp[0].time, userid);
+        return new Score(insert_score_result.insertId, snippetid, speed, acc, server_timestamp[0].time, isMultiplayer ? "Multiplayer" : "Solo", userid);
     }
 };
 

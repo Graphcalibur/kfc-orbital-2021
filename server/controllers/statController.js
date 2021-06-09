@@ -4,7 +4,8 @@ const {User, Score} = require('../models/User.js');
 
 module.exports.upload = async function(req, res) {
     const {snippetid, speed, acc} = req.params;
-    const result = await Score.register(snippetid, speed, acc, req.user ? req.user.id : null);
+    const isMulti = false;
+    const result = await Score.register(snippetid, speed, acc, isMulti, req.user ? req.user.id : null);
     res.json(result);
 };
 
