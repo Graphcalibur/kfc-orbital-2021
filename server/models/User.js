@@ -104,6 +104,10 @@ let User = class User {
             query.push('language = ?');
             params.push(filters.lang);
         }
+        if (filters.context) {
+            query.push('context = ?');
+            params.push(filters.context);
+        }
         return {conditions: query.join(' AND '), params: params};
     };
     async get_scorecount(filters) {

@@ -18,7 +18,8 @@ module.exports.summary = async function(req, res) {
 module.exports.scorelist = async function(req, res) {
     const MAX_COUNT = 20;
     const user = await User.from_username(req.params.username);
-    const filters = {lang: req.query.lang || null};
+    const filters = {lang: req.query.lang || null,
+                     context: req.query.context || null};
     const from = Number(req.query.from) || 0;
     const count = Math.min(MAX_COUNT, Number(req.query.count) || MAX_COUNT);
     const scorecount = await user.get_scorecount(filters);

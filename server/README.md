@@ -74,7 +74,7 @@ Accepts the following optional parameters:
 - `?from=` (default 0) The starting point from which to enumerate `score_window`.
 - `?count=` (default 20, maximum 20 (subject to change)) The number of scores to list in `score_window`.
 - `?lang=` Filter for plays that were made only using snippets in this language.
-- `?context=` (Only accepts either `solo` or `multi`) Filter for plays made in either solo mode or multiplayer mode. (Not currently implemented.)
+- `?context=` (Only accepts either `Solo` or `Multiplayer`) Filter for plays made in either solo mode or multiplayer mode.
 
 
 ## Authentication
