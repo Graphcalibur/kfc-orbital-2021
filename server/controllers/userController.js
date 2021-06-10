@@ -5,7 +5,7 @@ const {Strategy: LocalStrategy} = require('passport-local');
 
 const {con_pool} = require('../utils/database');
 const random = require('../utils/random');
-const User = require('../models/User.js');
+const {User} = require('../models/User.js');
 
 /* Controllers for the respective endpoints */
 exports.register = async function(req, res) {
@@ -61,7 +61,13 @@ passport.use(new LocalStrategy(
     function(username, password, cb) {
         User.from_authentication(username, password)
             .then((user) => cb(null, user))
-            .catch((error) => cb(null, false, {message: error.message}));
+            .catch(function (err) {
+                if (User.errors.is_user_error(err)) {
+                    cb(null, false, {message: err.message});
+                } else {
+                    throw err;
+                }
+            });
     }
 ));
 
@@ -87,12 +93,15 @@ exports.check_authentication = function(req, res, next) {
  * Checks that the session has a given login. Returns a 401 if not.
  * Only passes control to the next handler if there is a valid login.
  */
-exports.require_auth = function(req, res, next) {
-    if (req.user && req.params.username === req.user.username) {
-        next();
-    } else {
-        res.status(401);
-        res.json({message: "No valid login found"});
-    }
+exports.require_auth = function(check_username) {
+    return function(req, res, next) {
+        if (req.user && (!check_username || req.params.username === req.user.username)) {
+            next();
+        } else {
+            res.status(401);
+            res.json({message: "No valid login found"});
+        }
+    };
 };
+
 
