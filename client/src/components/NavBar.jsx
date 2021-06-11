@@ -12,8 +12,9 @@ class NavBar extends Component {
     curr_user: null,
   };
 
+  /* Get logged in user when the component first appears */
   componentDidMount() {
-    fetch("http://localhost:9000/api/current-login", {
+    fetch("/api/current-login", {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -23,8 +24,9 @@ class NavBar extends Component {
       });
   }
 
+  /* Logs out and refreshes the page */
   logout = () => {
-    fetch("http://localhost:9000/api/logout", {
+    fetch("/api/logout", {
       method: "POST",
       credentials: "include",
     }).then((res) => {
@@ -32,6 +34,8 @@ class NavBar extends Component {
     });
   };
 
+  /* Returns username and Logout button if a user if logged in, or
+  Login and Sign Up buttons if no user is logged in. */
   getLoginButtons = () => {
     return this.state.curr_user === null ? (
       <Nav className="ms-auto">

@@ -27,6 +27,8 @@ class SignUp extends Component {
     this.setState({ confirm_password: event.target.value });
   };
 
+  /* Checks if all input fields in the form are valid and if so,
+  attempts to register the user. */
   handleSubmit = (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -42,6 +44,9 @@ class SignUp extends Component {
     this.registerUser();
   };
 
+  /* Registers the user. If sign up was successful, then it automatically
+  logins the user and refreshes the page. Otherwise, it triggers the
+  failed sign up message. */
   registerUser = () => {
     const requestOptions = {
       method: "POST",
@@ -59,13 +64,11 @@ class SignUp extends Component {
 
     /* Automatically logs the user in after successful sign up. If sign up is
       not successful, displays an error message */
-    fetch("http://localhost:9000/api/register", requestOptions).then((res) => {
+    fetch("/api/register", requestOptions).then((res) => {
       if (res.status !== 409) {
-        fetch("http://localhost:9000/api/authuser", requestOptions2).then(
-          (res) => {
-            window.location.reload();
-          }
-        );
+        fetch("/api/authuser", requestOptions2).then((res) => {
+          window.location.reload();
+        });
       } else {
         this.setState({ failed_sign_up: true });
       }
