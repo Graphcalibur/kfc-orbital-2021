@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www",
-    "serverstart": "DEBUG=server:* npm run devstart"
+    "serverstart": "DEBUG=server:* npm run devstart",
+    "test": "jest --detectOpenHandles"
   },
   "dependencies": {
     "argon2": "^0.27.2",
@@ -21,7 +22,18 @@
     "jstransformer": "^1.0.0",
     "morgan": "~1.9.1",
     "mysql2": "^2.2.5",
+    "mysqldump": "^3.2.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "jest": "^27.0.4"
+  },
+  "jest": {
+    "globalSetup": "./tests/setup.js",
+    "globalTeardown": "./tests/teardown",
+    "setupFilesAfterEnv": [
+      "./tests/setupfiles"
+    ]
   }
 }
