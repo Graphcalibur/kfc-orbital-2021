@@ -46,16 +46,6 @@ class User extends Component {
           });
         }
       });
-
-    /*fetch(url)
-      .then((res) => res.json())
-      .then((res) => res[0])
-      .then((data) => {
-        this.setState({
-          code: data["code"].split("\n"),
-          language: data["language"],
-        });
-      });*/
   }
 
   render() {
