@@ -3,28 +3,6 @@ import CodeLinkBtn from "./components/CodeLinkBtn.jsx";
 import { Container, Row } from "react-bootstrap";
 
 const ChooseLanguage = () => {
-  /* ===Example user authentication code===
-  const langs = ["Python", "C++", "Java"];
-  const click = () => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
-        username: "abacaba123",
-        password: "SpeedIAmSpeed",
-      }),
-    };
-
-    fetch("http://localhost:9000/api/authuser", requestOptions);
-  };
-
-  const click2 = () => {
-      fetch("http://localhost:9000/api/user/abacaba123/testauth", {credentials: "include"})
-          .then(response => response.json())
-          .then(data => console.log(data));
-  };
-*/
   const langs = ["Python", "C++", "All Languages"];
   return (
     <Container fluid="sm" className="shadow p-4 mt-3 box">
