@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import WhiteLine from "./WhiteLine";
+
+import ProgressChart from "./ProgressChart";
 
 const Stats = (props) => {
   const { name, stats } = props;
@@ -40,22 +41,25 @@ const Stats = (props) => {
   };
 
   return (
-    <Col fluid="sm" md="3" className="shadow p-3 box">
-      <h4 className="text">{name} Stats</h4>
-      <WhiteLine />
+    <Row className="mt-3">
+      <Col md="4">
+        {stats.map((stat, i) => (
+          <Row classname="mt-1 ">
+            <Col md="6" className="text">
+              {stats_titles[i]}:
+            </Col>
+            <Col md="6" style={{ color: color_stat(stat, i) }}>
+              {stat}
+              {addendums[i]}
+            </Col>
+          </Row>
+        ))}
+      </Col>
 
-      {stats.map((stat, i) => (
-        <Row classname="mt-1 ">
-          <Col md="8" className="text">
-            {stats_titles[i]}:
-          </Col>
-          <Col md="4" style={{ color: color_stat(stat, i) }}>
-            {stat}
-            {addendums[i]}
-          </Col>
-        </Row>
-      ))}
-    </Col>
+      <Col md="8">
+        <ProgressChart className="p-4" wpm_data={props.wpm_data} />
+      </Col>
+    </Row>
   );
 };
 
