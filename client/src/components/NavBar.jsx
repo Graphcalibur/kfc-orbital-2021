@@ -55,7 +55,7 @@ class NavBar extends Component {
       </Nav>
     ) : (
       <Nav className="ms-auto">
-        <Link className="nav-link" to="/">
+        <Link className="nav-link" to={"/user/" + this.state.curr_user}>
           {this.state.curr_user}
         </Link>
         <Button variant="primary" onClick={() => this.logout()}>
