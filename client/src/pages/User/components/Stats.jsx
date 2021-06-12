@@ -4,7 +4,7 @@ import { Col, Row } from "react-bootstrap";
 import ProgressChart from "./ProgressChart";
 
 const Stats = (props) => {
-  const { name, stats } = props;
+  const { stats } = props;
   const stats_titles = [
     "Avg. Speed (All Time)",
     "Avg. Speed (Recent)",
@@ -45,10 +45,10 @@ const Stats = (props) => {
       <Col md="4">
         {stats.map((stat, i) => (
           <Row classname="mt-1 ">
-            <Col md="6" className="text">
+            <Col md="7" className="text">
               {stats_titles[i]}:
             </Col>
-            <Col md="6" style={{ color: color_stat(stat, i) }}>
+            <Col md="5" style={{ color: color_stat(stat, i) }}>
               {stat}
               {addendums[i]}
             </Col>
