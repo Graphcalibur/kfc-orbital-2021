@@ -61,7 +61,7 @@ CREATE TABLE `score` (
   KEY `fk_snippetid_idx` (`snippetid`),
   CONSTRAINT `fk__scores__code_snippet` FOREIGN KEY (`snippetid`) REFERENCES `code_snippet` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk__scores__user` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
