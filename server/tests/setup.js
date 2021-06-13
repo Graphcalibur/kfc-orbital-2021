@@ -21,7 +21,7 @@ module.exports = async () => {
     async function save_testdb_to_backup() {
         console.log("Saving current contents of " + test_db_name + " to " + testdb_backup_filename);
         return new Promise((resolve, reject) => {
-            exec(`mysqldump -u${setupConfig.user} -p${setupConfig.password} -h${setupConfig.host} ${setupConfig.database} < ${testdb_backup_filename}`,
+            exec(`mysqldump -u${setupConfig.user} -p${setupConfig.password} -h${setupConfig.host} ${setupConfig.database} > ${testdb_backup_filename}`,
                 (err, stdout, stderr) => {
                 if (err) {
                     reject(err);
