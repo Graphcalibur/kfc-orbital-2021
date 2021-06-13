@@ -11,7 +11,10 @@ module.exports.upload = async function(req, res) {
 
 module.exports.summary = async function(req, res) {
     const user = await User.from_username(req.params.username); 
-    const summary_stats = await user.get_summary_data();
+    const filters = {lang: req.query.lang || null,
+                    context: req.query.context || null,
+                    recent_count: req.query.recent ? Number(req.query.recent) : undefined};
+    const summary_stats = await user.get_summary_data(filters);
     res.json(summary_stats);
 };
 

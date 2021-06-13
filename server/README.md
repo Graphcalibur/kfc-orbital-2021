@@ -60,6 +60,13 @@ This is an object containing:
     and maximum accuracy of the user's plays over time.
 - `playcount`: an integer: the total amount of plays by the user.
 
+Accepts the following optional parameters. Each parameter can filter the set of plays to summarize,
+if supplied.
+
+- `?recent=`, an integer denoting the number of recent plays to consider.
+- `?context=`, as defined in `/stats/scorelist/`,
+- `?lang=`, as defined in `/stats/scorelist/`
+
 ### `GET` `/stats/scorelist/[username]`
 
 Obtain a partial list of the user's scores. This endpoint takes two optional parameters, `?from=` (default 0) and
