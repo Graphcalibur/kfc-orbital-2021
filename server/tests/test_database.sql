@@ -61,18 +61,8 @@ CREATE TABLE `score` (
   KEY `fk_snippetid_idx` (`snippetid`),
   CONSTRAINT `fk__scores__code_snippet` FOREIGN KEY (`snippetid`) REFERENCES `code_snippet` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk__scores__user` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `score`
---
-
-LOCK TABLES `score` WRITE;
-/*!40000 ALTER TABLE `score` DISABLE KEYS */;
-INSERT INTO `score` VALUES (1,NULL,2,100,97.21000,'2021-06-04 13:25:44','Solo'),(2,1,1,84,96.40000,'2021-06-03 13:13:07','Solo'),(3,1,2,66,99.23000,'2021-06-07 20:45:57','Solo'),(4,1,2,68,98.24000,'2021-06-07 21:01:55','Solo'),(5,1,2,78,98.82000,'2021-06-09 21:09:55','Solo'),(6,NULL,2,82,99.85000,'2021-06-09 21:11:43','Solo'),(7,1,2,80,97.05000,'2021-06-09 21:12:10','Solo');
-/*!40000 ALTER TABLE `score` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `user`

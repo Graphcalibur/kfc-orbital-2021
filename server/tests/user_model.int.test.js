@@ -37,4 +37,14 @@ test('can reject wrong authentication', async () => {
     }
 });
 
+test('can reject non-existent users', async () => {
+    const wrong_username = "pqrstuvser";
+    expect.assertions(1);
+    try {
+        const u = await User.from_authentication(wrong_username, test_password);
+    } catch (e) {
+        expect(e).toBeInstanceOf(User.errors.NoUserExistsError);
+    }
+});
+
 
