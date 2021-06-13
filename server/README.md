@@ -49,7 +49,7 @@ Return the resulting Score object. This is an object containing:
   conditions by which a score can be registered. This is `Solo` for
   plays made through this endpoint (subject to change).
 
-### `GET` `/stats/summary/[username]`
+### `GET` `/stats/[username]/summary`
 
 Returns an object representing summary statistics for the games played by `username`.
 This is an object containing:
@@ -67,12 +67,11 @@ if supplied.
 - `?context=`, as defined in `/stats/scorelist/`,
 - `?lang=`, as defined in `/stats/scorelist/`
 
-### `GET` `/stats/scorelist/[username]`
+### `GET` `/stats/[username]/scorelist`
 
-Obtain a partial list of the user's scores. This endpoint takes two optional parameters, `?from=` (default 0) and
-`?count=` (default 20). Returns an object containing:
+Obtain a partial list of the user's scores. Returns an object containing:
 
-- `playcount`: an integer: the total amount of plays by the user.
+- `playcount`: an integer: the total amount of plays by the user that matches all filters (except `?from` and `?count`).
 - `score_window`: the requested scores. This is a list containing `count` Score objects, the `i`th of which
     is the `from + i`th most recent play by the user. This list may be filtered by some other
     parameters this endpoint accepts, which are described in detail below.
