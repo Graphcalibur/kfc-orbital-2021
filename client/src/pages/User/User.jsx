@@ -27,6 +27,7 @@ class User extends Component {
 
     fetch(url)
       .then((res) => {
+        /* Check if user exists */
         if (false) {
           // TODO: Check if user exists
           return null;
@@ -35,8 +36,9 @@ class User extends Component {
         }
       })
       .then((data) => {
+        /* Sets user_exists to false if user doesn't exist, otherwise sets the stats */
         if (data === null) {
-          this.setState({ user_exists: true });
+          this.setState({ user_exists: false });
         } else {
           const all_stats = [
             data["speed"]["average"],
@@ -83,10 +85,12 @@ class User extends Component {
     let wpm = 0;
     let prev_date = null;
     for (let i = scorelist.length - 1; i >= 0; i--) {
-      const curr_date = new Date(scorelist[i]["time"]);
+      /* Scorelist object stores time in terms of seconds but Date objects
+      expects in it miliseconds, so we have to multiply by 1000 */
+      const curr_date = new Date(scorelist[i]["time"] * 1000);
 
       if (prev_date === null) {
-        prev_date = new Date(scorelist[i]["time"]);
+        prev_date = curr_date;
       }
 
       /* Only push to wpm_data if a score with a new date is found */
@@ -96,6 +100,7 @@ class User extends Component {
           y: wpm / (scorelist.length - i) /* Get average so far */,
         });
         prev_date = curr_date;
+        console.log(prev_date);
       }
 
       wpm += scorelist[i]["speed"];
@@ -112,13 +117,13 @@ class User extends Component {
   render() {
     return (
       <div>
-        <Container fluid="sm" className="shadow p-3 box">
-          <h1 className="text">
-            {this.state.user_exists
-              ? this.state.name + "'s Profile"
-              : "The user does not exist."}
-          </h1>
+        <h1 className="ms-4 text">
+          {this.state.user_exists
+            ? this.state.name + "'s Profile"
+            : "The user does not exist."}
+        </h1>
 
+        <Container fluid="sm" className="shadow p-3 box">
           <Tabs defaultActiveKey="all">
             <Tab eventKey="all" title="All Stats">
               <Stats
@@ -135,7 +140,7 @@ class User extends Component {
             <Tab eventKey="solo" title="Solo Stats">
               <Stats
                 wpm_data={this.state.wpm_data}
-                stats={this.state.solo_stats}
+                stats={this.state.all_stats}
               />
             </Tab>
           </Tabs>

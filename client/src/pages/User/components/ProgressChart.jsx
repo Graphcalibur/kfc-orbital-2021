@@ -7,23 +7,22 @@ class ProgressChart extends Component {
       chart: {
         height: 100,
         type: "line",
-        zoom: {
-          enabled: false,
-        },
+        zoom: { enabled: false },
       },
       dataLabels: { enabled: false },
       grid: {
         row: {
-          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          colors: ["#233243", "transparent"], // takes an array which will be repeated on columns
           opacity: 0.5,
         },
       },
       markers: { size: 5 },
       stroke: { curve: "straight" },
-      title: { text: "Average WPM over Time" },
+      title: { text: "Average WPM over Time", style: { color: "#ffffff" } },
       xaxis: {
         type: "datetime",
         labels: {
+          style: { colors: "#ffffff" },
           datetimeFormatter: {
             year: "yyyy",
             month: "MMM yyyy",
@@ -32,7 +31,7 @@ class ProgressChart extends Component {
           },
         },
       },
-      yaxis: { decimalsInFloat: 1 },
+      yaxis: { decimalsInFloat: 1, labels: { style: { colors: "#ffffff" } } },
     },
   };
 
