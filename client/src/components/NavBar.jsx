@@ -40,14 +40,14 @@ class NavBar extends Component {
     return this.state.curr_user === null ? (
       <Nav className="ms-auto">
         <Button
-          variant="primary"
+          variant="outline-primary"
           onClick={() => this.setState({ show_login: true })}
           className="me-3"
         >
           Login
         </Button>
         <Button
-          variant="primary"
+          variant="outline-primary"
           onClick={() => this.setState({ show_sign_up: true })}
         >
           Sign Up
@@ -58,7 +58,7 @@ class NavBar extends Component {
         <Link className="nav-link" to={"/user/" + this.state.curr_user}>
           {this.state.curr_user}
         </Link>
-        <Button variant="primary" onClick={() => this.logout()}>
+        <Button variant="outline-primary" onClick={() => this.logout()}>
           Logout
         </Button>
       </Nav>

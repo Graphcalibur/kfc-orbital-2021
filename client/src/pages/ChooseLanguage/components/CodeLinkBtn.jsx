@@ -11,7 +11,7 @@ const CodeLinkBtn = (props) => {
   return (
     <Col md="4" className="d-grid">
       <Button
-        variant="primary"
+        variant="outline-primary"
         onClick={() => history.push(`/solotyping/${link}`)}
       >
         <h2>{lang}</h2>

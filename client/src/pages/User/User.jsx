@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { Container, Row, Tab, Tabs } from "react-bootstrap";
+import { Container, Tab, Tabs } from "react-bootstrap";
 
-import ProgressChart from "./components/ProgressChart";
 import Stats from "./components/Stats";
 
 class User extends Component {

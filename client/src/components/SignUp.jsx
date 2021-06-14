@@ -82,7 +82,7 @@ class SignUp extends Component {
         choose a different username.
       </p>
     ) : (
-      <></>
+      <span></span>
     );
   };
 
