@@ -3,7 +3,7 @@
 - Run `npm install` on the `server` directory, then run `npm run start`
 - The website will now be available on localhost:9000.
 
-This assumes you have the database running, and have a `.env` file in place of `.env.sample` with the
+This assumes you have a MySQL database running, and have a `.env` file in place of `.env.sample` with the
 needed information. `sample_database_dump.sql` is a file SQL can read that initializes a test database.
 
 ---
@@ -137,3 +137,15 @@ CREATE TABLE `user_password` (
   CONSTRAINT `fk_userid` FOREIGN KEY (`userid`) REFERENCES `code_snippet` (`id`) ON DELETE CASCADE
 )
 ```
+
+---
+
+# On Testing
+
+[Jest](https://jestjs.io/) is used to facilitate automated testing. The tests assume that
+the MySQL database is running, with a database whose title matches the `TEST_DATABASE_NAME` environment variable.
+(This must be different from `DATABASE_NAME`, but the check can be avoided if there is a need.)
+A backup of the current contents of the `TEST_DATABASE_NAME` database is made before running the tests.
+
+The tests assume that you have `mysqldump` and `mysql` accessible on the command line. If not,
+tweak the relevant functions in `tests/setup.js` to fit your needs.
