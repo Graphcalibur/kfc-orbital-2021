@@ -12,6 +12,7 @@ class SoloTyping extends Component {
   state = {
     code: [""],
     language: "",
+    id: -1,
 
     curr_line_num: 0,
     curr_input: "",
@@ -48,6 +49,7 @@ class SoloTyping extends Component {
         this.setState({
           code: data["code"].split("\n"),
           language: data["language"],
+          id: data["id"],
         });
       });
   };
@@ -83,6 +85,20 @@ class SoloTyping extends Component {
 
   stopTyping = () => {
     clearInterval(this.state.timer);
+
+    fetch("/api/current-login", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data === null) return;
+
+        const url =
+          `/api/stats/upload/` +
+          `${this.state.id}/${this.getWPM()}wpm/${this.getAccuracy()}`;
+
+        fetch(url, { method: "POST", credentials: "include" });
+      });
   };
 
   /* When pressing enter, check if the text in the input
@@ -169,9 +185,25 @@ class SoloTyping extends Component {
     return code_length;
   };
 
+  /* WPM = (# of chars in code / 5) / time in minutes */
+  getWPM = () => {
+    const code_length = this.getCodeLength();
+    return Math.round(code_length / 5 / (this.state.elapsed_time / 60000));
+  };
+
+  /* Accuracy = (# of chars in code / # of chars typed including wrong) * 100
+       Formula does * 1000 / 10 so that it's accurate to the first decimal place */
+  getAccuracy = () => {
+    const code_length = this.getCodeLength();
+    return (
+      Math.round(
+        (code_length / (this.state.typed_wrong + code_length)) * 1000
+      ) / 10
+    );
+  };
+
   render() {
     const ended = this.state.started && !this.state.typing;
-    const code_length = this.getCodeLength();
 
     return (
       <Container>
@@ -216,9 +248,8 @@ class SoloTyping extends Component {
 
             <TypingStats
               ended={ended}
-              code_length={code_length}
-              typed_wrong={this.state.typed_wrong}
-              elapsed_time={this.state.elapsed_time}
+              wpm={this.getWPM()}
+              accuracy={this.getAccuracy()}
               reset={this.reset}
               getCode={this.getCode}
             />
@@ -227,7 +258,7 @@ class SoloTyping extends Component {
           <Col md="3" fluid="sm">
             <Header
               language={this.state.language}
-              code_length={code_length}
+              code_length={this.getCodeLength()}
               code_lines={this.state.code.length}
             />
             <span></span>

@@ -5,15 +5,7 @@ const TypingStats = (props) => {
   /* Show no stats if typing test hasn't ended */
   if (!props.ended) return <span></span>;
 
-  const { code_length, typed_wrong } = props;
-
-  /* Accuracy = (# of chars in code / # of chars typed including wrong) * 100
-       Formula does * 1000 / 10 so that it's accurate to the first decimal place */
-  const accuracy =
-    Math.round((code_length / (typed_wrong + code_length)) * 1000) / 10;
-
-  /* WPM = (# of chars in code / 5) / time in minutes */
-  const wpm = Math.round(code_length / 5 / (props.elapsed_time / 60000));
+  const { accuracy, wpm } = props;
 
   return (
     <Container fluid="sm" className="shadow p-3 gap-3 mt-3 box">
