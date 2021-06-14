@@ -66,7 +66,7 @@ class Login extends Component {
         correctly and try again.
       </p>
     ) : (
-      <></>
+      <span></span>
     );
   };
 

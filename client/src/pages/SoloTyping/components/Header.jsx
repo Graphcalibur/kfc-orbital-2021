@@ -1,13 +1,29 @@
 import React from "react";
-import Timer from "./Timer";
+import { Button, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const Header = (props) => {
-  return (
-    <div className="d-flex flex-sm-row gap-5">
-      <b className="text">Language: {props.language}</b>
+  const popover = (
+    <Tooltip>
+      Type the code in each line and hit Enter when you reach the end. If you
+      make any errors, you'll have to backspace and fix them before continuing.
+      Timing begins when you start typing and ends after the last line.
+    </Tooltip>
+  );
 
-      <Timer elapsed_time={props.elapsed_time} typing={props.typing} />
-    </div>
+  return (
+    <Container className="shadow p-3 ms-3 align-content-start box">
+      <p className="text">
+        <b>Language:</b> {props.language}
+        <br />
+        <b>Length (Characters):</b> {props.code_length}
+        <br />
+        <b>Length (Lines):</b> {props.code_lines}
+      </p>
+
+      <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
+        <Button variant="outline-primary">How to Play</Button>
+      </OverlayTrigger>
+    </Container>
   );
 };
 

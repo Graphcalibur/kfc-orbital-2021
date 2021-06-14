@@ -3,14 +3,9 @@ import { Container, Button } from "react-bootstrap";
 
 const TypingStats = (props) => {
   /* Show no stats if typing test hasn't ended */
-  if (!props.ended) return <></>;
+  if (!props.ended) return <span></span>;
 
-  const { code, typed_wrong } = props;
-  let code_length = 0;
-
-  for (let i = 0; i < code.length; i++) {
-    code_length += code[i].trim().length; /* Don't count starting whitespace */
-  }
+  const { code_length, typed_wrong } = props;
 
   /* Accuracy = (# of chars in code / # of chars typed including wrong) * 100
        Formula does * 1000 / 10 so that it's accurate to the first decimal place */
@@ -29,7 +24,7 @@ const TypingStats = (props) => {
         Speed: {wpm} WPM
       </p>
 
-      <Button onClick={props.reset} variant="primary" className="me-4">
+      <Button onClick={props.reset} variant="outline-primary" className="me-4">
         Try Again
       </Button>
 
@@ -38,7 +33,7 @@ const TypingStats = (props) => {
           props.getCode();
           props.reset();
         }}
-        variant="primary"
+        variant="outline-primary"
         className="me-4"
       >
         New Practice
