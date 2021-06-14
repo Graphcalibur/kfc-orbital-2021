@@ -21,7 +21,8 @@ module.exports = async () => {
     async function save_testdb_to_backup() {
         console.log("Saving current contents of " + test_db_name + " to " + testdb_backup_filename);
         return new Promise((resolve, reject) => {
-            exec(`mysqldump -u${setupConfig.user} -p${setupConfig.password} -h${setupConfig.host} ${setupConfig.database} > ${testdb_backup_filename}`,
+            const {user, password, host, port, database} = setupConfig;
+            exec(`mysqldump -u${user} -p${password} -h ${host} --port ${port} ${database} > ${testdb_backup_filename}`,
                 (err, stdout, stderr) => {
                 if (err) {
                     reject(err);
@@ -40,7 +41,8 @@ module.exports = async () => {
     function load_testdb() {
         return new Promise((resolve, reject) => {
             console.log("Loading test database");
-            exec(`mysql -u${setupConfig.user} -p${setupConfig.password} -h${setupConfig.host} ${setupConfig.database} < ${testdb_filename}`,
+            const {user, password, host, port, database} = setupConfig;
+            exec(`mysql -u${user} -p${password} -h${host} --port ${port} ${database} < ${testdb_filename}`,
                 (err, stdout, stderr) => {
                 if (err) {
                     reject(err);
