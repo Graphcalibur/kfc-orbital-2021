@@ -116,8 +116,8 @@ class User extends Component {
 
   render() {
     return (
-      <div>
-        <h1 className="ms-4 text">
+      <Container fluid="sm">
+        <h1 className="text">
           {this.state.user_exists
             ? this.state.name + "'s Profile"
             : "The user does not exist."}
@@ -145,7 +145,7 @@ class User extends Component {
             </Tab>
           </Tabs>
         </Container>
-      </div>
+      </Container>
     );
   }
 }
