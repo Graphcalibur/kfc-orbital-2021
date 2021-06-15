@@ -49,7 +49,7 @@ const Stats = (props) => {
               {stats_titles[i]}:
             </Col>
             <Col md="5" style={{ color: color_stat(stat, i) }}>
-              {stat}
+              {Math.round(stat * 10) / 10}
               {addendums[i]}
             </Col>
           </Row>
