@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing TypingStats component in page SoloTyping Test 1: Not ended 1`] = `<span />`;
+
+exports[`Testing TypingStats component in page SoloTyping Test 2: Ended 1`] = `<span />`;
+
+exports[`Testing TypingStats component in page SoloTyping Test 3: Ended 1`] = `<span />`;

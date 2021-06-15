@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Header component in page SoloTyping Test 1 1`] = `
+<div
+  className="shadow p-3 ms-3 align-content-start box container"
+>
+  <p
+    className="text"
+  >
+    <b>
+      Language:
+    </b>
+     
+    Python
+    <br />
+    <b>
+      Length (Characters):
+    </b>
+     
+    80
+    <br />
+    <b>
+      Length (Lines):
+    </b>
+     
+    7
+  </p>
+  <button
+    className="btn btn-outline-primary"
+    disabled={false}
+    onClick={[Function]}
+    type="button"
+  >
+    How to Play
+  </button>
+</div>
+`;
+
+exports[`Testing Header component in page SoloTyping Test 2 1`] = `
+<div
+  className="shadow p-3 ms-3 align-content-start box container"
+>
+  <p
+    className="text"
+  >
+    <b>
+      Language:
+    </b>
+     
+    C++
+    <br />
+    <b>
+      Length (Characters):
+    </b>
+     
+    6931
+    <br />
+    <b>
+      Length (Lines):
+    </b>
+     
+    314
+  </p>
+  <button
+    className="btn btn-outline-primary"
+    disabled={false}
+    onClick={[Function]}
+    type="button"
+  >
+    How to Play
+  </button>
+</div>
+`;

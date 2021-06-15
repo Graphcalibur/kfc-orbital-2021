@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Login component Test 1: Not shown 1`] = `null`;
+
+exports[`Testing Login component Test 2: Test validation with empty username or password fields 1`] = `null`;
+
+exports[`Testing Login component Test 2: Test validation with empty username or password fields 2`] = `null`;
+
+exports[`Testing Login component Test 3: Test validation with filled in username and password fields 1`] = `null`;
+
+exports[`Testing Login component Test 4: Test failed login 1`] = `null`;

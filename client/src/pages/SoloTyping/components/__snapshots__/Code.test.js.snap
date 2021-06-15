@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Code component in page SoloTyping Test 1: Python Code, no wrong 1`] = `
+<div
+  className="mt-3"
+>
+  <label
+    className="form-label code text"
+  >
+    for i in range(10):
+  </label>
+  <label
+    className="form-label code text"
+  >
+        print("number", i)
+  </label>
+  <label
+    className="form-label code text"
+  >
+    <span>
+          
+      <u>
+        <span
+          style={
+            Object {
+              "color": "#00cc44",
+            }
+          }
+        >
+          print(
+        </span>
+        <span
+          style={
+            Object {
+              "color": "#ff1a1a",
+            }
+          }
+        >
+          
+        </span>
+        "number squared": i ** 2)
+      </u>
+    </span>
+  </label>
+</div>
+`;
+
+exports[`Testing Code component in page SoloTyping Test 2: Python Code, with wrong 1`] = `
+<div
+  className="mt-3"
+>
+  <label
+    className="form-label code text"
+  >
+    for i in range(10):
+  </label>
+  <label
+    className="form-label code text"
+  >
+        print("number", i)
+  </label>
+  <label
+    className="form-label code text"
+  >
+    <span>
+          
+      <u>
+        <span
+          style={
+            Object {
+              "color": "#00cc44",
+            }
+          }
+        >
+          pri
+        </span>
+        <span
+          style={
+            Object {
+              "color": "#ff1a1a",
+            }
+          }
+        >
+          nt(
+        </span>
+        "number squared": i ** 2)
+      </u>
+    </span>
+  </label>
+</div>
+`;
+
+exports[`Testing Code component in page SoloTyping Test 3: C++ Code, with wrong 1`] = `
+<div
+  className="mt-3"
+>
+  <label
+    className="form-label code text"
+  >
+    for (int i = 0; i &lt; 10; ++i)
+  </label>
+  <label
+    className="form-label code text"
+  >
+    <span>
+          
+      <u>
+        <span
+          style={
+            Object {
+              "color": "#00cc44",
+            }
+          }
+        >
+          cout &lt;&lt; i &lt;&lt;
+        </span>
+        <span
+          style={
+            Object {
+              "color": "#ff1a1a",
+            }
+          }
+        >
+          
+        </span>
+         endl;
+      </u>
+    </span>
+  </label>
+  <label
+    className="form-label code text"
+  >
+    }
+  </label>
+</div>
+`;
+
+exports[`Testing Code component in page SoloTyping Test 3: C++ Code, with wrong 2`] = `
+<div
+  className="mt-3"
+>
+  <label
+    className="form-label code text"
+  >
+    for (int i = 0; i &lt; 10; ++i)
+  </label>
+  <label
+    className="form-label code text"
+  >
+    <span>
+          
+      <u>
+        <span
+          style={
+            Object {
+              "color": "#00cc44",
+            }
+          }
+        >
+          c
+        </span>
+        <span
+          style={
+            Object {
+              "color": "#ff1a1a",
+            }
+          }
+        >
+          out &lt;&lt; i &lt;&lt;
+        </span>
+         endl;
+      </u>
+    </span>
+  </label>
+  <label
+    className="form-label code text"
+  >
+    }
+  </label>
+</div>
+`;
