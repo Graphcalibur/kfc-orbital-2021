@@ -16,7 +16,7 @@ describe("Testing Code component in page SoloTyping", () => {
         curr_input_len={6}
       />
     );
-    expect(tree).toMatchSnapshot();
+    expect(tree.toJSON()).toMatchSnapshot();
   });
   test("Test 2: Python Code, with wrong", () => {
     const tree = create(
@@ -31,7 +31,7 @@ describe("Testing Code component in page SoloTyping", () => {
         curr_input_len={6}
       />
     );
-    expect(tree).toMatchSnapshot();
+    expect(tree.toJSON()).toMatchSnapshot();
   });
   test("Test 3: C++ Code, with wrong", () => {
     const tree = create(
@@ -42,7 +42,7 @@ describe("Testing Code component in page SoloTyping", () => {
         curr_input_len={12}
       />
     );
-    expect(tree).toMatchSnapshot();
+    expect(tree.toJSON()).toMatchSnapshot();
   });
   test("Test 3: C++ Code, with wrong", () => {
     const tree = create(
@@ -53,6 +53,6 @@ describe("Testing Code component in page SoloTyping", () => {
         curr_input_len={12}
       />
     );
-    expect(tree).toMatchSnapshot();
+    expect(tree.toJSON()).toMatchSnapshot();
   });
 });

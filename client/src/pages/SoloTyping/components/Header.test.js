@@ -7,12 +7,12 @@ describe("Testing Header component in page SoloTyping", () => {
     const tree = create(
       <Header language={"Python"} code_length={80} code_lines={7} />
     );
-    expect(tree).toMatchSnapshot();
+    expect(tree.toJSON()).toMatchSnapshot();
   });
   test("Test 2", () => {
     const tree = create(
       <Header language={"C++"} code_length={6931} code_lines={314} />
     );
-    expect(tree).toMatchSnapshot();
+    expect(tree.toJSON()).toMatchSnapshot();
   });
 });

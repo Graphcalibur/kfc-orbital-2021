@@ -5,7 +5,7 @@ import { create } from "react-test-renderer";
 describe("Testing Login component", () => {
   test("Test 1: Not shown", () => {
     const tree = create(<Login show={false} />);
-    expect(tree).toMatchSnapshot();
+    expect(tree.toJSON()).toMatchSnapshot();
   });
 
   test("Test 2: Test validation with empty username or password fields", () => {
@@ -16,7 +16,7 @@ describe("Testing Login component", () => {
     expect(tree).toMatchSnapshot();
 
     instance.setState({ username: "", password: "test", validated: true });
-    expect(tree).toMatchSnapshot();
+    expect(tree.toJSON()).toMatchSnapshot();
   });
 
   test("Test 3: Test validation with filled in username and password fields", () => {
@@ -27,7 +27,7 @@ describe("Testing Login component", () => {
       password: "testtest",
       validated: true,
     });
-    expect(tree).toMatchSnapshot();
+    expect(tree.toJSON()).toMatchSnapshot();
   });
 
   test("Test 4: Test failed login", () => {
@@ -39,6 +39,6 @@ describe("Testing Login component", () => {
       validated: true,
       failed_login: true,
     });
-    expect(tree).toMatchSnapshot();
+    expect(tree.toJSON()).toMatchSnapshot();
   });
 });
