@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing ChooseLanguage Page Test 1 1`] = `
+<div
+  className="shadow p-4 mt-3 box container-sm"
+>
+  <b
+    className="text"
+  >
+    Select the language to practice on:
+  </b>
+  <div
+    className="mt-3 justify-content-evenly row"
+  >
+    <div
+      className="d-grid col-md-4"
+    >
+      <button
+        className="btn btn-outline-primary"
+        disabled={false}
+        onClick={[Function]}
+        type="button"
+      >
+        <h2>
+          Python
+        </h2>
+      </button>
+    </div>
+    <div
+      className="d-grid col-md-4"
+    >
+      <button
+        className="btn btn-outline-primary"
+        disabled={false}
+        onClick={[Function]}
+        type="button"
+      >
+        <h2>
+          C++
+        </h2>
+      </button>
+    </div>
+    <div
+      className="d-grid col-md-4"
+    >
+      <button
+        className="btn btn-outline-primary"
+        disabled={false}
+        onClick={[Function]}
+        type="button"
+      >
+        <h2>
+          All Languages
+        </h2>
+      </button>
+    </div>
+  </div>
+</div>
+`;

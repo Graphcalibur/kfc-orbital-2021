@@ -1,0 +1,149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Timer component in page SoloTyping Test 1: Mins < 10, Seconds < 10, Not typing 1`] = `
+<b
+  className="text"
+>
+  Time Taken:
+   
+  <span
+    style={
+      Object {
+        "color": "#AAAAAA",
+      }
+    }
+  >
+    00
+    :
+    01
+  </span>
+</b>
+`;
+
+exports[`Testing Timer component in page SoloTyping Test 2: Mins < 10, Seconds < 10, Typing 1`] = `
+<b
+  className="text"
+>
+  Time Taken:
+   
+  <span
+    style={Object {}}
+  >
+    00
+    :
+    02
+  </span>
+</b>
+`;
+
+exports[`Testing Timer component in page SoloTyping Test 3: Mins < 10, Seconds >= 10, Not typing 1`] = `
+<b
+  className="text"
+>
+  Time Taken:
+   
+  <span
+    style={
+      Object {
+        "color": "#AAAAAA",
+      }
+    }
+  >
+    00
+    :
+    12
+  </span>
+</b>
+`;
+
+exports[`Testing Timer component in page SoloTyping Test 4: Mins < 10, Seconds >= 10, Typing 1`] = `
+<b
+  className="text"
+>
+  Time Taken:
+   
+  <span
+    style={Object {}}
+  >
+    00
+    :
+    12
+  </span>
+</b>
+`;
+
+exports[`Testing Timer component in page SoloTyping Test 5: Mins >= 10, Seconds < 10, Not typing 1`] = `
+<b
+  className="text"
+>
+  Time Taken:
+   
+  <span
+    style={
+      Object {
+        "color": "#AAAAAA",
+      }
+    }
+  >
+    11
+    :
+    00
+  </span>
+</b>
+`;
+
+exports[`Testing Timer component in page SoloTyping Test 6: Mins >= 10, Seconds < 10, Typing 1`] = `
+<b
+  className="text"
+>
+  Time Taken:
+   
+  <span
+    style={Object {}}
+  >
+    11
+    :
+    00
+  </span>
+</b>
+`;
+
+exports[`Testing Timer component in page SoloTyping Test 7: Mins >= 10, Seconds >= 10, Not typing 1`] = `
+<b
+  className="text"
+>
+  Time Taken:
+   
+  <span
+    style={
+      Object {
+        "color": "#AAAAAA",
+      }
+    }
+  >
+    11
+    :
+    20
+  </span>
+</b>
+`;
+
+exports[`Testing Timer component in page SoloTyping Test 8: Mins >= 10, Seconds >= 10, Typing 1`] = `
+<b
+  className="text"
+>
+  Time Taken:
+   
+  <span
+    style={
+      Object {
+        "color": "#AAAAAA",
+      }
+    }
+  >
+    11
+    :
+    20
+  </span>
+</b>
+`;
