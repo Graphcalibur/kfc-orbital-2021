@@ -7,7 +7,8 @@ const Timer = (props) => {
   const padZeroes = (num) => (num < 10 ? "0" + num.toString() : num);
 
   /* Color time gray when not typing */
-  const colorTime = () => (props.typing ? {} : { color: "#AAAAAA" });
+  const colorTime = () =>
+    props.typing ? { color: "#FFFFFF" } : { color: "#AAAAAA" };
 
   const mins = padZeroes(Math.floor(elapsed_time / 60000));
   const secs = padZeroes(Math.floor(elapsed_time / 1000) % 60);
@@ -15,7 +16,7 @@ const Timer = (props) => {
   return (
     <b className="text">
       Time Taken:{" "}
-      <span style={colorTime()}>
+      <span style={colorTime()} className="time">
         {mins}:{secs}
       </span>
     </b>

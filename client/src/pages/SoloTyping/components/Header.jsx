@@ -3,7 +3,7 @@ import { Button, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const Header = (props) => {
   const popover = (
-    <Tooltip>
+    <Tooltip className="tooltip">
       Type the code in each line and hit Enter when you reach the end. If you
       make any errors, you'll have to backspace and fix them before continuing.
       Timing begins when you start typing and ends after the last line.
@@ -21,7 +21,9 @@ const Header = (props) => {
       </p>
 
       <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
-        <Button variant="outline-primary">How to Play</Button>
+        <Button variant="outline-primary" className="howToPlay">
+          How to Play
+        </Button>
       </OverlayTrigger>
     </Container>
   );
