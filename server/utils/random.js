@@ -40,6 +40,6 @@ module.exports.choice = choice;
 // Given a string S of characters, and a length L,
 // generate a string of length L whose characters come from 
 const random_string = (alphabet, length) => {
-    return Array(length).forEach((i) => choice(alphabet)).join("");
+    return Array.from({length: length}, i => choice(alphabet)).join("");
 };
-
+module.exports.random_string = random_string;

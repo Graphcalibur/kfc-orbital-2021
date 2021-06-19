@@ -5,28 +5,16 @@ const socketio_room_name = (room_code) => {
     return `game_room:${room_code}`;
 };
 
+// Static strings for ready states
+const READY = 'ready';
+const NOT_READY = 'not ready';
+
 class Room {
-    /* need properties:
-     *
-     * room code
-     * player list
-     *  -> user object, socket 
-     *
-     * need methods:
-     *
-     * get_players_state
-     * get_room_data
-     * add_user_to_room
-     * kick_user_from_room
-     * is_empty
-     *
-    */
     /* Constructs a Room.
      * Options:
      *  - room_code: the code this room will be known under.
-     *
      */
-    Room(options) {
+    constructor(options) {
         this.room_code = options.room_code;
         this.players = []; // Each element is an object {user: User, sock: socket}
         this.ready_state = {}; // Object with usernames as key, and ready state as value
@@ -39,12 +27,12 @@ class Room {
         return this.players.length === 0;
     }
     /* Return an array denoting the current ready/not ready
-     * state of the players. Each element of the array is an object of the structure
+     * status of the players. Each element of the array is an object of the structure
      *  { username: (User object)
      *    status: (A string, which is either 'ready' or 'not ready') }
      */
-    get_players_state() {
-        return this.players.forEach(player => {username: player.user, status: this.ready_state[player.user]});
+    get_players_status() {
+        return this.players.map(player => {return {user: player.user, status: this.ready_state[player.user.username]};});
     }
     /* Return an object encoding information for each room.
      * This is of the form
@@ -53,7 +41,7 @@ class Room {
      */
     get_room_data() {
         return {room_code: this.room_code,
-            players: this.players.forEach(player => player.user)};
+            players: this.players.map(player => player.user)};
     }
     /* Sets the ready status of a User.
      */
@@ -69,7 +57,7 @@ class Room {
             this.set_player_status(user_socket.user, msg.current_status);
         });
         user_socket.on('get-room-status', (msg) => {
-            user_socket.emit('get-room-status-return', this.get_players_state());
+            user_socket.emit('get-room-status-return', this.get_players_status());
         });
         user_socket.on('leave-room', (msg) => {
             this.kick_user_from_room(user_socket);
@@ -87,8 +75,9 @@ class Room {
      * This method takes in the socket
      * that is connected to the current user.
      * This adds listeners for room commands, adds the user to the
-     * socket.io room corresponding to this room, and assigns
-     * a guest user to the socket if it currently does not have a user.
+     * socket.io room corresponding to this room, assigns
+     * a guest user to the socket if it currently does not have a user,
+     * and adds them to ready_state and players.
      *
      * Returns a User object corresponding to the current user.
      */
@@ -101,6 +90,8 @@ class Room {
         }
         this.register_room_commands(user_socket);
         user_socket.join(socketio_room_name(this.room_code));
+        this.ready_state[user_socket.user.username] = NOT_READY;
+        this.players.push({user: user_socket.user, sock: user_socket});
         return user_socket.user;
     }
     /*
@@ -123,7 +114,7 @@ class RoomManager {
      * Constructor takes a single options parameter, which is currently unused.
      *
      */
-    RoomManager(options) {
+    constructor(options) {
         this.room_list = {};
     }
     /* Randomly generate a new room code.
@@ -149,7 +140,7 @@ class RoomManager {
      * Return a list of all rooms this RoomManager currently keeping track of.
      */
     list_rooms() {
-        return this.room_list.values.forEach(room => room.get_room_data());
+        return this.room_list.values.map(room => room.get_room_data());
     }
     /* Add a user to a room.
      * This method takes in the user's connection socket, and the room code
