@@ -129,6 +129,13 @@ let User = class User {
     }
 };
 
+let GuestUser = class GuestUser {
+    constructor(username) {
+        this.username = username;
+        this.id = null;
+    }
+};
+
 let Score = class Score {
     constructor(playid, snippetid, speed, acc, time, context, userid = null) {
         this.playid = playid;
@@ -151,3 +158,4 @@ let Score = class Score {
 User.errors = errors;
 module.exports.User = User;
 module.exports.Score = Score;
+module.exports.GuestUser = GuestUser;
