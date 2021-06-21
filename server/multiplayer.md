@@ -11,7 +11,9 @@ containing a string `message` with the reason, as well as any other diagnostic d
 
 [TODO decide: if/how to work acknowledgement messages into the protocol?]
 
-- Client connects to websocket server. They can optionally send this:
+---
+
+Client can authenticate with the the websocket server using:
 ### Type: login-ws
 ```
     data: {
@@ -19,12 +21,13 @@ containing a string `message` with the reason, as well as any other diagnostic d
         password: (password)
     }
 ```
-    This connects the client with the server.
 
-    If they do not send this message, the server will treat them as an anonymous participant.
-    when processing commands.
+This connects the client with the server.
 
--
+If they do not send this message, the server will treat them as an anonymous participant
+when processing commands.
+
+---
 
 Client can send the following messages related to joining multiplayer rooms:
 ### Type: create-room
@@ -33,13 +36,13 @@ Client can send the following messages related to joining multiplayer rooms:
         (nothing atm)
     }
 ```
-    Effect: Server will create a new room, sending back a create-room-return with the following data:
-    ```
-        data: {
-            room_code: (room code)
-        }
-    ```
-    This is the code of the generated room.
+Effect: Server will create a new room, sending back a create-room-return with the following data:
+```
+    data: {
+        room_code: (room code)
+    }
+```
+This is the code of the generated room.
 
 ### Type: join-room
 ```
@@ -47,20 +50,18 @@ Client can send the following messages related to joining multiplayer rooms:
         room_code: (room code)
     }
 ```
-    Effect: Server will add them to the room. If private room, then we can probably add
-    a passcode to `data` or something. If the room code does not exist, return an error.
-    Server will then send a `join-room-acknowledge`, with the following data:
+Effect: Server will add them to the room. If private room, then we can probably add
+a passcode to `data` or something. If the room code does not exist, return an error.
+Server will then send a `join-room-acknowledge`, with the following data:
     ```
         data: { 
             user: (User object)
         }
     ```
-    The User object contains `id` and `username` properties. If a valid ws_login
-    request was sent, this User will correspond to the logged-in user. If
-    not, this User will be a guest user, whose id is null and whose username
-    is randomly generated.
-
-    Server will then send a `set-snippet` to the client.
+The User object contains `id` and `username` properties. If a valid `login-ws`
+request was sent beforehand, this User will correspond to the logged-in user. If
+not, this User will be a guest user, whose id is null and whose username
+is randomly generated.
 
 ### Type: list-rooms
 ```
@@ -68,20 +69,24 @@ Client can send the following messages related to joining multiplayer rooms:
         (nothing atm, possibly filters?) 
     }
 ```
-    Effect: Server will return a list-rooms-return, with the following data:
-    ```
-        data: {
-            (an Object where each key is a room code, and each value is the Room
-            that code stands for)
-        }
-    ```
+Effect: Server will return a `list-rooms-return`, with the following data:
+```
+    data: {
+        (an Object where each key is a room code, and each value is the Room
+        that code stands for. Each Room is of the following format:
+            { room_code: (room code),
+              players: (A list of Users, corresponding to the players in the room)}
+        )
+    }
+```
 ### Type: leave-room
 ```
     data: {
         (nothing atm)
     }
 ```
-    Effect: Server will remove the user from the room.
+Effect: Server will remove the user from the room. If no users are left in the room,
+delete the room.
 
 ### Type: get-room-status
 ```
@@ -89,30 +94,30 @@ Client can send the following messages related to joining multiplayer rooms:
         (nothing atm)
     }
 ```
-    Effect: The server will return a message that looks like this:
-        ```
-        type: get-room-status-return
-        data: 
-        {
-            players: [ An array, with an element corresponding to each member in the room.
-                { user: (User object)
-                status: (TODO decide ready or not ready)
-                }
-            ]
-        }
-        ```
+Effect: The server will return a message that looks like this:
+```
+    type: get-room-status-return
+    data: 
+    {
+        players: [ An array, with an element corresponding to each member in the room.
+            { user: (User object)
+            status: (A player's state. This is a string, which is either 'ready' or 'not ready'.)
+            }
+        ]
+    }
+```
 ### Type: set-player-status
 ```
     data: {
-        current_status: (TODO decide ready or not ready)
+        current_status: (new player state)
     }
 ```
-    Effect: The server will update the ready/not ready of the player. Upon
-    (TODO decide criteria of game start), the game will start.
-    The server will send a set-snippet, followed by a sequence
-    of start-game-countdown messages.
+Effect: The server will update the ready/not ready of the player. Upon
+(TODO decide criteria of game start), the game will start.
+The server will send a set-snippet, followed by a sequence
+of start-game-countdown messages.
 
--
+---
 
 Once in a room, the client can expect to receive the following messages:
 ### Type: set-snippet
@@ -121,7 +126,7 @@ Once in a room, the client can expect to receive the following messages:
         snippet: (snippet object, same structure as `/api/code`)
     }
 ```
-    Effect: This is the snippet the room's next game will use.
+Effect: This is the snippet the room's next game will use.
 
 ### Type: start-game-countdown
 ```
@@ -129,11 +134,11 @@ Once in a room, the client can expect to receive the following messages:
         seconds_to_start: (# of seconds to game start)
     }
 ```
-    Effect: A game is starting within the next (# of seconds) seconds; if the client intends
-    to show this in the UI, it can use this message.
+Effect: A game is starting within the next (# of seconds) seconds; if the client intends
+to show this in the UI, it can use this message.
 
-    If (# of seconds) = 0, then this message denotes the start of the game. The client 
-    must start sending update-player-state messages periodically once this happens.
+If (# of seconds) = 0, then this message denotes the start of the game. The client 
+must start sending update-player-state messages periodically once this happens.
 
 ### Type: update-race-state
 ```
@@ -147,23 +152,10 @@ Once in a room, the client can expect to receive the following messages:
         ]
     }
 ```
-    This message will be sent periodically every [TODO decide value of] X seconds to the client.
-    This contains last known progress of each player in the race. The `characters_typed` value
-    comes from any update_player_state messages they send, while `duration_since_start` 
-    is tracked by the server.
-
-        - The client must also send the following message periodically:
-        ```
-        type: update-player-state
-        data: {
-            characters_typed: (# of seconds) 
-            current_accuracy: (current accuracy in race. TODO decide: or number of mistakes? idk)
-        }
-        ```
-        This notifies the server of the current progress of the player.
-        If characters_typed is equal to the length of the snippet, this will register
-        a score in the database, and the client can stop sending update_player_state messages.
-
+This message will be sent periodically every [TODO decide value of] X seconds to the client.
+This contains last known progress of each player in the race. The `characters_typed` value
+comes from any `update-player-state` messages they send, while `duration_since_start` 
+is tracked by the server.
 
 ### Type: signal-game-end
 ```
@@ -171,8 +163,24 @@ Once in a room, the client can expect to receive the following messages:
         scores: [ An array of Scores, with one for each player's performance ]
     }
 ```
-    This message signals the end of a game. The client must stop sending update_player_state
-    once it receives this, and must move into whatever end-of-game state it has. The client may
-    send a set_player_status to ready themselves for the next game.
+This message signals the end of a game. The client must stop sending `update-player-state`
+once it receives this, and must move into whatever end-of-game state it has. The client may
+send a `set-player-status` to ready themselves for the next game.
+
+---
+
+During a race, the client is expected to send the following message periodically:
+### Type: update-player-state
+```
+    data: {
+        characters_typed: (# of characters correctly typed since start of race) 
+        current_accuracy: (current accuracy in race. TODO decide: or number of mistakes? idk)
+    }
+```
+This notifies the server of the current progress of the player.
+If characters_typed is equal to the length of the snippet, this will register
+a score in the database, and the client can stop sending `update-player-state` messages.
+
+
 
 
