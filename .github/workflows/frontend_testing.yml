@@ -27,4 +27,4 @@ jobs:
           npm run build --if-present --prefix client/
       - name: Run client-side tests
         run: |
-          CI=true npm run test --prefix client/
+          npm run test --prefix client/
