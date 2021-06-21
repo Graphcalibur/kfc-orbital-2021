@@ -77,7 +77,7 @@ describe("Testing whole SoloTyping page", () => {
       "#800000"
     );
   });
-*/
+
   test("Test 3: Get first line correct and get errors on second line", () => {
     const { wrapper, instance, input } = setup();
     instance.setState({ code: code, language: "Python" });
@@ -114,7 +114,7 @@ describe("Testing whole SoloTyping page", () => {
       "#800000"
     );
   });
-
+*/
   test("Test 4: Test getWPM and getAccuracy", () => {
     const { wrapper, instance, input } = setup();
     instance.setState({
