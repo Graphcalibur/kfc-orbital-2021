@@ -77,7 +77,7 @@ describe("Testing whole SoloTyping page", () => {
       "#800000"
     );
   });
-
+*/
   test("Test 3: Get first line correct and get errors on second line", () => {
     const { wrapper, instance, input } = setup();
     instance.setState({ code: code, language: "Python" });
@@ -126,5 +126,5 @@ describe("Testing whole SoloTyping page", () => {
 
     expect(instance.getWPM()).toEqual(27);
     expect(instance.getAccuracy()).toEqual(97.1);
-  });*/
+  });
 });
