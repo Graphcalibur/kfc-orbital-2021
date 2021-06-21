@@ -9,7 +9,7 @@ const ChooseLanguage = () => {
       <b className="text">Select the language to practice on:</b>
       <Row className="mt-3 justify-content-evenly">
         {langs.map((lang) => (
-          <CodeLinkBtn language={lang} key={lang} />
+          <CodeLinkBtn language={lang} key={lang} id={lang} />
         ))}
       </Row>
     </Container>
