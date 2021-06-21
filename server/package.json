@@ -25,7 +25,8 @@
     "mysqldump": "^3.2.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "socket.io": "^4.1.2"
+    "socket.io": "^4.1.2",
+    "socket.io-client": "^4.1.2"
   },
   "devDependencies": {
     "jest": "^27.0.4"
