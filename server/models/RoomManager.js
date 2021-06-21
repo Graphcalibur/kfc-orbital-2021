@@ -18,6 +18,7 @@ class Room {
         this.room_code = options.room_code;
         this.players = []; // Each element is an object {user: User, sock: socket}
         this.ready_state = {}; // Object with usernames as key, and ready state as value
+        this.manager = options.manager;
     }
     /*
      * Check if the room is empty.
@@ -32,7 +33,11 @@ class Room {
      *    status: (A string, which is either 'ready' or 'not ready') }
      */
     get_players_status() {
-        return this.players.map(player => {return {user: player.user, status: this.ready_state[player.user.username]};});
+        return {
+            players: this.players.map(player => {
+                return {user: player.user, status: this.ready_state[player.user.username]};
+            })
+        };
     }
     /* Return an object encoding information for each room.
      * This is of the form
@@ -67,9 +72,9 @@ class Room {
      *
      */
     deregister_room_commands(user_socket) {
-        user_socket.off("set-player-status");
-        user_socket.off("get-room-status");
-        user_socket.off("leave-room");
+        user_socket.removeAllListeners("set-player-status");
+        user_socket.removeAllListeners("get-room-status");
+        user_socket.removeAllListeners("leave-room");
     }
     /* Add a user to the room.
      * This method takes in the socket
@@ -102,8 +107,14 @@ class Room {
     kick_user_from_room(user_socket) {
         this.deregister_room_commands(user_socket);   
         user_socket.leave(socketio_room_name(this.room_code));
+        delete this.ready_state[user_socket.user.username];
+        this.players = this.players.filter(
+            (player) => (player.user.username !== user_socket.user.username));
         if (!user_socket.user.id) {
             user_socket.user = undefined;
+        }
+        if (this.is_empty()) {
+            this.manager.delete_room(this.room_code);
         }
     }
 }
@@ -134,13 +145,19 @@ class RoomManager {
      * create a empty room with that code.
      */
     create_room(room_code) {
-        this.room_list[room_code] = new Room({room_code: room_code}); 
+        this.room_list[room_code] = new Room({room_code: room_code, manager: this}); 
+    }
+    /* Deletes a room, given its room code.
+     *
+     */
+    delete_room(room_code) {
+        delete this.room_list[room_code];
     }
     /* 
      * Return a list of all rooms this RoomManager currently keeping track of.
      */
     list_rooms() {
-        return this.room_list.values.map(room => room.get_room_data());
+        return Object.values(this.room_list).map(room => room.get_room_data());
     }
     /* Add a user to a room.
      * This method takes in the user's connection socket, and the room code
@@ -149,6 +166,7 @@ class RoomManager {
     add_user_to_room(user_socket, room_code) {
         if (this.room_list.hasOwnProperty(room_code)) {
             this.room_list[room_code].add_user_to_room(user_socket);
+            return user_socket.user;
         } else {
             user_socket.emit('error', {message: `Room ${room_code} does not exist`});
         }
@@ -175,4 +193,5 @@ class RoomManager {
 };
 
 module.exports.room_manager = new RoomManager();
+module.exports.RoomManager = RoomManager;
 module.exports.Room = Room;

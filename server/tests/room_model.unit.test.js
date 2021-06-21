@@ -17,12 +17,12 @@ test('can add command listeners to user socket', () => {
 });
 
 test('can remove command listeners from user socket', () => {
-    let mock_socket = {off: jest.fn()};
+    let mock_socket = {removeAllListeners: jest.fn()};
     room.deregister_room_commands(mock_socket);
-    expect(mock_socket.off.mock.calls.length).toBe(3);
+    expect(mock_socket.removeAllListeners.mock.calls.length).toBe(3);
     let should_listen = ["set-player-status",
         "get-room-status", "leave-room"];
-    let registered = mock_socket.off.mock.calls.map((call) => call[0]);
+    let registered = mock_socket.removeAllListeners.mock.calls.map((call) => call[0]);
     should_listen.sort();
     registered.sort();
     expect(registered).toEqual(should_listen);
@@ -70,14 +70,16 @@ const READY = 'ready';
 const NOT_READY = 'not ready';
 test('can set all users initially to non ready', () => {
     const status = room.get_players_status();
-    expect.assertions(3 * status.length);
-    status.forEach(player => expect(player.user.id).not.toBeUndefined());
-    status.forEach(player => expect(player.user.username).toBeTruthy());
-    status.forEach(player => expect(player.status).toEqual(NOT_READY));
+    const player_list = status.players;
+    expect.assertions(3 * player_list.length);
+    player_list.forEach(player => expect(player.user.id).not.toBeUndefined());
+    player_list.forEach(player => expect(player.user.username).toBeTruthy());
+    player_list.forEach(player => expect(player.status).toEqual(NOT_READY));
 });
 
 test('can change ready state', () => {
     room.set_player_status(registered_user, 'ready');
     const status = room.get_players_status();
-    status.forEach(player => expect(player.status).toEqual(player.user.id == registered_user.id ? READY : NOT_READY));
+    const player_list = status.players;
+    player_list.forEach(player => expect(player.status).toEqual(player.user.id == registered_user.id ? READY : NOT_READY));
 });
