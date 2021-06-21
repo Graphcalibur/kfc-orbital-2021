@@ -34,6 +34,7 @@ module.exports = async () => {
     };
 
     function redirect_database_operations() {
+        process.env.__NON_TEST_DATABSE_NAME = process.env.DATABASE_NAME;
         process.env.DATABASE_NAME = test_db_name;
         console.log("Redirected all database operations to " + process.env.TEST_DATABASE_NAME);
     };

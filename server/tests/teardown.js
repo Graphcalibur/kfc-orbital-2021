@@ -4,4 +4,5 @@ module.exports = async () => {
     con_pool.end(function (err) {
         if (err) throw err;
     });
+    process.env.DATABASE_NAME = process.env.__NON_TEST_DATABASE_NAME;
 };
