@@ -12,7 +12,6 @@ describe("Testing Login component", () => {
     const tree = create(<Login show={true} />);
 
     const instance = tree.getInstance();
-    console.log(tree.toJSON());
     instance.setState({ username: "test", validated: true });
     expect(tree).toMatchSnapshot();
 
