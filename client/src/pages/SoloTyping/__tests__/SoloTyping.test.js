@@ -11,9 +11,14 @@ import { shallow } from "enzyme";
 */
 
 const setup = () => {
+    SoloTyping.WrappedComponent.prototype.startTyping = () => {
+        return 0;
+    };
+    
   SoloTyping.WrappedComponent.prototype.componentDidMount = () => {
     return 0;
   };
+  
   const wrapper = shallow(
     <SoloTyping.WrappedComponent match={{ params: { lang: "Python" } }} />
   );
@@ -32,7 +37,7 @@ describe("Testing whole SoloTyping page", () => {
     '    print("number squared": i ** 2)',
   ];
 
-/*  test("Test 1: Testing initial state", () => {
+  test("Test 1: Testing initial state", () => {
     const { instance } = setup();
 
     expect(instance.state).toEqual({
@@ -57,7 +62,7 @@ describe("Testing whole SoloTyping page", () => {
 
   test("Test 2: Getting errors in first line", () => {
     const { wrapper, instance, input } = setup();
-    instance.setState({ code: code, language: "Python" });
+    instance.setState({ code: code, language: "Python", typing: true, started: true });
 
     const to_type = ["f", "fo", "fol", "fol ", "fol i"];
     for (let i = 0; i < to_type.length; i++) {
@@ -65,11 +70,9 @@ describe("Testing whole SoloTyping page", () => {
     }
 
     /* Have to update inpput to get the new style */
-/*    const updated_input = wrapper.find(".form-control");
+    const updated_input = wrapper.find(".form-control");
 
     expect(instance.state.curr_input).toEqual("fol i");
-    expect(instance.state.typing).toEqual(true);
-    expect(instance.state.started).toEqual(true);
     expect(instance.state.first_wrong).toEqual(2);
     expect(instance.state.typed_wrong).toEqual(3);
     expect(updated_input.prop("style")).toHaveProperty(
@@ -80,7 +83,7 @@ describe("Testing whole SoloTyping page", () => {
 
   test("Test 3: Get first line correct and get errors on second line", () => {
     const { wrapper, instance, input } = setup();
-    instance.setState({ code: code, language: "Python" });
+    instance.setState({ code: code, language: "Python", typing: true, started: true });
 
     for (let i = 1; i <= code[0].length; i++) {
       input.simulate("change", { target: { value: code[0].substring(0, i) } });
@@ -127,11 +130,4 @@ describe("Testing whole SoloTyping page", () => {
     expect(instance.getWPM()).toEqual(27);
     expect(instance.getAccuracy()).toEqual(97.1);
   });
-*/
-test("Test 4: Test getWPM and getAccuracy", () => {
-    const { wrapper, instance, input } = setup();
-    input.simulate("change", { target: { value: "z" } });
-    
-    expect(true).toEqual(true);
-});
 });
