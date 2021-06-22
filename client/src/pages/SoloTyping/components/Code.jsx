@@ -5,7 +5,11 @@ const Code = (props) => {
   return (
     <div className="mt-3">
       {props.code.map((line, i) => (
-        <label className="form-label code text" key={line}>
+        <label
+          className="form-label code text"
+          key={i}
+          id={"line" + i.toString()}
+        >
           <CodeLine
             is_curr_line={props.curr_line_num === i}
             line={line}

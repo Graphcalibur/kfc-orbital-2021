@@ -7,7 +7,7 @@ class Login extends Component {
     username: "",
     password: "",
     validated: false,
-    failedLogin: false,
+    failed_login: false,
   };
 
   handleUsernameChange = (event) => {
@@ -54,13 +54,13 @@ class Login extends Component {
       if (res.status !== 401) {
         window.location.reload();
       } else {
-        this.setState({ failedLogin: true });
+        this.setState({ failed_login: true });
       }
     });
   };
 
-  failedLoginText = () => {
-    return this.state.failedLogin ? (
+  failed_loginText = () => {
+    return this.state.failed_login ? (
       <p style={{ fontSize: "80%", color: "#ff1a1a" }}>
         Login has failed. Check that you typed your username and password
         correctly and try again.
@@ -116,7 +116,7 @@ class Login extends Component {
               </Form.Control.Feedback>
             </Form.Group>
 
-            {this.failedLoginText()}
+            {this.failed_loginText()}
 
             <div className="d-flex align-items-center gap-3 float-end">
               <Link style={{ fontSize: "80%" }} to="/">

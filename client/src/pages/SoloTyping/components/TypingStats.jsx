@@ -11,7 +11,7 @@ const TypingStats = (props) => {
     <Container fluid="sm" className="shadow p-3 gap-3 mt-3 box">
       <h3 className="text">Your Typing Stats:</h3>
 
-      <p className="text">
+      <p className="text" id="stats">
         Accuracy: {accuracy}% <br />
         Speed: {wpm} WPM
       </p>
