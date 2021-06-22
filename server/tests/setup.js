@@ -53,9 +53,26 @@ module.exports = async () => {
             });
         });
     };
+
+    function setup_websocket_server() {
+        const http = require('http');
+        const {setup_server} = require('../socker/socketController');
+
+        let http_server;
+        const test_port = process.env.TEST_SERVER_PORT || "6969";
+        const test_addr = process.env.TEST_SERVER_ADDRESS || "127.0.0.1";
+
+        http_server = http.createServer();
+        setup_server(http_server);
+        http_server.listen(test_port); 
+
+        global.__HTTP_SERVER__ = http_server;
+    }
+
     redirect_database_operations();
     await save_testdb_to_backup();
     await load_testdb();
+    setup_websocket_server();
 
     console.log("Finished global setup");
 };

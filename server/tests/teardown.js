@@ -5,4 +5,5 @@ module.exports = async () => {
         if (err) throw err;
     });
     process.env.DATABASE_NAME = process.env.__NON_TEST_DATABASE_NAME;
+    global.__HTTP_SERVER__.close();
 };

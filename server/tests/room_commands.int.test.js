@@ -1,45 +1,7 @@
 const io = require('socket.io-client');
-const http = require('http');
-const {setup_server} = require('../socker/socketController');
-
-let http_server;
+const {make_query_request} = require('../utils/sockets');
 const test_port = process.env.TEST_SERVER_PORT || "6969";
 const test_addr = process.env.TEST_SERVER_ADDRESS || "127.0.0.1";
-
-beforeAll(() => {
-    http_server = http.createServer();
-    setup_server(http_server);
-    http_server.listen(test_port); 
-});
-
-afterAll(() => {
-    http_server.close(); 
-})
-
-/* Utility function for making request-and-response messages.
- * Returns a Promise that resolves to a server response.
- * Parameters:
- *  - socket: A socket to make the query with.
- *  - message_type: The message type to send.
- *  - message_return_type: The type the server will use to send the return message.
- *  - data: The data to send.
- *  - timeout (default 5000ms): If no response is received by this duration, reject.
- */
-const make_query_request = (socket, message_type, message_return_type, data, timeout = 5000) => {
-    return new Promise((resolve, reject) => {
-        const timeoutID = setTimeout(() => {
-            reject(new Error(`Query for ${message_type} timed out after ${timeout} ms`))
-        }, timeout);
-        socket.once(message_return_type, (msg) => {
-            clearTimeout(timeoutID);
-            resolve(msg);
-        });
-        socket.once('error', (msg) => {
-            reject(msg);
-        });
-        socket.emit(message_type, data);
-    });
-};
 
 test('can connect to server', (done) => {
     let socket = io.connect(`http://${test_addr}:${test_port}`);
