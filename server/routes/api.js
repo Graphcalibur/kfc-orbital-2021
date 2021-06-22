@@ -15,9 +15,9 @@ router.get('/code', code_snippet_controller.code_snippet);
 /* Endpoints for registering and viewing statistics */
 router.post('/stats/upload/:snippetid(\\d+)/:speed(\\d+)wpm/:acc/', stat_controller.upload);
 
-router.get('/stats/summary/:username/', stat_controller.summary);
+router.get('/stats/:username/summary', user_controller.check_user_exists, stat_controller.summary);
 
-router.get('/stats/scorelist/:username', stat_controller.scorelist);
+router.get('/stats/:username/scorelist', user_controller.check_user_exists, stat_controller.scorelist);
 
 /* Registration and authentication endpoints */
 router.post('/register', user_controller.register);

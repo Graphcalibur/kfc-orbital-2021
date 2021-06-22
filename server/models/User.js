@@ -89,14 +89,6 @@ let User = class User {
             throw new IncorrectPasswordError(username);
         }
     }
-    async get_summary_data() {
-        const speed_query = await con_pool.query("SELECT AVG(speed), MAX(speed), AVG(accuracy), MAX(accuracy), COUNT(*) FROM score WHERE userid=?", [this.id]);
-        return {speed: {average: Number(speed_query[0]["AVG(speed)"]),
-                        maximum: Number(speed_query[0]["MAX(speed)"])},
-                accuracy: {average: Number(speed_query[0]["AVG(accuracy)"]),
-                           maximum: Number(speed_query[0]["MAX(accuracy)"])},
-                playcount: Number(speed_query[0]["COUNT(*)"])};
-    }
     build_scorelist_query_conditions(filters) {
         let query = ['userid = ?'];
         let params = [this.id];
@@ -110,6 +102,20 @@ let User = class User {
         }
         return {conditions: query.join(' AND '), params: params};
     };
+    async get_summary_data(filters) {
+        const {recent_count} = filters;
+        const limit_query = recent_count ? " LIMIT 0, ?" : "";
+        const limit_params = recent_count ? [recent_count] : [];
+        const {conditions, params} = this.build_scorelist_query_conditions(filters);
+        const speed_query = await con_pool.query("SELECT AVG(speed), MAX(speed), AVG(accuracy), MAX(accuracy), COUNT(*) " +
+            "FROM (SELECT * FROM score WHERE "+ conditions  + limit_query + ") as filteredScore",
+            params.concat(limit_params));
+        return {speed: {average: Number(speed_query[0]["AVG(speed)"]),
+                        maximum: Number(speed_query[0]["MAX(speed)"])},
+                accuracy: {average: Number(speed_query[0]["AVG(accuracy)"]),
+                           maximum: Number(speed_query[0]["MAX(accuracy)"])},
+                playcount: Number(speed_query[0]["COUNT(*)"])};
+    }
     async get_scorecount(filters) {
         const {conditions, params} = this.build_scorelist_query_conditions(filters);
         const query_results = await con_pool.query("SELECT COUNT(*) AS count FROM score " +

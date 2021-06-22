@@ -104,4 +104,20 @@ exports.require_auth = function(check_username) {
     };
 };
 
-
+/* Middleware to check that user exists.
+ * Requires that the route has req.params.username set up.
+ * Returns a 404 if not, proceeds with the chain otherwise.
+ */
+exports.check_user_exists = async function(req, res, next) {
+    try {
+        const u = await User.from_username(req.params.username);
+        next();
+    } catch (e) {
+        if (e instanceof User.errors.NoUserExistsError) {
+            res.status(404);
+            res.json({message: e.message});
+        } else {
+            throw e;
+        }
+    }
+};
