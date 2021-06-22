@@ -85,7 +85,7 @@ describe("Testing SignUp component", () => {
       password: "testtest",
       confirm_password: "testtest",
       validated: true,
-      failed_sign_up: true,
+      failed_sign_up: 1,
     });
     expect(tree.toJSON()).toMatchSnapshot();
   });
