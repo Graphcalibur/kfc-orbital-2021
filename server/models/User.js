@@ -106,9 +106,9 @@ let User = class User {
         let {conditions: sub_conditions, params: sub_params} = this.build_scorelist_query_conditions(filters);
         let sub_query = "SELECT * FROM score WHERE " + sub_conditions + 
             " ORDER BY time DESC";
-        if (typeof filters.recent !== "undefined") {
+        if (typeof filters.recent_count !== "undefined") {
             sub_query += " LIMIT 0, ?";
-            sub_params.push(filters.recent);
+            sub_params.push(filters.recent_count);
         }
         const speed_query = await con_pool.query("SELECT AVG(speed), MAX(speed), AVG(accuracy), MAX(accuracy), COUNT(*) FROM (" +
             sub_query + ") AS sub_score", sub_params);

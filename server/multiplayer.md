@@ -171,14 +171,15 @@ must start sending update-player-state messages periodically once this happens.
     data: {
         duration_since_start: (number of milliseconds since start of game)
         [ An array with one element for each player in the race. Each element is of the form
-            { username: (user),
-              is_finished: (boolean indicating whether or not they are done),
-              characters_typed: (ctyped)
+            { user: (User),
+              mistypes: (number of mistypes they made since start of race),
+              line_no: (current line number),
+              current_line: (a string, their current input field)
             }
         ]
     }
 ```
-This message will be sent periodically every [TODO decide value of] X seconds to the client.
+This message will be sent periodically every 1 second to the client.
 This contains last known progress of each player in the race. The `characters_typed` value
 comes from any `update-player-state` messages they send, while `duration_since_start` 
 is tracked by the server.
@@ -199,12 +200,14 @@ During a race, the client is expected to send the following message periodically
 ### Type: update-player-state
 ```
     data: {
-        characters_typed: (# of characters correctly typed since start of race) 
-        current_accuracy: (current accuracy in race. TODO decide: or number of mistakes? idk)
+        mistypes: (number of mistypes they made since start of race),
+        line_no: (current line number),
+        current_line: (a string, their current input field)
     }
 ```
 This notifies the server of the current progress of the player.
-If characters_typed is equal to the length of the snippet, this will register
+If `line_no` indicates the last line, and `current_line` exactly
+matches the last line of the snippet, this will register
 a score in the database, and the client can stop sending `update-player-state` messages.
 
 

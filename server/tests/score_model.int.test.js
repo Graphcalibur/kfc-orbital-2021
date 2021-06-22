@@ -40,7 +40,7 @@ test('can retrieve overall summary statistics', async () => {
 
 test('can summarize only X most recent plays', async () => {
     const u = new User(test_userid, test_username);
-    const summary = await u.get_summary_data({lang: undefined, context: undefined, recent: 3});
+    const summary = await u.get_summary_data({lang: undefined, context: undefined, recent_count: 3});
     expect(summary).toEqual({
         playcount: 4,
         speed: {average: 87.3333, maximum: 95},
