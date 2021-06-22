@@ -81,5 +81,22 @@ test('can change ready state', () => {
     room.set_player_status(registered_user, 'ready');
     const status = room.get_players_status();
     const player_list = status.players;
+    expect.assertions(player_list.length);
     player_list.forEach(player => expect(player.status).toEqual(player.user.id == registered_user.id ? READY : NOT_READY));
 });
+
+test('can kick user from room', () => {
+    // mock the user socket
+    const mock_usocket = {leave: jest.fn(), current_room: room, removeAllListeners: jest.fn()};
+    mock_usocket.user = registered_user;
+
+    room.kick_user_from_room(mock_usocket);
+
+    // test that they have left the socket.io room, that they have no current room,
+    // and that the room's listing does not have them
+    const player_list = room.get_players_status().players;
+    expect.assertions(player_list.length + 2);
+    expect(mock_usocket.leave.mock.calls).toEqual([[`game_room:${room_code}`]]);
+    expect(mock_usocket.current_room).toBeUndefined();
+    player_list.forEach(player => expect(player.user.username).not.toEqual(registered_user.username));
+})

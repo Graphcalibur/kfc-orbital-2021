@@ -87,6 +87,7 @@ class Room {
      * Returns a User object corresponding to the current user.
      */
     add_user_to_room(user_socket) {
+        user_socket.current_room = this;
         if (!user_socket.user) {
             const GUEST_USERNAME_ALPHABET = "ABCDEFGH0123456789";
             const GUEST_USERNAME_LENGTH = 8;
@@ -105,6 +106,7 @@ class Room {
      * and clears their user information, if they are a guest user.
      */
     kick_user_from_room(user_socket) {
+        user_socket.current_room = undefined;
         this.deregister_room_commands(user_socket);   
         user_socket.leave(socketio_room_name(this.room_code));
         delete this.ready_state[user_socket.user.username];

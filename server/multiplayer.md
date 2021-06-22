@@ -22,10 +22,36 @@ Client can authenticate with the the websocket server using:
     }
 ```
 
-This connects the client with the server.
+This connects the client with the server. The server will return a `login-ws-return`. If
+the login was successful, this message will contain a User object, corresponding to 
+the user you just logged in as. If not, it will give an error message explaining
+why it was unsuccessful.
 
 If they do not send this message, the server will treat them as an anonymous participant
 when processing commands.
+
+### Type: logout-ws
+```
+    data: {
+        (nothing)
+    }
+```
+Logs out. This clears all user-specific data the server has with this connection, 
+and if you were logged in, kicks you out of any rooms you are in.
+
+### Type: check-current-login
+```
+    data: {
+        (nothing)
+    }
+```
+The server will return a `check-current-login-return`.
+If there is a currently-logged in user, this message will contain a User object
+corresponding to that user.
+If the current user is connected as a guest user, this message will contain 
+a dummy User object with null `id` and a randomly generated `username`. This
+'guest' connection occurs when a non-logged in client sends a `join-room`.
+If neither apply, returns null.
 
 ---
 
