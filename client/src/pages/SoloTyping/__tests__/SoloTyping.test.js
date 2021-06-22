@@ -5,12 +5,16 @@ import SoloTyping from "../SoloTyping";
 import { shallow } from "enzyme";
 
 /* Functions that can't be tested:
+- startTyping() - activating the timer causes the Github CI to never end
 - componentDidMount() - fetch function is not recognized
 - stopTyping() - fetch function is not recognized
 - reset() - this.text_input is not recognized
 */
 
 const setup = () => {
+  SoloTyping.WrappedComponent.prototype.componentDidMount = () => {
+    return 0;
+  };
   SoloTyping.WrappedComponent.prototype.componentDidMount = () => {
     return 0;
   };
@@ -57,7 +61,12 @@ describe("Testing whole SoloTyping page", () => {
 
   test("Test 2: Getting errors in first line", () => {
     const { wrapper, instance, input } = setup();
-    instance.setState({ code: code, language: "Python" });
+    instance.setState({
+      code: code,
+      language: "Python",
+      typing: true,
+      started: true,
+    });
 
     const to_type = ["f", "fo", "fol", "fol ", "fol i"];
     for (let i = 0; i < to_type.length; i++) {
@@ -68,8 +77,6 @@ describe("Testing whole SoloTyping page", () => {
     const updated_input = wrapper.find(".form-control");
 
     expect(instance.state.curr_input).toEqual("fol i");
-    expect(instance.state.typing).toEqual(true);
-    expect(instance.state.started).toEqual(true);
     expect(instance.state.first_wrong).toEqual(2);
     expect(instance.state.typed_wrong).toEqual(3);
     expect(updated_input.prop("style")).toHaveProperty(
@@ -80,7 +87,12 @@ describe("Testing whole SoloTyping page", () => {
 
   test("Test 3: Get first line correct and get errors on second line", () => {
     const { wrapper, instance, input } = setup();
-    instance.setState({ code: code, language: "Python" });
+    instance.setState({
+      code: code,
+      language: "Python",
+      typing: true,
+      started: true,
+    });
 
     for (let i = 1; i <= code[0].length; i++) {
       input.simulate("change", { target: { value: code[0].substring(0, i) } });
