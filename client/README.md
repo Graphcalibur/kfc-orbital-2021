@@ -8,5 +8,7 @@
 
 ## Pages directory
 
-- /code -> Page for the solo typing practice
+- /code/[language] -> Page for the solo typing practice, with an optional parameter for practicing only on code from a certain language
 - /lang -> Page for choosing which language to practice
+- /user/[user] -> Page for viewing a user's profile
+- Any other url will display a "404 Error Page Not Found."

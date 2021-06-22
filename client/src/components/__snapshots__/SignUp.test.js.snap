@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing SignUp component Test 1: Not shown 1`] = `null`;
+
+exports[`Testing SignUp component Test 2: Test validation with empty at least one empty field 1`] = `null`;
+
+exports[`Testing SignUp component Test 2: Test validation with empty at least one empty field 2`] = `null`;
+
+exports[`Testing SignUp component Test 3: Test validation with filled in fields but different password and confirm_password 1`] = `null`;
+
+exports[`Testing SignUp component Test 4:  Test validation with all fields valid except for email 1`] = `null`;
+
+exports[`Testing SignUp component Test 5:  Test validation with all fields valid, email empty 1`] = `null`;
+
+exports[`Testing SignUp component Test 6:  Test validation with all fields valid and email filled in 1`] = `null`;
+
+exports[`Testing SignUp component Test 7:  Test validation with failed sign up 1`] = `null`;

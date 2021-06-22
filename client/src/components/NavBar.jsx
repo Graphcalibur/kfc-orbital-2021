@@ -7,37 +7,58 @@ import SignUp from "./SignUp";
 
 class NavBar extends Component {
   state = {
-    showLogin: false,
-    showSignUp: false,
-    loggedIn: false,
+    show_login: false,
+    show_sign_up: false,
+    curr_user: null,
   };
 
+  /* Get logged in user when the component first appears */
+  componentDidMount() {
+    fetch("/api/current-login", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const new_curr_user = data === null ? data : data["username"];
+        this.setState({ curr_user: new_curr_user });
+      });
+  }
+
+  /* Logs out and refreshes the page */
   logout = () => {
-    fetch("http://localhost:9000/api/logout", { method: "POST" });
-    this.setState({ loggedIn: false });
+    fetch("/api/logout", {
+      method: "POST",
+      credentials: "include",
+    }).then((res) => {
+      window.location.reload();
+    });
   };
 
+  /* Returns username and Logout button if a user if logged in, or
+  Login and Sign Up buttons if no user is logged in. */
   getLoginButtons = () => {
-    return !this.state.loggedIn ? (
+    return this.state.curr_user === null ? (
       <Nav className="ms-auto">
         <Button
-          variant="primary"
-          onClick={() => this.setState({ showLogin: true })}
+          variant="outline-primary"
+          onClick={() => this.setState({ show_login: true })}
           className="me-3"
         >
           Login
         </Button>
         <Button
-          variant="primary"
-          onClick={() => this.setState({ showSignUp: true })}
+          variant="outline-primary"
+          onClick={() => this.setState({ show_sign_up: true })}
         >
           Sign Up
         </Button>
       </Nav>
     ) : (
       <Nav className="ms-auto">
-        <p className="text me-3">You are logged in!</p>
-        <Button variant="primary" onClick={() => this.logout()}>
+        <Link className="nav-link" to={"/user/" + this.state.curr_user}>
+          {this.state.curr_user}
+        </Link>
+        <Button variant="outline-primary" onClick={() => this.logout()}>
           Logout
         </Button>
       </Nav>
@@ -68,13 +89,12 @@ class NavBar extends Component {
             {this.getLoginButtons()}
 
             <Login
-              show={this.state.showLogin}
-              close={() => this.setState({ showLogin: false })}
-              login={() => this.setState({ loggedIn: true })}
+              show={this.state.show_login}
+              close={() => this.setState({ show_login: false })}
             />
             <SignUp
-              show={this.state.showSignUp}
-              close={() => this.setState({ showSignUp: false })}
+              show={this.state.show_sign_up}
+              close={() => this.setState({ show_sign_up: false })}
             />
           </Navbar.Collapse>
         </Container>

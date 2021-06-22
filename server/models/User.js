@@ -131,7 +131,7 @@ let User = class User {
             " WHERE " + conditions
             + " ORDER BY time DESC LIMIT ?, ?",
             params.concat([from, count]));
-        return query_results.map(res => new Score(res.playid, res.id, res.speed, Number(res.accuracy), Date.parse(res.time), res.context, res.userid));
+        return query_results.map(res => new Score(res.playid, res.id, res.speed, Number(res.accuracy), Date.parse(res.time) / 1000, res.context, res.userid));
     }
 };
 

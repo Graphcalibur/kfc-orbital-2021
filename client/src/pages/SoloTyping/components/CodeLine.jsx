@@ -23,10 +23,10 @@ const CodeLine = (props) => {
     <span>
       {"\u00a0".repeat(starting_whitespace)}
       <u>
-        <span style={{ color: "#00cc44" }}>
+        <span style={{ color: "#00cc44" }} id="right">
           {line.substring(starting_whitespace, first_wrong)}
         </span>
-        <span style={{ color: "#ff1a1a" }}>
+        <span style={{ color: "#ff1a1a" }} id="wrong">
           {line.substring(first_wrong, end_wrong)}
         </span>
         {line.substring(end_wrong)}
