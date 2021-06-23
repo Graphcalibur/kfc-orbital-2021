@@ -7,23 +7,31 @@ class User extends Component {
   state = {
     user_exists: true,
     name: "",
-    all_stats: [0, 0, 0, 0, 0, 0, 0],
-    race_stats: [0, 0, 0, 0, 0, 0, 0],
-    solo_stats: [0, 0, 0, 0, 0, 0, 0],
-    wpm_data: [{ x: new Date(0), y: 0 }],
+    all_stats: [0, 0, 0, 0],
+    all_stats_recent: [0, 0, 0],
+    multiplayer_stats: [0, 0, 0, 0],
+    multiplayer_stats_recent: [0, 0, 0],
+    solo_stats: [0, 0, 0, 0],
+    solo_stats_recent: [0, 0, 0],
+    wpm_data_all: [{ x: new Date(0), y: 0 }],
+    wpm_data_multiplayer: [{ x: new Date(0), y: 0 }],
+    wpm_data_solo: [{ x: new Date(0), y: 0 }],
   };
 
   componentDidMount() {
     const { user } = this.props.match.params;
-    console.log(user);
 
-    this.getSummary(user);
-    this.getScorelist(user);
+    const contexts = ["", "?context=Multiplayer", "?context=Solo"];
+
+    for (let i = 0; i < 3; i++) {
+      this.getSummary(user, contexts[i]);
+      this.getScorelist(user, contexts[i]);
+    }
   }
 
   /* Fetch summary of stats from backend */
-  getSummary = (user) => {
-    const url = "/api/stats/summary/" + user;
+  getSummary = (user, context) => {
+    const url = "/api/stats/" + user + "/summary" + context;
 
     fetch(url)
       .then((res) => {
@@ -40,26 +48,73 @@ class User extends Component {
         if (data === null) {
           this.setState({ user_exists: false });
         } else {
-          const all_stats = [
+          const stats = [
             data["speed"]["average"],
-            0,
             data["speed"]["maximum"],
-            0,
             data["accuracy"]["average"],
-            0,
             data["playcount"],
           ];
-          this.setState({
-            name: user,
-            all_stats: all_stats,
-          });
+
+          if (context === "") {
+            this.setState({
+              name: user,
+              all_stats: stats,
+            });
+          } else if (context === "?context=Multiplayer") {
+            this.setState({
+              name: user,
+              multiplayer_stats: stats,
+            });
+          } else {
+            this.setState({
+              name: user,
+              solo_stats: stats,
+            });
+          }
+        }
+      });
+
+    fetch(url + (context === "" ? "?" : "&") + "recent=2")
+      .then((res) => {
+        /* Check if user exists */
+        if (false) {
+          // TODO: Check if user exists
+          return null;
+        } else {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        /* Sets user_exists to false if user doesn't exist, otherwise sets the stats */
+        if (data === null) {
+          return null;
+        } else {
+          const stats_recent = [
+            data["speed"]["average"],
+            data["speed"]["maximum"],
+            data["accuracy"]["average"],
+          ];
+
+          if (context === "") {
+            this.setState({
+              all_stats_recent: stats_recent,
+            });
+          } else if (context === "?context=Multiplayer") {
+            this.setState({
+              multiplayer_stats_recent: stats_recent,
+            });
+          } else {
+            this.setState({
+              solo_stats_recent: stats_recent,
+            });
+          }
         }
       });
   };
 
   /* Fetch list of scores from backend */
-  getScorelist = (user) => {
-    const url = "/api/stats/scorelist/" + user;
+  getScorelist = (user, context) => {
+    const url = "/api/stats/" + user + "/scorelist" + context;
     fetch(url)
       .then((res) => {
         if (false) {
@@ -71,15 +126,19 @@ class User extends Component {
       })
       .then((data) => {
         if (data !== null) {
-          this.calculateChartData(data["score_window"]);
+          /* Don't bother calculating chart data if there is no score data */
+          if (data["score_window"].length > 0) {
+            this.calculateChartData(data["score_window"], context);
+          }
         }
       });
   };
 
   /* Calculate x and y data for each data point in the progress chart
     x = Date of data point
-    y = Average WPM at that date */
-  calculateChartData = (scorelist) => {
+    y = Average WPM at that date
+    So we want to combine typing practices on the same date together */
+  calculateChartData = (scorelist, context) => {
     const wpm_data = [];
 
     let wpm = 0;
@@ -100,7 +159,6 @@ class User extends Component {
           y: wpm / (scorelist.length - i) /* Get average so far */,
         });
         prev_date = curr_date;
-        console.log(prev_date);
       }
 
       wpm += scorelist[i]["speed"];
@@ -111,7 +169,31 @@ class User extends Component {
       y: wpm / scorelist.length,
     });
 
-    this.setState({ wpm_data: wpm_data });
+    if (context === "") {
+      this.setState({ wpm_data_all: wpm_data });
+    } else if (context === "?context=Multiplayer") {
+      this.setState({ wpm_data_multiplayer: wpm_data });
+    } else {
+      this.setState({ wpm_data_solo: wpm_data });
+    }
+  };
+
+  /* Combines non-recent and recent array into one array */
+  combineArrays = (arr1, arr2) => {
+    const arr3 = [];
+    for (let i = 0; i < arr1.length + arr2.length; i++) {
+      arr3.push(0);
+    }
+
+    for (let i = 0; i < arr1.length; i++) {
+      arr3[i * 2] = arr1[i];
+    }
+
+    for (let i = 0; i < arr2.length; i++) {
+      arr3[i * 2 + 1] = arr2[i];
+    }
+
+    return arr3;
   };
 
   render() {
@@ -127,20 +209,29 @@ class User extends Component {
           <Tabs defaultActiveKey="all">
             <Tab eventKey="all" title="All Stats">
               <Stats
-                wpm_data={this.state.wpm_data}
-                stats={this.state.all_stats}
+                wpm_data={this.state.wpm_data_all}
+                stats={this.combineArrays(
+                  this.state.all_stats,
+                  this.state.all_stats_recent
+                )}
               />
             </Tab>
             <Tab eventKey="racing" title="Racing Stats">
               <Stats
-                wpm_data={this.state.wpm_data}
-                stats={this.state.race_stats}
+                wpm_data={this.state.wpm_data_multiplayer}
+                stats={this.combineArrays(
+                  this.state.multiplayer_stats,
+                  this.state.multiplayer_stats_recent
+                )}
               />
             </Tab>
             <Tab eventKey="solo" title="Solo Stats">
               <Stats
-                wpm_data={this.state.wpm_data}
-                stats={this.state.all_stats}
+                wpm_data={this.state.wpm_data_solo}
+                stats={this.combineArrays(
+                  this.state.solo_stats,
+                  this.state.solo_stats_recent
+                )}
               />
             </Tab>
           </Tabs>

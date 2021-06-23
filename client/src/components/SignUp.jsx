@@ -8,7 +8,7 @@ class SignUp extends Component {
     password: "",
     confirm_password: "",
     validated: false,
-    failed_sign_up: false,
+    failed_sign_up: 0,
   };
 
   handleUsernameChange = (event) => {
@@ -65,25 +65,35 @@ class SignUp extends Component {
     /* Automatically logs the user in after successful sign up. If sign up is
       not successful, displays an error message */
     fetch("/api/register", requestOptions).then((res) => {
-      if (res.status !== 409) {
+      if (res.status === 200) {
         fetch("/api/authuser", requestOptions2).then((res) => {
           window.location.reload();
         });
+      } else if (res.status === 409) {
+        this.setState({ failed_sign_up: 1 });
       } else {
-        this.setState({ failed_sign_up: true });
+        this.setState({ failed_sign_up: 2 });
       }
     });
   };
 
   failedSignUpText = () => {
-    return this.state.failed_sign_up ? (
-      <p style={{ fontSize: "80%", color: "#ff1a1a" }}>
-        Sign up has failed. Someone with that username already exists. Please
-        choose a different username.
-      </p>
-    ) : (
-      <span></span>
-    );
+    if (this.state.failed_sign_up === 1) {
+      return (
+        <p style={{ fontSize: "80%", color: "#ff1a1a" }}>
+          Sign up has failed. Someone with that username already exists. Please
+          choose a different username.
+        </p>
+      );
+    } else if (this.state.failed_sign_up === 2) {
+      return (
+        <p style={{ fontSize: "80%", color: "#ff1a1a" }}>
+          Sign up has failed. Please try again later.
+        </p>
+      );
+    }
+
+    return <span></span>;
   };
 
   render() {

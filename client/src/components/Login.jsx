@@ -7,7 +7,7 @@ class Login extends Component {
     username: "",
     password: "",
     validated: false,
-    failed_login: false,
+    failed_login: 0,
   };
 
   handleUsernameChange = (event) => {
@@ -51,23 +51,32 @@ class Login extends Component {
     };
 
     fetch("/api/authuser", requestOptions).then((res) => {
-      if (res.status !== 401) {
+      if (res.status === 200) {
         window.location.reload();
+      } else if (res.status === 401) {
+        this.setState({ failed_login: 1 });
       } else {
-        this.setState({ failed_login: true });
+        this.setState({ failed_login: 2 });
       }
     });
   };
 
   failed_loginText = () => {
-    return this.state.failed_login ? (
-      <p style={{ fontSize: "80%", color: "#ff1a1a" }}>
-        Login has failed. Check that you typed your username and password
-        correctly and try again.
-      </p>
-    ) : (
-      <span></span>
-    );
+    if (this.state.failed_login === 1) {
+      return (
+        <p style={{ fontSize: "80%", color: "#ff1a1a" }}>
+          Login has failed. Check that you typed your username and password
+          correctly and try again.
+        </p>
+      );
+    } else if (this.state.failed_login === 2) {
+      return (
+        <p style={{ fontSize: "80%", color: "#ff1a1a" }}>
+          Login has failed. Please try again later.
+        </p>
+      );
+    }
+    return <span></span>;
   };
 
   render() {
