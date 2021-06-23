@@ -1,5 +1,8 @@
 const random = require('../utils/random');
+const {io} = require('socket.io');
 const { GuestUser } = require('./User');
+const { Game } = require('./Game');
+const { CodeSnippet } = require('./CodeSnippet');
 
 const socketio_room_name = (room_code) => {
     return `game_room:${room_code}`;
@@ -19,6 +22,7 @@ class Room {
         this.players = []; // Each element is an object {user: User, sock: socket}
         this.ready_state = {}; // Object with usernames as key, and ready state as value
         this.manager = options.manager;
+        this.current_game = null;
     }
     /*
      * Check if the room is empty.
@@ -49,9 +53,29 @@ class Room {
             players: this.players.map(player => player.user)};
     }
     /* Sets the ready status of a User.
+     * If, because of this, all players are ready, initialize the game.
      */
     set_player_status(user, ready_state) {
         this.ready_state[user.username] = ready_state;  
+        if (this.players_all_ready) {
+            this.initialize_game();
+        }
+    }
+    /* Reset everyone's ready state.
+     * The intention is to call this after a game.
+     */
+    reset_player_statuses() {
+        for (const username in this.ready_state) {
+            this.ready_state[username] = NOT_READY;
+        }
+    }
+    /* Create a Game for the room, and prepare it.
+     */
+    initialize_game() {
+        CodeSnippet.get_random({}).then((snippet) => {
+            this.current_game = new Game(io, this.players, snippet, socketio_room_name(this.room_code));
+            this.current_game.prepare_game(() => this.reset_player_statuses());
+        });
     }
     /*
      * Adds listeners to process set-player-status, get-room-status and leave-room for
@@ -118,6 +142,11 @@ class Room {
         if (this.is_empty()) {
             this.manager.delete_room(this.room_code);
         }
+    }
+    get players_all_ready() {
+        return Object.entries(this.ready_state)
+            .map(([user, state]) => state === READY)
+            .reduce((a, b) => (a && b), true);
     }
 }
 

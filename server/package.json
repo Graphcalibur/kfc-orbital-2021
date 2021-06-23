@@ -19,6 +19,7 @@
     "express-session": "^1.17.2",
     "http-errors": "~1.6.3",
     "jade": "^0.31.2",
+    "jest-matcher-deep-close-to": "^2.0.1",
     "jstransformer": "^1.0.0",
     "morgan": "~1.9.1",
     "mysql2": "^2.2.5",

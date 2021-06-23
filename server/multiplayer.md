@@ -170,7 +170,7 @@ must start sending update-player-state messages periodically once this happens.
 ```
     data: {
         duration_since_start: (number of milliseconds since start of game)
-        [ An array with one element for each player in the race. Each element is of the form
+        player_states: [ An array with one element for each player in the race. Each element is of the form
             { user: (User),
               mistypes: (number of mistypes they made since start of race),
               line_no: (current line number),
@@ -187,7 +187,10 @@ is tracked by the server.
 ### Type: signal-game-end
 ```
     data: {
-        scores: [ An array of Scores, with one for each player's performance ]
+        scores: [ An array of objects; one for each player. Each is of the form
+            {user: User,
+             score: (Score object, as returned by /api/upload/)}
+        ]
     }
 ```
 This message signals the end of a game. The client must stop sending `update-player-state`
