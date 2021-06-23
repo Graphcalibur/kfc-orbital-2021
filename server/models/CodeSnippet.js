@@ -19,7 +19,7 @@ let CodeSnippet = class CodeSnippet {
     get length() {
         // Assume that every newline is a keystroke, and that whitespace is stripped.
         const lines = this.code.split('\n');
-        const total_characters = lines.map(line => line.trim()).reduce((a, b) => a + b);
+        const total_characters = lines.map(line => line.trim().length).reduce((a, b) => a + b);
         return total_characters + lines.length - 1;
     }
     /* Retrieves a random snippet, following the parameters in the query object.

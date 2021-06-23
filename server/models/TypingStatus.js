@@ -20,7 +20,8 @@ let TypingStatus = class TypingStatus {
     /* Check if this TypingState represents a finished state.
      */
     get is_finished() {
-        const final_line = this.snippet.code.split("\n").trim();  
+        const last_line_idx = this.snippet.line_count - 1;
+        const final_line = this.snippet.code.split("\n")[last_line_idx].trim();  
         return (this.line_no + 1 >= this.snippet.line_count) &&
             (this.current_line.trim() == final_line);
     }
@@ -61,7 +62,7 @@ let TypingStatus = class TypingStatus {
         if (!this.finish_time) return undefined;
         const code_length = this.snippet.length;
         const keystrokes = this.snippet.length + this.mistypes;
-        return code_length / (code_length + keystrokes) * 100;
+        return (code_length / (keystrokes)) * 100;
     }
     /* Return an object with speed, acc and time properties,
      * representing the finished state of the play.
