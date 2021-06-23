@@ -14,12 +14,17 @@ test('can connect to server', (done) => {
 describe('room-related messaging',  () => {
     const READY = 'ready';
     const NOT_READY = 'not ready';
-    let socket;
+    let socket, socket2;
     beforeAll((done) => {
         socket = io.connect(`http://${test_addr}:${test_port}`);
-        socket.on('connect', () => {
-            done();
-        });
+        socket2 = io.connect(`http://${test_addr}:${test_port}`);
+        let good_connections = 0;
+        const check_if_done = () => {
+            good_connections += 1;
+            if (good_connections === 2) done();
+        };
+        socket.on('connect', check_if_done);
+        socket2.on('connect', check_if_done);
     });
     test('room list is initially empty', async () => {
         const room_list = await make_query_request(socket, 'list-rooms', 'list-rooms-return', {});
@@ -41,11 +46,30 @@ describe('room-related messaging',  () => {
         current_user = join_room_result.user;
         console.log(current_user);
     });
+    let registered_user;
+    const registered_user_credentials = {username: "abacaba123", password: "SpeedIAmSpeed"};
+    test('can log in', async () => {
+        const login_result = await make_query_request(socket2, 'login-ws', 'login-ws-return',
+            registered_user_credentials
+        );
+        expect(login_result).toEqual({id: 1, username: "abacaba123"});
+        const current_login = await make_query_request(socket2, 'check-current-login', 'check-current-login-return',
+            {} 
+        );
+        expect(current_login).toEqual(login_result);
+        registered_user = login_result;
+    });
+    test('can join room as registered user', async () => {
+        const join_room_result = await make_query_request(socket2, 'join-room', 'join-room-acknowledge',
+            {room_code: generated_room_code});
+        expect(join_room_result.user).toEqual(registered_user);
+    });
     test('can update room listing', async () => {
         const room_list = await make_query_request(socket, 'list-rooms', 'list-rooms-return', {});
+
         expect(room_list.length).toBe(1);
         expect(room_list[0].room_code).toBe(generated_room_code);
-        expect(room_list[0].players).toEqual([current_user]);
+        expect(room_list[0].players).toEqual([current_user, registered_user]);
     });
     test('can get initial status', async () => {
         const list_room_result = await make_query_request(socket, 'get-room-status', 'get-room-status-return',
@@ -53,6 +77,8 @@ describe('room-related messaging',  () => {
         expect(list_room_result).toEqual({
             players: [
                 {user: current_user,
+                 status: NOT_READY},
+                {user: registered_user,
                  status: NOT_READY}
             ]
         });
@@ -64,17 +90,25 @@ describe('room-related messaging',  () => {
         expect(list_room_result).toEqual({
             players: [
                 {user: current_user,
-                status: READY}
+                status: READY},
+                {user: registered_user,
+                status: NOT_READY}
             ]
         });
     });
     test('can leave room', async () => {
         socket.emit('leave-room', {});
         const room_list = await make_query_request(socket, 'list-rooms', 'list-rooms-return', {});
-        expect(room_list.length).toBe(0); // room should be deleted
+        expect(room_list.length).toBe(1);
     });
+    test('can delete room with zero players', async () => {
+        socket2.emit('leave-room', {});
+        const room_list = await make_query_request(socket, 'list-rooms', 'list-rooms-return', {});
+        expect(room_list.length).toBe(0);
+    })
     afterAll((done) => {
         socket.disconnect();
+        socket2.disconnect();
         done();
     })
 });

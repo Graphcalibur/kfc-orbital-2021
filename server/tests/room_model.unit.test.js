@@ -81,8 +81,9 @@ test('can change ready state', () => {
     room.set_player_status(registered_user, 'ready');
     const status = room.get_players_status();
     const player_list = status.players;
-    expect.assertions(player_list.length);
+    expect.assertions(player_list.length + 1);
     player_list.forEach(player => expect(player.status).toEqual(player.user.id == registered_user.id ? READY : NOT_READY));
+    expect(room.players_all_ready).toBeFalsy();
 });
 
 test('can kick user from room', () => {
