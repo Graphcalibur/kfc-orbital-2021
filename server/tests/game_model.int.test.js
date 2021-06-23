@@ -113,7 +113,7 @@ describe('manual updating through update_player_state', () => {
     });
 });
 
-describe.only('socket communication', () => {
+describe('socket communication', () => {
     let game;
     let player1_update_listener, player2_update_listener;
     beforeAll(() => {

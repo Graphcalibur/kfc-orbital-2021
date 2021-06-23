@@ -26,6 +26,16 @@ let Game = class Game {
         this.game_start_time = null;
         this.broadcast_update_handle = null;
         this.game_finish_cb = null;
+        this.init_current_status();
+    }
+    /* Initialize the this.current_status map, setting properties
+     * of the TypingStatus such as the start time.
+     */
+    init_current_status() {
+        this.game_start_time = new Date();
+        for (const player of this.players) {
+            this.current_status.set(player.user, new TypingStatus(this.snippet, this.game_start_time));
+        }
     }
     /* Check if all players in the game have finished typing.
      */
@@ -77,12 +87,11 @@ let Game = class Game {
      * Takes a callback argument, which is called when the game ends.
      */
     run_game(cb) {
-        this.game_start_time = new Date();
         this.game_finish_cb = cb || (() => null);
         for (const player of this.players) {
             this.register_update_listener(player.user, player.socket);
-            this.current_status.set(player.user, new TypingStatus(this.snippet, this.game_start_time));
         }
+        this.init_current_status();
         const broadcast_updates = () => {
             const current_time = new Date();
             this.io.to(this.socketio_room).emit(
