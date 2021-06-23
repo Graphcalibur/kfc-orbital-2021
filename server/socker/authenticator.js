@@ -10,8 +10,8 @@ module.exports.setup_authentication_commands = (socket) => {
             if (User.errors.is_user_error(err)) {
                 socket.emit('error', {message: err.message});
             } else {
-                console.log("ws server encountered internal server error: ", err);
-                socket.emit('error', {message: "Internal server error occured"});
+                console.log("ws server encountered internal server error:  ", err);
+                socket.emit('error', {message: "internal server error occured", data: err.name});
             }
        }
     });
