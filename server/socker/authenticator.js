@@ -1,10 +1,8 @@
 
 const {User} = require('../models/User');
-console.log("Loading authenticator pointing to db ", process.env.DATABASE_NAME);
 
 module.exports.setup_authentication_commands = (socket) => {
     socket.on('login-ws', async (msg) => {
-        console.log("verifying auth", msg);
        try {
            socket.user = await User.from_authentication(msg.username, msg.password);
            socket.emit('login-ws-return', socket.user);

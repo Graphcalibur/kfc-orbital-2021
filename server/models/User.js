@@ -66,7 +66,6 @@ let User = class User {
      * Throws NoUserExistsError.
      */
     static async from_username(username) {
-        console.log("checking username", username);
         const user_id_results = await con_pool.query("SELECT id FROM user WHERE username = ?", username);
         if (user_id_results.length === 0) {
             throw new NoUserExistsError(username);
@@ -80,9 +79,7 @@ let User = class User {
      * Throws NoUserExistsError, IncorrectPasswordError, and Error (in case of unknown database error).
      */
     static async from_authentication(username, password) {
-        console.log("verifying auth", username, password);
         const user = await User.from_username(username);
-        console.log("retrieving hash of password");
         const saved_hash = await con_pool.query("SELECT password_hash FROM user_password WHERE userid = ?", user.id);
         if (saved_hash.length !== 1) {
             throw new Error("Internal error occurred");

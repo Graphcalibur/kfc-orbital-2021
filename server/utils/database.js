@@ -2,8 +2,6 @@
 var util = require("util");
 var mysql = require("mysql2");
 
-console.log("INIT DATABASE", process.env.DATABASE_NAME);
-
 const config = {
   connectionLimit: 20,
   host: process.env.DATABASE_HOST,

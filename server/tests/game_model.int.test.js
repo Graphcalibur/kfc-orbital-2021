@@ -224,6 +224,7 @@ describe('socket communication', () => {
 
         // give update that finishes game
         jest.advanceTimersByTime(500); // time since start: 6.5s
+        console.log("game done", new Date(), game.game_start_time);
         player2_update_listener({mistypes:3, line_no:3, current_line: ".<-.<.+++.------.--------.>>+.>++."});
     })
 });
