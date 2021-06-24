@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www",
     "serverstart": "DEBUG=server:* npm run devstart",
-    "test": "jest --detectOpenHandles --verbose"
+    "test": "jest --detectOpenHandles --verbose --runInBand"
   },
   "dependencies": {
     "argon2": "^0.27.2",
