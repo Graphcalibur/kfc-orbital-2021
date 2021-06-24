@@ -155,3 +155,7 @@ A backup of the current contents of the `TEST_DATABASE_NAME` database is made be
 
 The tests assume that you have `mysqldump` and `mysql` accessible on the command line. If not,
 tweak the relevant functions in `tests/setup.js` to fit your needs.
+
+_Note_: Watch mode is broken, probably due to the scuffed way I set up (and query) the database.
+At this point, the test suite is small enough that you can probably afford to 
+manually run it every time.

@@ -38,17 +38,15 @@ test('can retrieve overall summary statistics', async () => {
     });
 });
 
-/* TODO tests a feature on a topic branch, will uncomment if merged
 test('can summarize only X most recent plays', async () => {
     const u = new User(test_userid, test_username);
-    const summary = await u.get_summary_data({lang: undefined, context: undefined, recent: 3});
+    const summary = await u.get_summary_data({lang: undefined, context: undefined, recent_count: 3});
     expect(summary).toEqual({
         playcount: 4,
-        speed: {average: 87.33333, maximum: 95},
+        speed: {average: 87.3333, maximum: 95},
         accuracy: {average: 97.5, maximum: 99.3}
     });
 });
-*/
 
 test('can retrieve full scorelist', async () => {
     const u = new User(test_userid, test_username);

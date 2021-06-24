@@ -103,18 +103,20 @@ let User = class User {
         return {conditions: query.join(' AND '), params: params};
     };
     async get_summary_data(filters) {
-        const {recent_count} = filters;
-        const limit_query = recent_count ? " LIMIT 0, ?" : "";
-        const limit_params = recent_count ? [recent_count] : [];
-        const {conditions, params} = this.build_scorelist_query_conditions(filters);
-        const speed_query = await con_pool.query("SELECT AVG(speed), MAX(speed), AVG(accuracy), MAX(accuracy), COUNT(*) " +
-            "FROM (SELECT * FROM score WHERE "+ conditions  + limit_query + ") as filteredScore",
-            params.concat(limit_params));
+        let {conditions: sub_conditions, params: sub_params} = this.build_scorelist_query_conditions(filters);
+        let sub_query = "SELECT * FROM score WHERE " + sub_conditions + 
+            " ORDER BY time DESC";
+        if (typeof filters.recent_count !== "undefined") {
+            sub_query += " LIMIT 0, ?";
+            sub_params.push(filters.recent_count);
+        }
+        const speed_query = await con_pool.query("SELECT AVG(speed), MAX(speed), AVG(accuracy), MAX(accuracy), COUNT(*) FROM (" +
+            sub_query + ") AS sub_score", sub_params);
         return {speed: {average: Number(speed_query[0]["AVG(speed)"]),
                         maximum: Number(speed_query[0]["MAX(speed)"])},
                 accuracy: {average: Number(speed_query[0]["AVG(accuracy)"]),
                            maximum: Number(speed_query[0]["MAX(accuracy)"])},
-                playcount: Number(speed_query[0]["COUNT(*)"])};
+                playcount: await this.get_scorecount(filters)}
     }
     async get_scorecount(filters) {
         const {conditions, params} = this.build_scorelist_query_conditions(filters);
@@ -132,6 +134,13 @@ let User = class User {
             + " ORDER BY time DESC LIMIT ?, ?",
             params.concat([from, count]));
         return query_results.map(res => new Score(res.playid, res.id, res.speed, Number(res.accuracy), Date.parse(res.time) / 1000, res.context, res.userid));
+    }
+};
+
+let GuestUser = class GuestUser {
+    constructor(username) {
+        this.username = username;
+        this.id = null;
     }
 };
 
@@ -157,3 +166,4 @@ let Score = class Score {
 User.errors = errors;
 module.exports.User = User;
 module.exports.Score = Score;
+module.exports.GuestUser = GuestUser;

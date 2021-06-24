@@ -14,6 +14,13 @@ module.exports = async () => {
         "If you need to run tests on the same database as development," +
         "remove this assertion and try again.");
 
+    function redirect_database_operations() {
+        process.env.__NON_TEST_DATABSE_NAME = process.env.DATABASE_NAME;
+        process.env.DATABASE_NAME = test_db_name;
+        console.log("Redirected all database operations to " + process.env.TEST_DATABASE_NAME);
+    };
+
+    redirect_database_operations();
 
     let {config: setupConfig} = require('../utils/database');
     setupConfig.database = test_db_name;
@@ -33,11 +40,6 @@ module.exports = async () => {
         });
     };
 
-    function redirect_database_operations() {
-        process.env.DATABASE_NAME = test_db_name;
-        console.log("Redirected all database operations to " + process.env.TEST_DATABASE_NAME);
-    };
-
     function load_testdb() {
         return new Promise((resolve, reject) => {
             console.log("Loading test database");
@@ -52,9 +54,25 @@ module.exports = async () => {
             });
         });
     };
-    redirect_database_operations();
+
+    function setup_websocket_server() {
+        const http = require('http');
+        const {setup_server} = require('../socker/socketController');
+
+        let http_server;
+        const test_port = process.env.TEST_SERVER_PORT || "6969";
+        const test_addr = process.env.TEST_SERVER_ADDRESS || "127.0.0.1";
+
+        http_server = http.createServer();
+        setup_server(http_server);
+        http_server.listen(test_port); 
+
+        global.__HTTP_SERVER__ = http_server;
+    }
+
     await save_testdb_to_backup();
     await load_testdb();
+    setup_websocket_server();
 
     console.log("Finished global setup");
 };
