@@ -6,6 +6,7 @@ import ChooseLanguage from "./pages/ChooseLanguage/ChooseLanguage";
 import Error from "./pages/Error/Error";
 import Home from "./pages/Home/Home";
 import NavBar from "./components/NavBar";
+import Rooms from "./pages/Rooms/Rooms";
 import SoloTyping from "./pages/SoloTyping/SoloTyping";
 import User from "./pages/User/User";
 
@@ -19,6 +20,7 @@ class App extends Component {
           <Route path="/solotyping/:lang?" component={SoloTyping} />
           <Route path="/lang" component={ChooseLanguage} />
           <Route path="/user/:user" component={User} />
+          <Route path="/rooms" component={Rooms} />
           <Route component={Error} />
         </Switch>
       </div>

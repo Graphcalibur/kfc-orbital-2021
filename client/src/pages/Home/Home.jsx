@@ -75,7 +75,7 @@ const Home = () => {
                   </p>
                   <Button
                     variant="outline-primary"
-                    onClick={() => history.push(`/lang`)}
+                    onClick={() => history.push(`/rooms`)}
                   >
                     Race Against Others
                   </Button>
