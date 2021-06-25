@@ -1,4 +1,4 @@
-const { Server } = require("socket.io")(httpServer, { cors: { origin: "*" } });
+const { Server } = require("socket.io");
 const { room_manager } = require("../models/RoomManager");
 const { setup_authentication_commands } = require("./authenticator");
 

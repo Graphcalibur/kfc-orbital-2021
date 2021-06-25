@@ -1,37 +1,52 @@
 import React, { Component } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
-import socketIOClient from "socket.io-client";
+import { Col, Container, Row } from "react-bootstrap";
 
 import CreateRoom from "./components/CreateRoom";
 import Filters from "./components/Filters";
 import Room from "./components/Room";
 
-const socket = socketIOClient("http://localhost:9000", {
-  transports: ["websocket"],
-});
+// TODO: Implement logging in
 
 class Rooms extends Component {
   state = {
     rooms: [],
+    refresh_timer: null,
   };
 
+  /* When component mounts, set socket to listen to list of rooms,
+  and start the timer to periodically update lsit of rooms */
+  componentDidMount() {
+    this.props.socket.on("list-rooms-return", (rooms) => {
+      this.setState({ rooms: rooms });
+    });
+
+    /* For debugging purposes */
+    this.props.socket.on("join-room-acknowledge", (rooms) => {
+      console.log(rooms["user"]);
+    });
+
+    const timer = setInterval(() => {
+      this.getRooms();
+    }, 200);
+
+    this.setState({ refresh_timer: timer });
+  }
+
+  /* When component unmounts, stop the timer */
+  componentWillUnmount() {
+    clearInterval(this.state.refresh_timer);
+  }
+
   getRooms = () => {
-    socket.emit("list-rooms", "PLACEHOLDER");
+    this.props.socket.emit("list-rooms", "PLACEHOLDER");
   };
 
   createRoom = () => {
-    socket.emit("create-room");
+    this.props.socket.emit("create-room");
   };
 
-  componentDidMount = () => {
-    socket.on("list-rooms-return", (rooms) => {
-      this.setState({ rooms: rooms });
-      console.log(rooms);
-    });
-
-    setInterval(() => {
-      this.getRooms();
-    }, 200);
+  joinRoom = (code) => {
+    this.props.socket.emit("join-room", { room_code: code });
   };
 
   render() {
@@ -48,6 +63,7 @@ class Rooms extends Component {
                 code={room["room_code"]}
                 players={room["players"]}
                 key={room["room_code"]}
+                joinRoom={this.joinRoom}
               />
             ))}
           </Col>
