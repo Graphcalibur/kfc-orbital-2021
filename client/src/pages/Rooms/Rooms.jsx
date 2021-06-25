@@ -6,6 +6,7 @@ import Filters from "./components/Filters";
 import Room from "./components/Room";
 
 // TODO: Implement logging in
+// TODO: Display something when there aren't any rooms.
 
 class Rooms extends Component {
   state = {
