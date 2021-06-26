@@ -208,11 +208,13 @@ class SoloTyping extends Component {
     const { curr_input } = this.state;
 
     return (
-      <Container>
-        <h1 className="text">Solo Practice</h1>
+      <Container fluid="lg">
+        <h1 className="text">
+          <b>Solo Practice</b>
+        </h1>
 
         <Row>
-          <Col md="9" fluid="sm">
+          <Col md="9">
             <Container className="shadow p-3 box">
               <Timer
                 elapsed_time={this.state.elapsed_time}
@@ -253,7 +255,7 @@ class SoloTyping extends Component {
             />
           </Col>
 
-          <Col md="3" fluid="sm">
+          <Col md="3">
             <Header
               language={this.state.language}
               code_length={this.getCodeLength()}
