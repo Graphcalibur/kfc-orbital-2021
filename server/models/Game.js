@@ -94,7 +94,7 @@ let Game = class Game {
         this.init_current_status();
         const broadcast_updates = () => {
             const current_time = new Date();
-            this.io.to(this.socketio_room).emit(
+            this.io.in(this.socketio_room).emit(
                 'update-race-state',
                 {duration_since_start: current_time.getTime() - this.game_start_time.getTime(),
                  player_states: this.player_states}
@@ -107,13 +107,13 @@ let Game = class Game {
      * Takes a callback argument, which is called when the game ends.
      */
     prepare_game(cb) {
-        this.io.to(this.socketio_room).emit('set-snippet',
+        this.io.in(this.socketio_room).emit('set-snippet',
             {snippet: {id: this.snippet.id,
                        language: this.snippet.language,
                        code: this.snippet.code}}
         );
         const send_countdown = (count) => {
-            this.io.to(this.socketio_room).emit(
+            this.io.in(this.socketio_room).emit(
                 'start-game-countdown',
                 {seconds_to_start: count}
             );
@@ -144,7 +144,7 @@ let Game = class Game {
             return final_scores;
         };
         get_scores().then((scores) => {
-            this.io.to(this.socketio_room).emit(
+            this.io.in(this.socketio_room).emit(
                 'signal-game-end',
                 {scores: scores.entries()
                         .map(([user, score]) => {user, score})
@@ -152,11 +152,11 @@ let Game = class Game {
             );
             this.game_finish_cb();
         }).catch((err) => {
-            this.io.to(this.socketio_room).emit(
+            this.io.in(this.socketio_room).emit(
                 'signal-game-end',
                 {}
             );
-            this.io.to(this.socketio_room).emit(
+            this.io.in(this.socketio_room).emit(
                 'error',
                 {message: "Internal server error occurred during saving scores",
                  data: err}

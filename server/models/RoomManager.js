@@ -1,5 +1,4 @@
 const random = require('../utils/random');
-const {io} = require('socket.io');
 const { GuestUser } = require('./User');
 const { Game } = require('./Game');
 const { CodeSnippet } = require('./CodeSnippet');
@@ -18,6 +17,7 @@ class Room {
      *  - room_code: the code this room will be known under.
      */
     constructor(options) {
+        this.io = options.io;
         this.room_code = options.room_code;
         this.players = []; // Each element is an object {user: User, sock: socket}
         this.ready_state = {}; // Object with usernames as key, and ready state as value
@@ -73,7 +73,7 @@ class Room {
      */
     initialize_game() {
         CodeSnippet.get_random({}).then((snippet) => {
-            this.current_game = new Game(io, this.players, snippet, socketio_room_name(this.room_code));
+            this.current_game = new Game(this.io, this.players, snippet[0], socketio_room_name(this.room_code));
             this.current_game.prepare_game(() => this.reset_player_statuses());
         });
     }
@@ -121,7 +121,7 @@ class Room {
         this.register_room_commands(user_socket);
         user_socket.join(socketio_room_name(this.room_code));
         this.ready_state[user_socket.user.username] = NOT_READY;
-        this.players.push({user: user_socket.user, sock: user_socket});
+        this.players.push({user: user_socket.user, socket: user_socket});
         return user_socket.user;
     }
     /*
@@ -158,6 +158,10 @@ class RoomManager {
      */
     constructor(options) {
         this.room_list = {};
+        this.io = undefined;
+    }
+    set_server(io) {
+        this.io = io;
     }
     /* Randomly generate a new room code.
      * **NOTE**: This does not check if the room code already exists,
@@ -176,7 +180,7 @@ class RoomManager {
      * create a empty room with that code.
      */
     create_room(room_code) {
-        this.room_list[room_code] = new Room({room_code: room_code, manager: this}); 
+        this.room_list[room_code] = new Room({io: this.io, room_code: room_code, manager: this}); 
     }
     /* Deletes a room, given its room code.
      *
