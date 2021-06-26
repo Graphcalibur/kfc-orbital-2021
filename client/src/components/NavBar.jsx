@@ -78,7 +78,7 @@ class NavBar extends Component {
               <Link className="nav-link" to="/">
                 Home
               </Link>
-              <Link className="nav-link" to="/lang">
+              <Link className="nav-link" to="/rooms">
                 Race
               </Link>
               <Link className="nav-link" to="/lang">

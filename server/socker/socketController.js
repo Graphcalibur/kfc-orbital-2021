@@ -1,6 +1,6 @@
-const {Server} = require('socket.io');
-const {room_manager} = require('../models/RoomManager');
-const {setup_authentication_commands} = require("./authenticator");
+const { Server } = require("socket.io");
+const { room_manager } = require("../models/RoomManager");
+const { setup_authentication_commands } = require("./authenticator");
 
 module.exports.setup_server = server => {
     const io = new Server(server);
@@ -10,4 +10,3 @@ module.exports.setup_server = server => {
         setup_authentication_commands(socket);
     });
 };
-

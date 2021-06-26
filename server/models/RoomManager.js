@@ -8,8 +8,8 @@ const socketio_room_name = (room_code) => {
 };
 
 // Static strings for ready states
-const READY = 'ready';
-const NOT_READY = 'not ready';
+const READY = 'Ready';
+const NOT_READY = 'Not Ready';
 
 class Room {
     /* Constructs a Room.
