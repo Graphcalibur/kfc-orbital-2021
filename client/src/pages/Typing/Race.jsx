@@ -1,14 +1,19 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Col, Container, Row } from "react-bootstrap";
+import socketIOClient from "socket.io-client/dist/socket.io.js";
 
-import "./SoloTyping.css";
+import "./Typing.css";
 import Code from "./components/Code";
 import Header from "./components/Header";
-import TypingStats from "./components/TypingStats";
 import Timer from "./components/Timer";
+import TypingInput from "./components/TypingInput";
 
-class SoloTyping extends Component {
+const socket = socketIOClient("http://localhost:9000", {
+  transports: ["websocket"],
+});
+
+class Race extends Component {
   state = {
     code: [""],
     language: "",
@@ -18,92 +23,70 @@ class SoloTyping extends Component {
     curr_input: "",
 
     first_wrong: 0,
-    typed_wrong: 0,
 
     typing: false,
     started: false,
 
-    start_time: 0,
     elapsed_time: 0,
-    timer: null,
+    refresh_timer: null,
+
+    countdown: 100,
   };
 
   componentDidMount() {
-    this.getCode();
+    socket.on("start-game-countdown", (data) => {
+      this.setState({ countdown: data["seconds_to_start"] });
+
+      if (this.state.countdown === 0) {
+        this.startTyping();
+      }
+    });
+
+    socket.on("update-race-state", (data) => {
+      this.setState({
+        elapsed_time: data["duration_since_start"],
+      });
+    });
+
+    socket.on("signal-game-end", (data) => {
+      this.endGame();
+    });
+
     this.text_input.focus();
   }
 
-  /* Fetches code from backend */
-  getCode = () => {
-    const { lang } = this.props.match.params;
-    let url = "/api/code";
+  endGame = () => {
+    console.log("game ended");
+  };
 
-    if (lang !== undefined) {
-      url += "?lang=" + lang;
-    }
-
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => res[0])
-      .then((data) => {
-        this.setState({
-          code: data["code"].split("\n"),
-          language: data["language"],
-          id: data["id"],
-        });
-      });
+  sendPlayerState = () => {
+    socket.emit("update-player-state", {
+      mistypes: this.state.typed_wrong,
+      line_no: this.state.curr_line_num,
+      current_line: this.state.curr_input,
+    });
   };
 
   startTyping = () => {
     const timer = setInterval(() => {
-      this.setState({ elapsed_time: Date.now() - this.state.start_time });
+      this.sendPlayerState();
     }, 200);
 
     this.setState({
       typing: true,
       started: true,
-      start_time: Date.now(),
-      timer: timer,
+      refresh_timer: timer,
     });
-  };
-
-  reset = () => {
-    this.setState({
-      curr_line_num: 0,
-      curr_input: "",
-      first_wrong: 0,
-      typed_wrong: 0,
-      typing: false,
-      started: false,
-      start_time: 0,
-      elapsed_time: 0,
-      timer: null,
-    });
-
-    this.text_input.focus();
   };
 
   stopTyping = () => {
     clearInterval(this.state.timer);
-
-    fetch("/api/current-login", {
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data === null) return;
-
-        const url =
-          `/api/stats/upload/` +
-          `${this.state.id}/${this.getWPM()}wpm/${this.getAccuracy()}`;
-
-        fetch(url, { method: "POST", credentials: "include" });
-      });
+    this.sendPlayerState();
   };
 
   /* When pressing enter, check if the text in the input
-      matches the current line being typed. If it does, clear
-      the input and move on to the next line */
+          matches the current line being typed. If it does, clear
+          the input and move on to the next line */
   handleSubmit = (event) => {
     if (event.key === "Enter" && this.state.typing) {
       const { curr_input, code, curr_line_num } = this.state;
@@ -165,13 +148,6 @@ class SoloTyping extends Component {
     });
   };
 
-  /* Change bg color of the input to red when there is a wrong input */
-  getInputStyle = () => {
-    return this.state.first_wrong < this.state.curr_input.length
-      ? { backgroundColor: "#800000", color: "white" }
-      : { backgroundColor: "#233243", color: "white" };
-  };
-
   /* Returns length of code */
   getCodeLength = () => {
     const { code } = this.state;
@@ -185,25 +161,9 @@ class SoloTyping extends Component {
     return code_length;
   };
 
-  /* WPM = (# of chars in code / 5) / time in minutes */
-  getWPM = () => {
-    const code_length = this.getCodeLength();
-    return Math.round(code_length / 5 / (this.state.elapsed_time / 60000));
-  };
-
-  /* Accuracy = (# of chars in code / # of chars typed including wrong) * 100
-       Formula does * 1000 / 10 so that it's accurate to the first decimal place */
-  getAccuracy = () => {
-    const code_length = this.getCodeLength();
-    return (
-      Math.round(
-        (code_length / (this.state.typed_wrong + code_length)) * 1000
-      ) / 10
-    );
-  };
-
   render() {
     const ended = this.state.started && !this.state.typing;
+    const { curr_input } = this.state;
 
     return (
       <Container>
@@ -221,22 +181,18 @@ class SoloTyping extends Component {
                 code={this.state.code}
                 curr_line_num={this.state.curr_line_num}
                 first_wrong={this.state.first_wrong}
-                curr_input_len={this.state.curr_input.length}
+                curr_input_len={curr_input.length}
               />
 
-              <input
-                type="text"
-                className="form-control code mb-4"
-                autoComplete="off"
-                placeholder="Start typing here..."
-                style={this.getInputStyle()}
-                value={this.state.curr_input}
-                readOnly={ended}
-                onKeyPress={this.handleSubmit}
-                ref={(input) =>
-                  (this.text_input = input)
-                } /* for autofocusing after clicking start */
-                onChange={(event) => this.handleInputChange(event)}
+              <TypingInput
+                is_wrong={this.state.first_wrong < curr_input.length}
+                curr_input={curr_input}
+                ended={ended}
+                handleSubmit={this.handleSubmit}
+                handleInputChange={this.handleInputChange}
+                setRef={(input) => {
+                  this.text_input = input;
+                }}
               />
 
               <Link to={`/lang`}>
@@ -245,14 +201,6 @@ class SoloTyping extends Component {
                 </button>
               </Link>
             </Container>
-
-            <TypingStats
-              ended={ended}
-              wpm={this.getWPM()}
-              accuracy={this.getAccuracy()}
-              reset={this.reset}
-              getCode={this.getCode}
-            />
           </Col>
 
           <Col md="3" fluid="sm">
@@ -268,5 +216,3 @@ class SoloTyping extends Component {
     );
   }
 }
-
-export default withRouter(SoloTyping);
