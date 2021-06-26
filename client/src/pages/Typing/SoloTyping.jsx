@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Col, Container, Row } from "react-bootstrap";
 
-import "./SoloTyping.css";
-import Code from "../components/Code";
-import Header from "../components/Header";
-import TypingStats from "../components/TypingStats";
-import Timer from "../components/Timer";
-import TypingInput from "../components/TypingInput";
+import "./Typing.css";
+import Code from "./components/Code";
+import Header from "./components/Header";
+import TypingStats from "./components/TypingStats";
+import Timer from "./components/Timer";
+import TypingInput from "./components/TypingInput";
 
 class SoloTyping extends Component {
   state = {
@@ -231,7 +231,7 @@ class SoloTyping extends Component {
               <TypingInput
                 is_wrong={this.state.first_wrong < curr_input.length}
                 curr_input={curr_input}
-                ended={ended}
+                cannotType={ended}
                 handleSubmit={this.handleSubmit}
                 handleInputChange={this.handleInputChange}
                 setRef={(input) => {

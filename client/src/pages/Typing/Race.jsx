@@ -1,23 +1,23 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { Col, Container, Row } from "react-bootstrap";
-import socketIOClient from "socket.io-client/dist/socket.io.js";
 
 import "./Typing.css";
 import Code from "./components/Code";
 import Header from "./components/Header";
+import PlayerState from "./components/PlayerState";
 import Timer from "./components/Timer";
 import TypingInput from "./components/TypingInput";
 
-const socket = socketIOClient("http://localhost:9000", {
-  transports: ["websocket"],
-});
+// TODO: Handle error where user enters Race without entering a room
+// TODO: Handle user leaving a Race early
+// TODO: Add Countdown
 
 class Race extends Component {
   state = {
-    code: [""],
-    language: "",
-    id: -1,
+    code: this.props.snippet["code"].split("\n"),
+    language: this.props.snippet["language"],
+    id: this.props.snippet["id"],
 
     curr_line_num: 0,
     curr_input: "",
@@ -28,13 +28,13 @@ class Race extends Component {
     started: false,
 
     elapsed_time: 0,
-    refresh_timer: null,
 
     countdown: 100,
+    player_states: [],
   };
 
   componentDidMount() {
-    socket.on("start-game-countdown", (data) => {
+    this.props.socket.on("start-game-countdown", (data) => {
       this.setState({ countdown: data["seconds_to_start"] });
 
       if (this.state.countdown === 0) {
@@ -42,17 +42,24 @@ class Race extends Component {
       }
     });
 
-    socket.on("update-race-state", (data) => {
-      this.setState({
-        elapsed_time: data["duration_since_start"],
-      });
+    this.props.socket.on("update-race-state", (data) => {
+      if (this.state.typing) {
+        this.setState({
+          elapsed_time: data["duration_since_start"],
+          player_states: data["player_states"],
+        });
+      }
     });
 
-    socket.on("signal-game-end", (data) => {
+    this.props.socket.on("signal-game-end", (data) => {
       this.endGame();
     });
 
     this.text_input.focus();
+  }
+
+  componentWillUnmount() {
+    this.props.socket.emit("leave-room");
   }
 
   endGame = () => {
@@ -60,7 +67,7 @@ class Race extends Component {
   };
 
   sendPlayerState = () => {
-    socket.emit("update-player-state", {
+    this.props.socket.emit("update-player-state", {
       mistypes: this.state.typed_wrong,
       line_no: this.state.curr_line_num,
       current_line: this.state.curr_input,
@@ -68,19 +75,13 @@ class Race extends Component {
   };
 
   startTyping = () => {
-    const timer = setInterval(() => {
-      this.sendPlayerState();
-    }, 200);
-
     this.setState({
       typing: true,
       started: true,
-      refresh_timer: timer,
     });
   };
 
   stopTyping = () => {
-    clearInterval(this.state.timer);
     this.sendPlayerState();
   };
 
@@ -146,6 +147,8 @@ class Race extends Component {
       first_wrong: new_first_wrong,
       curr_input: new_input,
     });
+
+    this.sendPlayerState();
   };
 
   /* Returns length of code */
@@ -161,16 +164,41 @@ class Race extends Component {
     return code_length;
   };
 
+  /* Calculates progress of a player in % */
+  getPlayerProgress = (player_state) => {
+    const { code } = this.state;
+    const line_no = player_state["line_no"];
+    if (line_no >= code.length) return 100;
+
+    let curr_len = this.getFirstWrong(
+      code[line_no],
+      player_state["current_line"]
+    );
+    for (let i = 0; i < line_no; i++) {
+      curr_len += code[i].trim().length;
+    }
+
+    return Math.round((curr_len * 100) / this.getCodeLength());
+  };
+
   render() {
-    const ended = this.state.started && !this.state.typing;
     const { curr_input } = this.state;
 
     return (
-      <Container>
-        <h1 className="text">Solo Practice</h1>
+      <Container fluid="lg">
+        <h1 className="text mb-4">
+          <b>Race</b>
+        </h1>
+
+        {this.state.player_states.map((player_state) => (
+          <PlayerState
+            player={player_state["user"]["username"]}
+            percentage={this.getPlayerProgress(player_state)}
+          />
+        ))}
 
         <Row>
-          <Col md="9" fluid="sm">
+          <Col md="9">
             <Container className="shadow p-3 box">
               <Timer
                 elapsed_time={this.state.elapsed_time}
@@ -187,23 +215,17 @@ class Race extends Component {
               <TypingInput
                 is_wrong={this.state.first_wrong < curr_input.length}
                 curr_input={curr_input}
-                ended={ended}
+                cannotType={!this.state.typing}
                 handleSubmit={this.handleSubmit}
                 handleInputChange={this.handleInputChange}
                 setRef={(input) => {
                   this.text_input = input;
                 }}
               />
-
-              <Link to={`/lang`}>
-                <button className="btn me-2 btn-outline-primary">
-                  Back to Language Selection
-                </button>
-              </Link>
             </Container>
           </Col>
 
-          <Col md="3" fluid="sm">
+          <Col md="3">
             <Header
               language={this.state.language}
               code_length={this.getCodeLength()}
@@ -216,3 +238,5 @@ class Race extends Component {
     );
   }
 }
+
+export default Race;

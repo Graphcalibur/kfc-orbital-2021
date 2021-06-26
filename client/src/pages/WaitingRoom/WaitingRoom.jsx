@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 import Player from "./components/Player";
 
@@ -12,6 +12,7 @@ class WaitingRoom extends Component {
     refresh_timer: null,
     players: [],
     curr_player: "",
+    redirecting: false,
   };
 
   /* When component mounts, set socket to listen for room status and 
@@ -27,6 +28,11 @@ class WaitingRoom extends Component {
       this.setState({ curr_player: player["username"] });
     });
 
+    this.props.socket.on("set-snippet", (player) => {
+      this.setState({ redirecting: true });
+      this.props.history.push(`/race`);
+    });
+
     const timer = setInterval(() => {
       this.getRoomStatus();
     }, 200);
@@ -38,7 +44,7 @@ class WaitingRoom extends Component {
 
   /* Leave the room and stop the timer when component unmounts */
   componentWillUnmount() {
-    this.leaveRoom();
+    if (!this.state.redirecting) this.leaveRoom();
     clearInterval(this.state.refresh_timer);
   }
 
@@ -113,4 +119,4 @@ class WaitingRoom extends Component {
   }
 }
 
-export default WaitingRoom;
+export default withRouter(WaitingRoom);
