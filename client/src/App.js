@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import "./App.css";
-import socketIOClient from "socket.io-client";
+import socketIOClient from "socket.io-client/dist/socket.io.js";
 
 import ChooseLanguage from "./pages/ChooseLanguage/ChooseLanguage";
 import Error from "./pages/Error/Error";
