@@ -10,7 +10,7 @@ const get_mock_socket = () => {
 };
 
 const mock_io = {
-    to: jest.fn((room_code) => {
+    in: jest.fn((room_code) => {
         return mock_io;
     }),
     emit: jest.fn((evt, data) => null),
@@ -125,7 +125,7 @@ describe('socket communication', () => {
         // plus two .toBeCalledWith checks for update-player-status listener
         expect.assertions(26);
         // check if a set-snippet was broadcasted to the room
-        expect(mock_io.to.mock.calls[0]).toEqual([socketio_room]);
+        expect(mock_io.in.mock.calls[0]).toEqual([socketio_room]);
         expect(mock_io.emit.mock.calls[0]).toEqual([
             'set-snippet',
             {snippet: {id: snippet.id,
@@ -133,14 +133,14 @@ describe('socket communication', () => {
             code: snippet.code}}
         ]);
         // check for the broadcasts of countdown-game-start
-        expect(mock_io.to.mock.calls[1]).toEqual([socketio_room]);
+        expect(mock_io.in.mock.calls[1]).toEqual([socketio_room]);
         expect(mock_io.emit.mock.calls[1]).toEqual([
             'start-game-countdown',
             {seconds_to_start: 10}
         ]);
         for (let seconds_left = 9, call_idx = 2; seconds_left >= 0; --seconds_left, ++call_idx) {
             jest.advanceTimersByTime(1000);
-            expect(mock_io.to.mock.calls[call_idx]).toEqual([socketio_room]);
+            expect(mock_io.in.mock.calls[call_idx]).toEqual([socketio_room]);
             expect(mock_io.emit.mock.calls[call_idx]).toEqual([
                 'start-game-countdown',
                 {seconds_to_start: seconds_left}
@@ -168,7 +168,7 @@ describe('socket communication', () => {
             duration_since_start: 1000,
             player_states: current_states
         };
-        expect(mock_io.to).toBeCalledWith(socketio_room);
+        expect(mock_io.in).toBeCalledWith(socketio_room);
         expect(mock_io.emit).toBeCalledWith('update-race-state', current_update);
     });
     test('can update player state', () => {
@@ -189,7 +189,7 @@ describe('socket communication', () => {
             player_states: current_states
         };
         jest.advanceTimersByTime(333); // time since start: 2s
-        expect(mock_io.to).toBeCalledWith(socketio_room);
+        expect(mock_io.in).toBeCalledWith(socketio_room);
         expect(mock_io.emit).toBeCalledWith('update-race-state', current_update);
     });
     test('can partially update player state', () => {
@@ -210,7 +210,7 @@ describe('socket communication', () => {
             player_states: current_states
         };
         jest.advanceTimersByTime(500); // time since start: 6s
-        expect(mock_io.to).lastCalledWith(socketio_room);
+        expect(mock_io.in).lastCalledWith(socketio_room);
         expect(mock_io.emit).lastCalledWith('update-race-state', current_update);
     })
     test('can finish game', (done) => {
