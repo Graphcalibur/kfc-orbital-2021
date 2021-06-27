@@ -6,7 +6,6 @@ import Filters from "./components/Filters";
 import Room from "./components/Room";
 
 // TODO: Implement logging in
-// TODO: Display something when there aren't any rooms.
 
 class Rooms extends Component {
   state = {
@@ -50,24 +49,33 @@ class Rooms extends Component {
     this.props.socket.emit("join-room", { room_code: code });
   };
 
+  displayRooms = () => {
+    const { rooms } = this.state;
+    return rooms.length === 0 ? (
+      <span className="text">
+        Looks like there currently aren't any rooms. Why not create a new one?
+      </span>
+    ) : (
+      rooms.map((room) => (
+        <Room
+          code={room["room_code"]}
+          players={room["players"]}
+          key={room["room_code"]}
+          joinRoom={this.joinRoom}
+        />
+      ))
+    );
+  };
+
   render() {
     return (
       <Container fluid="lg">
         <h1 className="text">
-          <b>Racing Rooms</b>
+          <b>Racing Rooms Listing</b>
         </h1>
 
         <Row className="mt-3">
-          <Col md="8">
-            {this.state.rooms.map((room) => (
-              <Room
-                code={room["room_code"]}
-                players={room["players"]}
-                key={room["room_code"]}
-                joinRoom={this.joinRoom}
-              />
-            ))}
-          </Col>
+          <Col md="8">{this.displayRooms()}</Col>
           <Col md="4">
             <Filters />
             <CreateRoom createRoom={this.createRoom} />
