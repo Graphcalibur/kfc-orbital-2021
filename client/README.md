@@ -14,6 +14,7 @@
 - /user/[user] -> Page for viewing a user's profile
 - /rooms -> Page for viewing and joining rooms
 - /waitingroom -> Page for waiting in a room before the race starts
+- /race -> Page for the actual race
 - Any other url will display a "404 Error Page Not Found."
 
 ## Image Sources

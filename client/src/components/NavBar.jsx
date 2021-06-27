@@ -5,6 +5,9 @@ import { Button, Container, Navbar, Nav } from "react-bootstrap";
 import Login from "./Login";
 import SignUp from "./SignUp";
 
+/* TODO: Re-implement reloading page after logging in when the server-
+side storage becomes a thing */
+
 class NavBar extends Component {
   state = {
     show_login: false,
@@ -14,6 +17,7 @@ class NavBar extends Component {
 
   /* Get logged in user when the component first appears */
   componentDidMount() {
+    this.props.socket.emit("check-current-login");
     fetch("/api/current-login", {
       credentials: "include",
     })
@@ -26,11 +30,14 @@ class NavBar extends Component {
 
   /* Logs out and refreshes the page */
   logout = () => {
+    this.props.socket.emit("logout-ws");
+
     fetch("/api/logout", {
       method: "POST",
       credentials: "include",
     }).then((res) => {
-      window.location.reload();
+      /* window.location.reload(); */
+      this.setState({ curr_user: null });
     });
   };
 
@@ -65,6 +72,11 @@ class NavBar extends Component {
     );
   };
 
+  /* Only necessary until server-side storage gets implemented */
+  updateCurrUser = (user) => {
+    this.setState({ curr_user: user });
+  };
+
   render() {
     return (
       <Navbar variant="dark" bg="dark" expand="sm" className="mb-3">
@@ -91,10 +103,14 @@ class NavBar extends Component {
             <Login
               show={this.state.show_login}
               close={() => this.setState({ show_login: false })}
+              socket={this.props.socket}
+              updateCurrUser={this.updateCurrUser}
             />
             <SignUp
               show={this.state.show_sign_up}
               close={() => this.setState({ show_sign_up: false })}
+              socket={this.props.socket}
+              updateCurrUser={this.updateCurrUser}
             />
           </Navbar.Collapse>
         </Container>

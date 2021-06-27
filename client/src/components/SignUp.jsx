@@ -66,8 +66,15 @@ class SignUp extends Component {
       not successful, displays an error message */
     fetch("/api/register", requestOptions).then((res) => {
       if (res.status === 200) {
+        this.props.socket.emit("login-ws", {
+          username: this.state.username,
+          password: this.state.password,
+        });
+
         fetch("/api/authuser", requestOptions2).then((res) => {
-          window.location.reload();
+          /* window.location.reload(); */
+          this.props.updateCurrUser(this.state.username);
+          this.setState({ failed_sign_up: 3 });
         });
       } else if (res.status === 409) {
         this.setState({ failed_sign_up: 1 });
@@ -91,9 +98,12 @@ class SignUp extends Component {
           Sign up has failed. Please try again later.
         </p>
       );
+    } else if (this.state.failed_sign_up === 3) {
+      /* To delete when server-side storage gets done */
+      return (
+        <p style={{ fontSize: "80%" }}>You have successfully signed up!</p>
+      );
     }
-
-    return <span></span>;
   };
 
   render() {
