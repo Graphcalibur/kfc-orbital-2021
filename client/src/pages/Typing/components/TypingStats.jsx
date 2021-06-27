@@ -39,7 +39,7 @@ const TypingStats = (props) => {
       return (
         <span>
           <Button
-            onClick={() => props.back_to_waiting(history)}
+            onClick={() => props.backToWaiting(history)}
             variant="outline-primary"
             className="me-4"
           >

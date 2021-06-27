@@ -1,13 +1,7 @@
 import React, { Component } from "react";
-import { Col, Container, Row } from "react-bootstrap";
 
-import "./Typing.css";
-import Code from "./components/Code";
-import Header from "./components/Header";
 import PlayerState from "./components/PlayerState";
-import Timer from "./components/Timer";
-import TypingInput from "./components/TypingInput";
-import TypingStats from "./components/TypingStats";
+import Typing from "./components/Typing";
 
 // TODO: Handle error where user enters Race without entering a room
 // TODO: Handle user leaving a Race early
@@ -43,9 +37,10 @@ class Race extends Component {
   componentDidMount() {
     /* Get countdown and start typing when the countdown ends */
     this.props.socket.on("start-game-countdown", (data) => {
+      console.log("Countdown received");
       this.setState({ countdown: data["seconds_to_start"] });
 
-      if (this.state.countdown === 0) {
+      if (data["seconds_to_start"] === 0) {
         this.startTyping();
       }
     });
@@ -85,7 +80,6 @@ class Race extends Component {
 
   componentWillUnmount() {
     if (!this.state.keep_room) {
-      console.log("lol");
       this.props.socket.emit("leave-room");
     }
   }
@@ -220,26 +214,34 @@ class Race extends Component {
   */
   getTopText = () => {
     if (this.state.game_ended) {
-      return this.state.scores.map((score) => (
-        <PlayerState
-          player={score["user"]["username"]}
-          state_name="Score"
-          state_value={score["score"]["speed"]}
-          state_suffix=" WPM"
-        />
-      ));
-    } else if (this.state.started) {
-      return this.state.player_states.map((player_state) => (
-        <PlayerState
-          player={player_state["user"]["username"]}
-          state_name="Progress"
-          state_value={this.getPlayerProgress(player_state)}
-          state_suffix="%"
-        />
-      ));
+      return (
+        <span className="mb-3">
+          {this.state.scores.map((score) => (
+            <PlayerState
+              player={score["user"]["username"]}
+              state_name="Score"
+              state_value={score["score"]["speed"]}
+              state_suffix=" WPM"
+            />
+          ))}
+        </span>
+      );
+    } else if (this.state.started && this.state.player_states.length > 0) {
+      return (
+        <span className="mb-3">
+          {this.state.player_states.map((player_state) => (
+            <PlayerState
+              player={player_state["user"]["username"]}
+              state_name="Progress"
+              state_value={this.getPlayerProgress(player_state)}
+              state_suffix="%"
+            />
+          ))}
+        </span>
+      );
     } else {
       return (
-        <span className="text">
+        <span className="text mb-3">
           <b>Countdown: </b> {this.state.countdown}
         </span>
       );
@@ -256,63 +258,35 @@ class Race extends Component {
   };
 
   render() {
-    const { curr_input } = this.state;
-
     return (
-      <Container fluid="lg">
-        <h1 className="text mb-3">
-          <b>Race</b>
-        </h1>
-
-        {this.getTopText()}
-
-        <Row className="mt-3">
-          <Col md="9">
-            <Container className="shadow p-3 box">
-              <Timer
-                elapsed_time={this.state.elapsed_time}
-                typing={this.state.typing}
-              />
-
-              <Code
-                code={this.state.code}
-                curr_line_num={this.state.curr_line_num}
-                first_wrong={this.state.first_wrong}
-                curr_input_len={curr_input.length}
-              />
-
-              <TypingInput
-                is_wrong={this.state.first_wrong < curr_input.length}
-                curr_input={curr_input}
-                cannotType={!this.state.typing}
-                handleSubmit={this.handleSubmit}
-                handleInputChange={this.handleInputChange}
-                setRef={(input) => {
-                  this.text_input = input;
-                }}
-              />
-            </Container>
-
-            <TypingStats
-              ended={this.state.game_ended}
-              wpm={this.state.curr_player_score["speed"]}
-              accuracy={this.state.curr_player_score["acc"]}
-              back_to_waiting={this.backToWaitingRoom}
-              is_solo={false}
-            />
-          </Col>
-
-          <Col md="3">
-            <Header
-              language={this.state.language}
-              code_length={this.getCodeLength()}
-              code_lines={this.state.code.length}
-              is_solo={false}
-            />
-            <span></span>
-          </Col>
-        </Row>
-      </Container>
+      <Typing
+        heading="Race"
+        code={this.state.code}
+        language={this.state.language}
+        id={this.state.id}
+        curr_line_num={this.state.curr_line_num}
+        curr_input={this.state.curr_input}
+        first_wrong={this.state.first_wrong}
+        typed_wrong={this.state.typed_wrong}
+        typing={this.state.typing}
+        started={this.state.started}
+        elapsed_time={this.state.elapsed_time}
+        ended={this.state.game_ended}
+        is_solo={false}
+        wpm={this.state.curr_player_score["speed"]}
+        accuracy={this.state.curr_player_score["acc"]}
+        code_length={this.getCodeLength()}
+        getTopText={this.getTopText}
+        getBackBtn={() => <span></span>}
+        reset={() => null}
+        getCode={() => null}
+        backToWaiting={this.backToWaitingRoom}
+        handleSubmit={this.handleSubmit}
+        handleInputChange={this.handleInputChange}
+        setRef={(input) => {
+          this.text_input = input;
+        }}
+      />
     );
   }
 }

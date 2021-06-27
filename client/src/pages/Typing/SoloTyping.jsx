@@ -1,13 +1,8 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { Col, Container, Row } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
-import "./Typing.css";
-import Code from "./components/Code";
-import Header from "./components/Header";
-import TypingStats from "./components/TypingStats";
-import Timer from "./components/Timer";
-import TypingInput from "./components/TypingInput";
+import Typing from "./components/Typing";
 
 class SoloTyping extends Component {
   state = {
@@ -166,13 +161,6 @@ class SoloTyping extends Component {
     });
   };
 
-  /* Change bg color of the input to red when there is a wrong input */
-  getInputStyle = () => {
-    return this.state.first_wrong < this.state.curr_input.length
-      ? { backgroundColor: "#800000", color: "white" }
-      : { backgroundColor: "#233243", color: "white" };
-  };
-
   /* Returns length of code */
   getCodeLength = () => {
     const { code } = this.state;
@@ -203,70 +191,44 @@ class SoloTyping extends Component {
     );
   };
 
-  render() {
-    const ended = this.state.started && !this.state.typing;
-    const { curr_input } = this.state;
-
+  getBackBtn = () => {
     return (
-      <Container fluid="lg">
-        <h1 className="text">
-          <b>Solo Practice</b>
-        </h1>
+      <Link to={`/lang`}>
+        <Button variant="outline-primary">Back to Language Selection</Button>
+      </Link>
+    );
+  };
 
-        <Row>
-          <Col md="9">
-            <Container className="shadow p-3 box">
-              <Timer
-                elapsed_time={this.state.elapsed_time}
-                typing={this.state.typing}
-              />
-
-              <Code
-                code={this.state.code}
-                curr_line_num={this.state.curr_line_num}
-                first_wrong={this.state.first_wrong}
-                curr_input_len={curr_input.length}
-              />
-
-              <TypingInput
-                is_wrong={this.state.first_wrong < curr_input.length}
-                curr_input={curr_input}
-                cannotType={ended}
-                handleSubmit={this.handleSubmit}
-                handleInputChange={this.handleInputChange}
-                setRef={(input) => {
-                  this.text_input = input;
-                }}
-              />
-
-              <Link to={`/lang`}>
-                <button className="btn me-2 btn-outline-primary">
-                  Back to Language Selection
-                </button>
-              </Link>
-            </Container>
-
-            <TypingStats
-              ended={ended}
-              wpm={this.getWPM()}
-              accuracy={this.getAccuracy()}
-              reset={this.reset}
-              getCode={this.getCode}
-              is_solo={true}
-            />
-          </Col>
-
-          <Col md="3">
-            <Header
-              language={this.state.language}
-              code_length={this.getCodeLength()}
-              code_lines={this.state.code.length}
-              is_solo={true}
-            />
-            <span></span>
-          </Col>
-        </Row>
-      </Container>
+  render() {
+    return (
+      <Typing
+        heading="Solo Practice"
+        code={this.state.code}
+        language={this.state.language}
+        id={this.state.id}
+        curr_line_num={this.state.curr_line_num}
+        curr_input={this.state.curr_input}
+        first_wrong={this.state.first_wrong}
+        typed_wrong={this.state.typed_wrong}
+        typing={this.state.typing}
+        started={this.state.started}
+        elapsed_time={this.state.elapsed_time}
+        ended={this.state.started && !this.state.typing}
+        is_solo={true}
+        wpm={this.getWPM()}
+        accuracy={this.getAccuracy()}
+        code_length={this.getCodeLength()}
+        getTopText={() => <span></span>}
+        getBackBtn={this.getBackBtn}
+        reset={this.reset}
+        getCode={this.getCode}
+        backToWaiting={() => null}
+        handleSubmit={this.handleSubmit}
+        handleInputChange={this.handleInputChange}
+        setRef={(input) => {
+          this.text_input = input;
+        }}
+      />
     );
   }
 }
