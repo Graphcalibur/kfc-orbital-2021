@@ -1,8 +1,14 @@
-const sharedsession = require("express-socket.io-session");
 const {Server} = require('socket.io');
 const {room_manager} = require('../models/RoomManager');
+const passport = require('passport');
 const { setup_authentication_commands,
         check_session_auth } = require("./authenticator");
+
+
+// Helper function to convert express auth-related middleware
+// to socket.io middleware
+const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+
 
 /**
  * Set up the socket.io server.
@@ -11,9 +17,9 @@ const { setup_authentication_commands,
  */
 module.exports.setup_server = (server, session) => {
     const io = new Server(server);
-    io.use(sharedsession(session, {
-        autoSave: true
-    }));
+    io.use(wrap(session))
+    io.use(wrap(passport.initialize()));
+    io.use(wrap(passport.session()));
     room_manager.set_server(io);
     io.on('connection', (socket) => {
         check_session_auth(socket);

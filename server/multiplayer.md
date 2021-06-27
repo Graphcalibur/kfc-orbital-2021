@@ -27,7 +27,13 @@ the login was successful, this message will contain a User object, corresponding
 the user you just logged in as. If not, it will give an error message explaining
 why it was unsuccessful.
 
-If they do not send this message, the server will treat them as an anonymous participant
+_Note_: You may elect to use this alternate authentication flow:
+- Authenticate using the HTTP API
+- While in the same session, make the socket.io connection
+
+The socket.io server can read the session login info, and recognize the login.
+
+If they do not authenticate, the server will treat them as an anonymous participant
 when processing commands.
 
 ### Type: logout-ws

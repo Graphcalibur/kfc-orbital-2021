@@ -27,7 +27,7 @@ module.exports.setup_authentication_commands = (socket) => {
 };
 
 module.exports.check_session_auth = (socket) => {
-    if (socket.handshake.session.user) {
-        socket.user = socket.handshake.session.user;
+    if (socket.request.user) {
+        socket.user = socket.request.user;
     }
 };

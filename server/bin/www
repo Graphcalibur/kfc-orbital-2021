@@ -42,7 +42,7 @@ var server = http.createServer(app);
  * Create websocket server.
  */
 var socketController = require("../socker/socketController");
-socketController.setup_server(server);
+socketController.setup_server(server, session);
 
 /**
  * Listen on provided port, on all network interfaces.
