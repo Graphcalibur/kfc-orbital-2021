@@ -1,10 +1,27 @@
 #!/usr/bin/env node
 
 /**
+ * Setup environment variables.
+ */
+
+require('dotenv').config();
+
+/**
+ * Setup session middleware. This will be used by both the 
+ * HTTP server and websocket server.
+ */
+var session = require("express-session")(
+  {secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {secure: false}
+});
+
+/**
  * Module dependencies.
  */
 
-var app = require("../app");
+var app = require("../app")(session);
 var debug = require("debug")("server:server");
 var http = require("http");
 
@@ -20,6 +37,10 @@ app.set("port", port);
  */
 
 var server = http.createServer(app);
+
+/**
+ * Create websocket server.
+ */
 var socketController = require("../socker/socketController");
 socketController.setup_server(server);
 
