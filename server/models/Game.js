@@ -146,8 +146,8 @@ let Game = class Game {
         get_scores().then((scores) => {
             this.io.in(this.socketio_room).emit(
                 'signal-game-end',
-                {scores: scores.entries()
-                        .map(([user, score]) => {user, score})
+                {scores: [...scores.entries()]
+                        .map(([user, score]) => {return {user, score};})
                 }
             );
             this.game_finish_cb();
@@ -161,6 +161,7 @@ let Game = class Game {
                 {message: "Internal server error occurred during saving scores",
                  data: err}
             );
+            console.log(err);
             this.game_finish_cb();
         });
     }
