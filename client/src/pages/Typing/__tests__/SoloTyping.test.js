@@ -25,7 +25,7 @@ const setup = () => {
   return {
     wrapper: wrapper,
     instance: wrapper.instance(),
-    input: wrapper.find("TypingInput"),
+    input: wrapper.find("Typing"),
   };
 };
 
@@ -74,12 +74,14 @@ describe("Testing whole SoloTyping page", () => {
     }
 
     /* Have to update inpput to get the new style */
-    const updated_input = wrapper.find("TypingInput");
+    const updated_input = wrapper.find("Typing");
 
     expect(instance.state.curr_input).toEqual("fol i");
     expect(instance.state.first_wrong).toEqual(2);
     expect(instance.state.typed_wrong).toEqual(3);
-    expect(updated_input.prop("is_wrong")).toEqual(true);
+    expect(
+      instance.state.first_wrong < instance.state.curr_input.length
+    ).toEqual(true);
   });
 
   test("Test 3: Get first line correct and get errors on second line", () => {
@@ -98,12 +100,14 @@ describe("Testing whole SoloTyping page", () => {
       });
     }
 
-    let updated_input = wrapper.find("TypingInput");
+    let updated_input = wrapper.find("Typing");
 
     expect(instance.state.curr_input).toEqual("for i in range(10):");
     expect(instance.state.first_wrong).toEqual(19);
     expect(instance.state.typed_wrong).toEqual(0);
-    expect(updated_input.prop("is_wrong")).toEqual(false);
+    expect(
+      instance.state.first_wrong < instance.state.curr_input.length
+    ).toEqual(false);
 
     /* Hit enter to go to second line */
     instance.handleSubmit({ key: "Enter" });
@@ -117,12 +121,14 @@ describe("Testing whole SoloTyping page", () => {
     instance.handleInputChange({
       target: { value: "z" },
     });
-    updated_input = wrapper.find("TypingInput");
+    updated_input = wrapper.find("Typing");
 
     expect(instance.state.curr_input).toEqual("z");
     expect(instance.state.first_wrong).toEqual(0);
     expect(instance.state.typed_wrong).toEqual(1);
-    expect(updated_input.prop("is_wrong")).toEqual(true);
+    expect(
+      instance.state.first_wrong < instance.state.curr_input.length
+    ).toEqual(true);
   });
 
   test("Test 4: Test getWPM and getAccuracy", () => {
