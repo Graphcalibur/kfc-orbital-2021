@@ -252,6 +252,7 @@ class SoloTyping extends Component {
               accuracy={this.getAccuracy()}
               reset={this.reset}
               getCode={this.getCode}
+              is_solo={true}
             />
           </Col>
 
@@ -260,6 +261,7 @@ class SoloTyping extends Component {
               language={this.state.language}
               code_length={this.getCodeLength()}
               code_lines={this.state.code.length}
+              is_solo={true}
             />
             <span></span>
           </Col>

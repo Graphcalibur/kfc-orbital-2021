@@ -8,7 +8,8 @@ const PlayerState = (props) => {
         <b>Player: </b> {props.player}
       </Col>
       <Col md="9">
-        <b>Progress: </b> {props.percentage}%
+        <b>{props.state_name}: </b> {props.state_value}
+        {props.state_suffix}
       </Col>
     </Row>
   );

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
 import { Col, Container, Row } from "react-bootstrap";
 
 import "./Typing.css";
@@ -8,6 +7,7 @@ import Header from "./components/Header";
 import PlayerState from "./components/PlayerState";
 import Timer from "./components/Timer";
 import TypingInput from "./components/TypingInput";
+import TypingStats from "./components/TypingStats";
 
 // TODO: Handle error where user enters Race without entering a room
 // TODO: Handle user leaving a Race early
@@ -31,9 +31,17 @@ class Race extends Component {
 
     countdown: 100,
     player_states: [],
+
+    curr_player: "",
+    game_ended: false,
+    scores: [],
+    curr_player_score: { speed: 0, acc: 0 },
+
+    keep_room: false,
   };
 
   componentDidMount() {
+    /* Get countdown and start typing when the countdown ends */
     this.props.socket.on("start-game-countdown", (data) => {
       this.setState({ countdown: data["seconds_to_start"] });
 
@@ -42,29 +50,45 @@ class Race extends Component {
       }
     });
 
+    /* Don't update elapsed_time if player is done typing */
     this.props.socket.on("update-race-state", (data) => {
       if (this.state.typing) {
         this.setState({
           elapsed_time: data["duration_since_start"],
           player_states: data["player_states"],
         });
+      } else {
+        this.setState({
+          player_states: data["player_states"],
+        });
       }
     });
 
     this.props.socket.on("signal-game-end", (data) => {
-      this.endGame();
+      console.log(data);
+      this.setState({
+        game_ended: true,
+        scores: data["scores"],
+        curr_player_score: this.getCurrPlayerScore(data["scores"]),
+      });
     });
 
-    this.text_input.focus();
+    /* Get current user */
+    this.props.socket.on("check-current-login-return", (player) => {
+      if (player === null) return;
+      this.setState({ curr_player: player["username"] });
+    });
+
+    this.props.socket.emit("check-current-login");
+    this.setState({ keep_room: false });
   }
 
   componentWillUnmount() {
-    this.props.socket.emit("leave-room");
+    if (!this.state.keep_room) {
+      console.log("lol");
+      this.props.socket.emit("leave-room");
+    }
   }
-
-  endGame = () => {
-    console.log("game ended");
-  };
 
   sendPlayerState = () => {
     this.props.socket.emit("update-player-state", {
@@ -79,10 +103,18 @@ class Race extends Component {
       typing: true,
       started: true,
     });
+    this.text_input.focus();
   };
 
+  /* TODO: Not sure if this is still needed? */
   stopTyping = () => {
     this.sendPlayerState();
+  };
+
+  /* Go back to Waiting Room, but don't leave the room */
+  backToWaitingRoom = (history) => {
+    /* This makes sure state is updated before changing page to /waitingroom */
+    this.setState({ keep_room: true }, () => history.push(`/waitingroom`));
   };
 
   /* When pressing enter, check if the text in the input
@@ -123,7 +155,7 @@ class Race extends Component {
     return i;
   };
 
-  /* Check for wrong inputs whenever the input changes */
+  /* Check for wrong inputs whenever the input changes and sends player state */
   handleInputChange = (event) => {
     if (!this.state.started) {
       this.startTyping();
@@ -181,23 +213,60 @@ class Race extends Component {
     return Math.round((curr_len * 100) / this.getCodeLength());
   };
 
+  /* Decide which text to render above the main typing container
+  Game Ended --> Players' Scores
+  Game In Progress --> Players' Progress
+  Game Not Started --> Countdown
+  */
+  getTopText = () => {
+    if (this.state.game_ended) {
+      return this.state.scores.map((score) => (
+        <PlayerState
+          player={score["user"]["username"]}
+          state_name="Score"
+          state_value={score["score"]["speed"]}
+          state_suffix=" WPM"
+        />
+      ));
+    } else if (this.state.started) {
+      return this.state.player_states.map((player_state) => (
+        <PlayerState
+          player={player_state["user"]["username"]}
+          state_name="Progress"
+          state_value={this.getPlayerProgress(player_state)}
+          state_suffix="%"
+        />
+      ));
+    } else {
+      return (
+        <span className="text">
+          <b>Countdown: </b> {this.state.countdown}
+        </span>
+      );
+    }
+  };
+
+  /* Gets the current player's score from the list of scores */
+  getCurrPlayerScore = (scores) => {
+    for (let i = 0; i < scores.length; i++) {
+      if (scores[i]["user"]["username"] === this.state.curr_player) {
+        return scores[i]["score"];
+      }
+    }
+  };
+
   render() {
     const { curr_input } = this.state;
 
     return (
       <Container fluid="lg">
-        <h1 className="text mb-4">
+        <h1 className="text mb-3">
           <b>Race</b>
         </h1>
 
-        {this.state.player_states.map((player_state) => (
-          <PlayerState
-            player={player_state["user"]["username"]}
-            percentage={this.getPlayerProgress(player_state)}
-          />
-        ))}
+        {this.getTopText()}
 
-        <Row>
+        <Row className="mt-3">
           <Col md="9">
             <Container className="shadow p-3 box">
               <Timer
@@ -223,6 +292,14 @@ class Race extends Component {
                 }}
               />
             </Container>
+
+            <TypingStats
+              ended={this.state.game_ended}
+              wpm={this.state.curr_player_score["speed"]}
+              accuracy={this.state.curr_player_score["acc"]}
+              back_to_waiting={this.backToWaitingRoom}
+              is_solo={false}
+            />
           </Col>
 
           <Col md="3">
@@ -230,6 +307,7 @@ class Race extends Component {
               language={this.state.language}
               code_length={this.getCodeLength()}
               code_lines={this.state.code.length}
+              is_solo={false}
             />
             <span></span>
           </Col>

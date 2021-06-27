@@ -6,13 +6,14 @@ import Player from "./components/Player";
 
 // TODO: Error handling if user goes into waitingroom without joining a room
 // TODO: Improve layout
+// TODO: Mention race will begin when all players are ready
 
 class WaitingRoom extends Component {
   state = {
     refresh_timer: null,
     players: [],
     curr_player: "",
-    redirecting: false,
+    keep_room: false,
   };
 
   /* When component mounts, set socket to listen for room status and 
@@ -29,7 +30,7 @@ class WaitingRoom extends Component {
     });
 
     this.props.socket.on("set-snippet", (player) => {
-      this.setState({ redirecting: true });
+      this.setState({ keep_room: true });
       this.props.history.push(`/race`);
     });
 
@@ -39,12 +40,12 @@ class WaitingRoom extends Component {
 
     this.props.socket.emit("check-current-login");
 
-    this.setState({ refresh_timer: timer });
+    this.setState({ refresh_timer: timer, keep_room: false });
   }
 
   /* Leave the room and stop the timer when component unmounts */
   componentWillUnmount() {
-    if (!this.state.redirecting) this.leaveRoom();
+    if (!this.state.keep_room) this.leaveRoom();
     clearInterval(this.state.refresh_timer);
   }
 
