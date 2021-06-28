@@ -20,7 +20,7 @@ import WaitingRoom from "./pages/WaitingRoom/WaitingRoom";
 4) Race automatically ends after a certain time?
 */
 
-const socket = socketIOClient("http://localhost:9000", {
+const socket = socketIOClient("/", {
   transports: ["websocket"],
 });
 
