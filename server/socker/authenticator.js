@@ -25,3 +25,9 @@ module.exports.setup_authentication_commands = (socket) => {
         socket.emit('check-current-login-return', socket.user || null);
     })
 };
+
+module.exports.check_session_auth = (socket) => {
+    if (socket.request.user) {
+        socket.user = socket.request.user;
+    }
+};
