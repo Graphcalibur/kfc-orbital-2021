@@ -63,8 +63,15 @@ module.exports = async () => {
         const test_port = process.env.TEST_SERVER_PORT || "6969";
         const test_addr = process.env.TEST_SERVER_ADDRESS || "127.0.0.1";
 
+        var session = require("express-session")(
+            {secret: "test_secret",
+            resave: false,
+            saveUninitialized: true,
+            cookie: {secure: false}
+        });
+
         http_server = http.createServer();
-        setup_server(http_server);
+        setup_server(http_server, session);
         http_server.listen(test_port); 
 
         global.__HTTP_SERVER__ = http_server;
