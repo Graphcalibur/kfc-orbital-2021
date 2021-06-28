@@ -66,6 +66,11 @@ class SignUp extends Component {
       not successful, displays an error message */
     fetch("/api/register", requestOptions).then((res) => {
       if (res.status === 200) {
+        this.props.socket.emit("login-ws", {
+          username: this.state.username,
+          password: this.state.password,
+        });
+
         fetch("/api/authuser", requestOptions2).then((res) => {
           window.location.reload();
         });

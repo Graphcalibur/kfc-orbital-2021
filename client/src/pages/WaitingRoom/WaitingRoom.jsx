@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 import Player from "./components/Player";
 
 // TODO: Error handling if user goes into waitingroom without joining a room
 // TODO: Improve layout
+// TODO: Mention race will begin when all players are ready
 
 class WaitingRoom extends Component {
   state = {
     refresh_timer: null,
     players: [],
     curr_player: "",
+    keep_room: false,
   };
 
   /* When component mounts, set socket to listen for room status and 
@@ -27,18 +29,23 @@ class WaitingRoom extends Component {
       this.setState({ curr_player: player["username"] });
     });
 
+    this.props.socket.on("set-snippet", (player) => {
+      this.setState({ keep_room: true });
+      this.props.history.push(`/race`);
+    });
+
     const timer = setInterval(() => {
       this.getRoomStatus();
     }, 200);
 
     this.props.socket.emit("check-current-login");
 
-    this.setState({ refresh_timer: timer });
+    this.setState({ refresh_timer: timer, keep_room: false });
   }
 
   /* Leave the room and stop the timer when component unmounts */
   componentWillUnmount() {
-    this.leaveRoom();
+    if (!this.state.keep_room) this.leaveRoom();
     clearInterval(this.state.refresh_timer);
   }
 
@@ -65,6 +72,35 @@ class WaitingRoom extends Component {
     this.props.socket.emit("set-player-status", { current_status: new_status });
   };
 
+  getPlayerStatus = () => {
+    if (this.state.players.length === 0) {
+      return (
+        <Row>
+          <Col>You don't seem to be in a room.</Col>
+        </Row>
+      );
+    } else {
+      return (
+        <span>
+          {this.state.players.map((player) => (
+            <Player
+              name={player["user"]["username"]}
+              status={player["status"]}
+              key={player["user"]["username"]}
+              is_curr={player["user"]["username"] === this.state.curr_user}
+            />
+          ))}
+          <Row className="mt-3">
+            <Col>
+              You will automatically be redirected to the race when everyone is
+              ready.
+            </Col>
+          </Row>
+        </span>
+      );
+    }
+  };
+
   render() {
     return (
       <Container fluid="lg">
@@ -81,14 +117,7 @@ class WaitingRoom extends Component {
             </Col>
           </Row>
 
-          {this.state.players.map((player) => (
-            <Player
-              name={player["user"]["username"]}
-              status={player["status"]}
-              key={player["user"]["username"]}
-              is_curr={player["user"]["username"] === this.state.curr_user}
-            />
-          ))}
+          {this.getPlayerStatus()}
 
           <Button
             variant="outline-primary"
@@ -113,4 +142,4 @@ class WaitingRoom extends Component {
   }
 }
 
-export default WaitingRoom;
+export default withRouter(WaitingRoom);

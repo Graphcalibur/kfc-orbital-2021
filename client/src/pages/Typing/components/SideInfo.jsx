@@ -1,12 +1,14 @@
 import React from "react";
 import { Button, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
 
-const Header = (props) => {
+const SideInfo = (props) => {
   const popover = (
     <Tooltip>
-      Type the code in each line and hit Enter when you reach the end. If you
-      make any errors, you'll have to backspace and fix them before continuing.
-      Timing begins when you start typing and ends after the last line.
+      Type the code in each line and hit Enter when you reach the end. Any
+      errors made will have to be backspaced and fixed before continuing. Timing
+      begins when
+      {props.is_solo ? " you start typing " : " the countdown finishes "}
+      and ends after the last line.
     </Tooltip>
   );
 
@@ -27,4 +29,4 @@ const Header = (props) => {
   );
 };
 
-export default Header;
+export default SideInfo;

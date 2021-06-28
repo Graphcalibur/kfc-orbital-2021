@@ -9,11 +9,12 @@
 ## Pages directory
 
 - / -> Home page
-- /code/[language] -> Page for the solo typing practice, with an optional parameter for practicing only on code from a certain language
+- /solotyping/[language] -> Page for the solo typing practice, with an optional parameter for practicing only on code from a certain language
 - /lang -> Page for choosing which language to practice
 - /user/[user] -> Page for viewing a user's profile
 - /rooms -> Page for viewing and joining rooms
 - /waitingroom -> Page for waiting in a room before the race starts
+- /race -> Page for the actual race
 - Any other url will display a "404 Error Page Not Found."
 
 ## Image Sources

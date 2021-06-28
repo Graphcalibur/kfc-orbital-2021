@@ -40,6 +40,11 @@ class Login extends Component {
   /* Logs in the user and refrshes the page if it was successful,
   or triggers the failed login message if it is not. */
   loginUser = () => {
+    this.props.socket.emit("login-ws", {
+      username: this.state.username,
+      password: this.state.password,
+    });
+
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -76,6 +81,7 @@ class Login extends Component {
         </p>
       );
     }
+
     return <span></span>;
   };
 

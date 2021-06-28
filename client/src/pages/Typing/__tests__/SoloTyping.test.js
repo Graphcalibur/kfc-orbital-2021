@@ -25,7 +25,7 @@ const setup = () => {
   return {
     wrapper: wrapper,
     instance: wrapper.instance(),
-    input: wrapper.find(".form-control"),
+    input: wrapper.find("Typing"),
   };
 };
 
@@ -70,19 +70,18 @@ describe("Testing whole SoloTyping page", () => {
 
     const to_type = ["f", "fo", "fol", "fol ", "fol i"];
     for (let i = 0; i < to_type.length; i++) {
-      input.simulate("change", { target: { value: to_type[i] } });
+      instance.handleInputChange({ target: { value: to_type[i] } });
     }
 
     /* Have to update inpput to get the new style */
-    const updated_input = wrapper.find(".form-control");
+    const updated_input = wrapper.find("Typing");
 
     expect(instance.state.curr_input).toEqual("fol i");
     expect(instance.state.first_wrong).toEqual(2);
     expect(instance.state.typed_wrong).toEqual(3);
-    expect(updated_input.prop("style")).toHaveProperty(
-      "backgroundColor",
-      "#800000"
-    );
+    expect(
+      instance.state.first_wrong < instance.state.curr_input.length
+    ).toEqual(true);
   });
 
   test("Test 3: Get first line correct and get errors on second line", () => {
@@ -94,37 +93,42 @@ describe("Testing whole SoloTyping page", () => {
       started: true,
     });
 
+    /* Get first line correct */
     for (let i = 1; i <= code[0].length; i++) {
-      input.simulate("change", { target: { value: code[0].substring(0, i) } });
+      instance.handleInputChange({
+        target: { value: code[0].substring(0, i) },
+      });
     }
 
-    let updated_input = wrapper.find(".form-control");
+    let updated_input = wrapper.find("Typing");
 
     expect(instance.state.curr_input).toEqual("for i in range(10):");
     expect(instance.state.first_wrong).toEqual(19);
     expect(instance.state.typed_wrong).toEqual(0);
-    expect(updated_input.prop("style")).toHaveProperty(
-      "backgroundColor",
-      "#233243"
-    );
+    expect(
+      instance.state.first_wrong < instance.state.curr_input.length
+    ).toEqual(false);
 
-    input.simulate("keypress", { key: "Enter" });
+    /* Hit enter to go to second line */
+    instance.handleSubmit({ key: "Enter" });
 
     expect(instance.state.curr_input).toEqual("");
     expect(instance.state.curr_line_num).toEqual(1);
     expect(instance.state.first_wrong).toEqual(0);
     expect(instance.state.typed_wrong).toEqual(0);
 
-    input.simulate("change", { target: { value: "z" } });
-    updated_input = wrapper.find(".form-control");
+    /* Get second line wrong */
+    instance.handleInputChange({
+      target: { value: "z" },
+    });
+    updated_input = wrapper.find("Typing");
 
     expect(instance.state.curr_input).toEqual("z");
     expect(instance.state.first_wrong).toEqual(0);
     expect(instance.state.typed_wrong).toEqual(1);
-    expect(updated_input.prop("style")).toHaveProperty(
-      "backgroundColor",
-      "#800000"
-    );
+    expect(
+      instance.state.first_wrong < instance.state.curr_input.length
+    ).toEqual(true);
   });
 
   test("Test 4: Test getWPM and getAccuracy", () => {
