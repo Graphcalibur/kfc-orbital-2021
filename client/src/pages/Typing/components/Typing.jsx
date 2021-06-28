@@ -3,7 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 
 import "../Typing.css";
 import Code from "./Code";
-import Header from "./Header";
+import SideInfo from "./SideInfo";
 import TypingStats from "./TypingStats";
 import Timer from "./Timer";
 import TypingInput from "./TypingInput";
@@ -55,7 +55,7 @@ const Typing = (props) => {
         </Col>
 
         <Col md="3">
-          <Header
+          <SideInfo
             language={props.language}
             code_length={props.code_length}
             code_lines={props.code.length}

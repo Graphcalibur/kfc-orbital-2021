@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
 
-const Header = (props) => {
+const SideInfo = (props) => {
   const popover = (
     <Tooltip>
       Type the code in each line and hit Enter when you reach the end. Any
@@ -29,4 +29,4 @@ const Header = (props) => {
   );
 };
 
-export default Header;
+export default SideInfo;

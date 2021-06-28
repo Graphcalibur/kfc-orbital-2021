@@ -9,7 +9,7 @@
 ## Pages directory
 
 - / -> Home page
-- /code/[language] -> Page for the solo typing practice, with an optional parameter for practicing only on code from a certain language
+- /solotyping/[language] -> Page for the solo typing practice, with an optional parameter for practicing only on code from a certain language
 - /lang -> Page for choosing which language to practice
 - /user/[user] -> Page for viewing a user's profile
 - /rooms -> Page for viewing and joining rooms
