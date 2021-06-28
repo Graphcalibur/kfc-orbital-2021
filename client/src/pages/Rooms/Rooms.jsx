@@ -5,8 +5,6 @@ import CreateRoom from "./components/CreateRoom";
 import Filters from "./components/Filters";
 import Room from "./components/Room";
 
-// TODO: Implement logging in
-
 class Rooms extends Component {
   state = {
     rooms: [],

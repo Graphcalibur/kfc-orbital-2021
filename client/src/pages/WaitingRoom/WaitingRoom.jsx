@@ -72,6 +72,35 @@ class WaitingRoom extends Component {
     this.props.socket.emit("set-player-status", { current_status: new_status });
   };
 
+  getPlayerStatus = () => {
+    if (this.state.players.length === 0) {
+      return (
+        <Row>
+          <Col>You don't seem to be in a room.</Col>
+        </Row>
+      );
+    } else {
+      return (
+        <span>
+          {this.state.players.map((player) => (
+            <Player
+              name={player["user"]["username"]}
+              status={player["status"]}
+              key={player["user"]["username"]}
+              is_curr={player["user"]["username"] === this.state.curr_user}
+            />
+          ))}
+          <Row className="mt-3">
+            <Col>
+              You will automatically be redirected to the race when everyone is
+              ready.
+            </Col>
+          </Row>
+        </span>
+      );
+    }
+  };
+
   render() {
     return (
       <Container fluid="lg">
@@ -88,14 +117,7 @@ class WaitingRoom extends Component {
             </Col>
           </Row>
 
-          {this.state.players.map((player) => (
-            <Player
-              name={player["user"]["username"]}
-              status={player["status"]}
-              key={player["user"]["username"]}
-              is_curr={player["user"]["username"] === this.state.curr_user}
-            />
-          ))}
+          {this.getPlayerStatus()}
 
           <Button
             variant="outline-primary"

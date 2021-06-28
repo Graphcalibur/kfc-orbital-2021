@@ -26,16 +26,12 @@ const socket = socketIOClient("http://localhost:9000", {
 
 class App extends Component {
   state = {
-    race_snippet: { code: [""], language: "", id: -1 },
+    race_snippet: { code: "", language: "", id: -1 },
   };
 
   componentDidMount() {
     socket.on("set-snippet", (snippet) => {
       this.setState({ race_snippet: snippet["snippet"] });
-    });
-
-    socket.on("login-ws-return", (user) => {
-      console.log(user);
     });
 
     socket.on("check-current-login-return", (user) => {

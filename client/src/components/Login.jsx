@@ -57,9 +57,7 @@ class Login extends Component {
 
     fetch("/api/authuser", requestOptions).then((res) => {
       if (res.status === 200) {
-        /* window.location.reload(); */
-        this.props.updateCurrUser(this.state.username);
-        this.setState({ failed_login: 3 });
+        window.location.reload();
       } else if (res.status === 401) {
         this.setState({ failed_login: 1 });
       } else {
@@ -81,11 +79,6 @@ class Login extends Component {
         <p style={{ fontSize: "80%", color: "#ff1a1a" }}>
           Login has failed. Please try again later.
         </p>
-      );
-    } else if (this.state.failed_login === 3) {
-      /* To delete when server-side storage gets done */
-      return (
-        <p style={{ fontSize: "80%" }}>You have successfully logged in!</p>
       );
     }
 
