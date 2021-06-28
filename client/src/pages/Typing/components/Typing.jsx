@@ -34,7 +34,7 @@ const Typing = (props) => {
             <TypingInput
               is_wrong={props.first_wrong < curr_input.length}
               curr_input={curr_input}
-              cannotType={props.ended}
+              cannotType={!props.typing}
               handleSubmit={props.handleSubmit}
               handleInputChange={props.handleInputChange}
               setRef={props.setRef}
