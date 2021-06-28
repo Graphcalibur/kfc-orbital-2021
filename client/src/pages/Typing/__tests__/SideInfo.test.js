@@ -1,10 +1,10 @@
 import React from "react";
-import Header from "../components/Header";
+import SideInfo from "../components/SideInfo";
 import { shallow } from "enzyme";
 
 const setup = (language, code_length, code_lines) => {
   const wrapper = shallow(
-    <Header
+    <SideInfo
       language={language}
       code_length={code_length}
       code_lines={code_lines}
@@ -17,7 +17,7 @@ const setup = (language, code_length, code_lines) => {
   };
 };
 
-describe("Testing Header component in page SoloTyping", () => {
+describe("Testing SideInfo component in page SoloTyping", () => {
   test("Test 1", () => {
     const { text } = setup("Python", 80, 7);
     expect(text.text()).toEqual(
