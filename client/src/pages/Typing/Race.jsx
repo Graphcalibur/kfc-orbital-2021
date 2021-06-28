@@ -273,6 +273,7 @@ class Race extends Component {
         elapsed_time={this.state.elapsed_time}
         ended={this.state.game_ended}
         is_solo={false}
+        cannot_type={!this.state.typing}
         wpm={this.state.curr_player_score["speed"]}
         accuracy={this.state.curr_player_score["acc"]}
         code_length={this.getCodeLength()}

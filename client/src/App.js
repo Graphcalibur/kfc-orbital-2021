@@ -18,6 +18,7 @@ import WaitingRoom from "./pages/WaitingRoom/WaitingRoom";
 2) Race doesn't start until at least 2 people are in
 3) Server-side storage for socket data
 4) Race automatically ends after a certain time?
+5) Race ends on hittin enter instead of automatically when last line is correct?
 */
 
 const socket = socketIOClient("/", {

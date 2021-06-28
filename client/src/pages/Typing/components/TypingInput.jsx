@@ -13,7 +13,7 @@ const TypingInput = (props) => {
       placeholder="Start typing here..."
       style={style}
       value={props.curr_input}
-      readOnly={props.cannotType}
+      readOnly={props.cannot_type}
       onKeyPress={props.handleSubmit}
       onChange={(event) => props.handleInputChange(event)}
       ref={props.setRef}

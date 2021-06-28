@@ -200,6 +200,8 @@ class SoloTyping extends Component {
   };
 
   render() {
+    const ended = this.state.started && !this.state.typing;
+
     return (
       <Typing
         heading="Solo Practice"
@@ -213,8 +215,9 @@ class SoloTyping extends Component {
         typing={this.state.typing}
         started={this.state.started}
         elapsed_time={this.state.elapsed_time}
-        ended={this.state.started && !this.state.typing}
+        ended={ended}
         is_solo={true}
+        cannot_type={ended}
         wpm={this.getWPM()}
         accuracy={this.getAccuracy()}
         code_length={this.getCodeLength()}
