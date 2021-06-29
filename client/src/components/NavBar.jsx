@@ -34,7 +34,7 @@ class NavBar extends Component {
       method: "POST",
       credentials: "include",
     }).then((res) => {
-      this.setState({ curr_user: null });
+      window.location.reload();
     });
   };
 
