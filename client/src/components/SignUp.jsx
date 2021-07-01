@@ -155,6 +155,7 @@ class SignUp extends Component {
                 required
                 type="password"
                 placeholder="Password"
+                id="password"
                 value={password}
                 onChange={(event) => this.handlePasswordChange(event)}
               />
@@ -163,12 +164,13 @@ class SignUp extends Component {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="confirm" id="confirm">
+            <Form.Group className="mb-3" controlId="confirm">
               <Form.Label>Confirm Password</Form.Label>
               <Form.Control
                 required
                 type="password"
                 placeholder="Confirm Password"
+                id="confirm"
                 value={confirm_password}
                 onChange={(event) => this.handleConfirmChange(event)}
                 isInvalid={password !== confirm_password}
