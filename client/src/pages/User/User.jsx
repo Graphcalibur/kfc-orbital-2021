@@ -156,7 +156,7 @@ class User extends Component {
       if (curr_date.getDate() !== prev_date.getDate()) {
         wpm_data.push({
           x: prev_date,
-          y: wpm / (scorelist.length - i) /* Get average so far */,
+          y: wpm / (scorelist.length - i - 1) /* Get average so far */,
         });
         prev_date = curr_date;
       }

@@ -44,11 +44,15 @@ const Stats = (props) => {
     <Row className="mt-3">
       <Col md="4">
         {stats.map((stat, i) => (
-          <Row classname="mt-1 ">
+          <Row className="mt-1" key={i}>
             <Col md="7" className="text">
               {stats_titles[i]}:
             </Col>
-            <Col md="5" style={{ color: color_stat(stat, i) }}>
+            <Col
+              md="5"
+              style={{ color: color_stat(stat, i) }}
+              id={"stat" + i.toString()}
+            >
               {Math.round(stat * 10) / 10}
               {addendums[i]}
             </Col>
