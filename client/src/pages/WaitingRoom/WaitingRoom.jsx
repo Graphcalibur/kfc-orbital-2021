@@ -4,9 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 
 import Player from "./components/Player";
 
-// TODO: Error handling if user goes into waitingroom without joining a room
 // TODO: Improve layout
-// TODO: Mention race will begin when all players are ready
 
 class WaitingRoom extends Component {
   state = {
