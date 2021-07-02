@@ -213,7 +213,13 @@ class Race extends Component {
   Game Not Started --> Countdown
   */
   getTopText = () => {
-    if (this.state.game_ended) {
+    if (this.state.countdown === 100) {
+      return (
+        <span className="text mb-3">
+          Hmm. It doesn't seem like you're in a race.
+        </span>
+      );
+    } else if (this.state.game_ended) {
       return (
         <span className="mb-3">
           {this.state.scores.map((score) => (
