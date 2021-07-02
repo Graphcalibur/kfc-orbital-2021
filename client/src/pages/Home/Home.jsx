@@ -5,12 +5,14 @@ import { Link } from "react-router-dom";
 import spaceship from "./images/spaceship.png";
 import ufo from "./images/ufo.png";
 import lightspeed from "./images/lightspeed.jpg";
+
 import ViewStats from "./components/ViewStats";
+import Leaderboard from "./components/Leaderboard";
 
 class Home extends Component {
   state = {
     user: null,
-    leaderboard: [],
+    leaderboard: [{ name: "abacaba123", speed: 60 }],
   };
 
   componentDidMount() {
@@ -23,6 +25,14 @@ class Home extends Component {
         this.setState({ user: new_curr_user });
       });
   }
+
+  getLeaderboard = () => {
+    const { leaderboard } = this.state;
+
+    if (leaderboard.length === 0) {
+      return;
+    }
+  };
 
   render() {
     return (
@@ -105,13 +115,7 @@ class Home extends Component {
 
           <Row className="justify-content-evenly">
             <Col md="6" className="p-3" fluid="sm">
-              <Container className="shadow p-3 box">
-                <h3 className="text">
-                  <b>Leaderboard</b>
-                </h3>
-
-                <p className="text">WIP</p>
-              </Container>
+              <Leaderboard leaderboard={this.state.leaderboard} />
             </Col>
 
             <Col md="6" className="p-3" fluid="sm">
