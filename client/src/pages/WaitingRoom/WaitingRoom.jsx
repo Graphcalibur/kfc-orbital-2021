@@ -85,7 +85,7 @@ class WaitingRoom extends Component {
               name={player["user"]["username"]}
               status={player["status"]}
               key={player["user"]["username"]}
-              is_curr={player["user"]["username"] === this.state.curr_user}
+              is_curr={player["user"]["username"] === this.state.curr_player}
             />
           ))}
           <Row className="mt-3">

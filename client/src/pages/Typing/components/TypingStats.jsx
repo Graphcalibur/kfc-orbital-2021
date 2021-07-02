@@ -45,13 +45,6 @@ const TypingStats = (props) => {
           >
             Back to Waiting Room
           </Button>
-
-          <Button
-            onClick={() => history.push(`/rooms`)}
-            variant="outline-primary"
-          >
-            Back to Room List
-          </Button>
         </span>
       );
     }

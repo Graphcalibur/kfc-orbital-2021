@@ -3,10 +3,6 @@ import React, { Component } from "react";
 import PlayerState from "./components/PlayerState";
 import Typing from "./components/Typing";
 
-// TODO: Handle error where user enters Race without entering a room
-// TODO: Handle user leaving a Race early
-// TODO: Add Countdown
-
 class Race extends Component {
   state = {
     code: this.props.snippet["code"].split("\n"),
@@ -225,6 +221,7 @@ class Race extends Component {
           {this.state.scores.map((score) => (
             <PlayerState
               player={score["user"]["username"]}
+              is_curr={score["user"]["username"] === this.state.curr_player}
               state_name="Score"
               state_value={score["score"]["speed"]}
               state_suffix=" WPM"
@@ -235,11 +232,12 @@ class Race extends Component {
     } else if (this.state.started && this.state.player_states.length > 0) {
       return (
         <span className="mb-3">
-          {this.state.player_states.map((player_state) => (
+          {this.state.player_states.map((state) => (
             <PlayerState
-              player={player_state["user"]["username"]}
+              player={state["user"]["username"]}
+              is_curr={state["user"]["username"] === this.state.curr_player}
               state_name="Progress"
-              state_value={this.getPlayerProgress(player_state)}
+              state_value={this.getPlayerProgress(state)}
               state_suffix="%"
             />
           ))}
@@ -284,7 +282,6 @@ class Race extends Component {
         accuracy={this.state.curr_player_score["acc"]}
         code_length={this.getCodeLength()}
         getTopText={this.getTopText}
-        getBackBtn={() => <span></span>}
         reset={() => null}
         getCode={() => null}
         backToWaiting={this.backToWaitingRoom}

@@ -6,7 +6,9 @@ import { Col, Row } from "react-bootstrap";
 const Player = (props) => {
   return (
     <Row>
-      <Col md="3">{props.name}</Col>
+      <Col md="3">
+        {props.name} {props.is_curr ? " (You)" : ""}{" "}
+      </Col>
       <Col md="9">{props.status}</Col>
     </Row>
   );

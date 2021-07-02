@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { withRouter } from "react-router-dom";
 
 import Typing from "./components/Typing";
 
@@ -191,14 +190,6 @@ class SoloTyping extends Component {
     );
   };
 
-  getBackBtn = () => {
-    return (
-      <Link to={`/lang`}>
-        <Button variant="outline-primary">Back to Language Selection</Button>
-      </Link>
-    );
-  };
-
   render() {
     const ended = this.state.started && !this.state.typing;
 
@@ -222,7 +213,6 @@ class SoloTyping extends Component {
         accuracy={this.getAccuracy()}
         code_length={this.getCodeLength()}
         getTopText={() => <span></span>}
-        getBackBtn={this.getBackBtn}
         reset={this.reset}
         getCode={this.getCode}
         backToWaiting={() => null}

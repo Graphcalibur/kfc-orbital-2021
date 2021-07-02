@@ -1,5 +1,6 @@
 import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 import "../Typing.css";
 import Code from "./Code";
@@ -10,6 +11,16 @@ import TypingInput from "./TypingInput";
 
 const Typing = (props) => {
   const { curr_input } = props;
+
+  const back_btn = props.is_solo ? (
+    <Link to={`/lang`}>
+      <Button variant="outline-primary">Back to Language Selection</Button>
+    </Link>
+  ) : (
+    <Link to={`/rooms`}>
+      <Button variant="outline-primary">Leave Race</Button>
+    </Link>
+  );
 
   return (
     <Container fluid="lg">
@@ -40,7 +51,7 @@ const Typing = (props) => {
               setRef={props.setRef}
             />
 
-            {props.getBackBtn()}
+            {back_btn}
           </Container>
 
           <TypingStats
