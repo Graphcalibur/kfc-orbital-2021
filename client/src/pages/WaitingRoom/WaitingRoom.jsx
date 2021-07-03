@@ -105,7 +105,7 @@ class WaitingRoom extends Component {
         <h1 className="text">
           <b>Waiting Room</b>
         </h1>
-        <Container className="shadow p-3 box text">
+        <Container className="p-3 box text">
           <Row>
             <Col md="3">
               <b>Player Name</b>

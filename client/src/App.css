@@ -42,7 +42,10 @@
 }
 
 .box {
-  background-color: #0d141b;
+  background-color: #0d2a3f;
+  border-color: #000000;
+  border-width: 1px;
+  box-shadow: rgba(0, 0, 0, 0.6) 0px 18px 25px 8px;
 }
 
 .modal .modal-content {

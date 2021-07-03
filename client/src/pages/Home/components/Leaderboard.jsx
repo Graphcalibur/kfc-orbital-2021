@@ -6,7 +6,7 @@ const Leaderboard = (props) => {
   const { leaderboard } = props;
 
   return (
-    <Container className="shadow p-3 box">
+    <Container className="p-3 box">
       <h3 className="text">
         <b>Leaderboard</b>
       </h3>

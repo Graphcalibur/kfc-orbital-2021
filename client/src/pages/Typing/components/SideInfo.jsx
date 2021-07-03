@@ -13,7 +13,7 @@ const SideInfo = (props) => {
   );
 
   return (
-    <Container className="shadow p-3 ms-3 align-content-start box">
+    <Container className="p-3 ms-3 align-content-start box">
       <p className="text">
         <b>Language:</b> {props.language}
         <br />

@@ -11,7 +11,7 @@ const Room = (props) => {
   };
 
   return (
-    <Row className="shadow mb-3 p-2 box text align-items-center">
+    <Row className="mb-3 p-2 box text align-items-center">
       <Col md="4">
         <b>Room Code: </b>
         {props.code}

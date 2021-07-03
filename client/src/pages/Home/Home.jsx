@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 import spaceship from "./images/spaceship.png";
 import ufo from "./images/ufo.png";
-import lightspeed from "./images/lightspeed.jpg";
 
 import ViewStats from "./components/ViewStats";
 import Leaderboard from "./components/Leaderboard";
@@ -37,21 +36,10 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <Container
-          className="shadow p-3"
-          style={{
-            backgroundImage: `url(${lightspeed})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "1200px",
-          }}
-        >
-          <h1 style={{ fontSize: "70px" }} className="text">
-            CodeRacer
-          </h1>
-          <h5 className="text">
-            Making typing code fun, exciting, and competitive.
-          </h5>
-        </Container>
+        <center className="text">
+          <h1 style={{ fontSize: "70px" }}>CodeRacer</h1>
+          <h5>Making typing code fun, exciting, and competitive.</h5>
+        </center>
 
         <Container className="mt-4">
           <h5 className="text">
@@ -60,7 +48,7 @@ class Home extends Component {
 
           <Row className="justify-content-evenly">
             <Col md="6" className="p-3" fluid="sm">
-              <Container className="shadow p-3 box">
+              <Container className="p-3 box">
                 <Row className="justify-content-between">
                   <Col md="7">
                     <h3 className="text">
@@ -85,7 +73,7 @@ class Home extends Component {
             </Col>
 
             <Col md="6" className="p-3" fluid="sm">
-              <Container className="shadow p-3 box">
+              <Container className="p-3 box">
                 <Row className="justify-content-between">
                   <Col md="6">
                     <h3 className="text">

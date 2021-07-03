@@ -51,7 +51,7 @@ const TypingStats = (props) => {
   };
 
   return (
-    <Container fluid="sm" className="shadow p-3 gap-3 mt-3 box">
+    <Container fluid="sm" className="p-3 gap-3 mt-3 box">
       <h3 className="text">Your Typing Stats:</h3>
 
       <p className="text" id="stats">

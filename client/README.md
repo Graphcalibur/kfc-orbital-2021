@@ -19,7 +19,7 @@
 
 ## Image Sources
 
-- Light Speed Background: https://ak.picdn.net/shutterstock/videos/24609584/thumb/10.jpg
+- Background: https://cdn.wallpapersafari.com/23/0/sioLPa.jpg
 - Rocket: https://wikiclipart.com/wp-content/uploads/2017/01/Rocket-clipart-free-images-4.png
 - UFO: https://www.clipartmax.com/png/full/21-213902_ufo-clipart.png
 - Speedometer: https://www.clipartmax.com/png/full/142-1421212_speedometer-clip-art.png

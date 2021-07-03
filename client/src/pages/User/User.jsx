@@ -205,7 +205,7 @@ class User extends Component {
             : "The user does not exist."}
         </h1>
 
-        <Container fluid="sm" className="shadow p-3 box">
+        <Container fluid="sm" className="p-3 box">
           <Tabs defaultActiveKey="all">
             <Tab eventKey="all" title="All Stats">
               <Stats

@@ -21,7 +21,7 @@ const ViewStats = (props) => {
     );
 
   return (
-    <Container className="shadow p-3 box">
+    <Container className="p-3 box">
       <Row className="justify-content-between">
         <Col md="7">
           <h3 className="text">

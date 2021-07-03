@@ -32,7 +32,7 @@ const Typing = (props) => {
 
       <Row className="mt-3">
         <Col md="9">
-          <Container className="shadow p-3 box">
+          <Container className="p-3 box">
             <Timer elapsed_time={props.elapsed_time} typing={props.typing} />
 
             <Code
