@@ -59,7 +59,7 @@ class Home extends Component {
                       people!
                     </p>
                     <Link to={`/rooms`}>
-                      <Button variant="outline-primary">
+                      <Button variant="outline-info">
                         Race Against Others
                       </Button>
                     </Link>
@@ -83,7 +83,7 @@ class Home extends Component {
                       Practice your code typing skills at your own pace.
                     </p>
                     <Link to={`/lang`}>
-                      <Button variant="outline-primary">
+                      <Button variant="outline-info">
                         Practice On Your Own
                       </Button>
                     </Link>

@@ -23,7 +23,7 @@ const SideInfo = (props) => {
       </p>
 
       <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
-        <Button variant="outline-primary">How to Play</Button>
+        <Button variant="outline-info">How to Play</Button>
       </OverlayTrigger>
     </Container>
   );

@@ -138,7 +138,7 @@ class Login extends Component {
                 Forgot password?
               </Link>
 
-              <Button variant="primary" type="submit">
+              <Button variant="outline-info" type="submit">
                 Login
               </Button>
             </div>

@@ -180,7 +180,7 @@ class SignUp extends Component {
 
             {this.failedSignUpText()}
 
-            <Button variant="primary" type="submit" className="float-end">
+            <Button variant="outline-info" type="submit" className="float-end">
               Sign Up
             </Button>
           </Form>

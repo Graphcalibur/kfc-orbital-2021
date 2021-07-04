@@ -14,11 +14,11 @@ const Typing = (props) => {
 
   const back_btn = props.is_solo ? (
     <Link to={`/lang`}>
-      <Button variant="outline-primary">Back to Language Selection</Button>
+      <Button variant="outline-info">Back to Language Selection</Button>
     </Link>
   ) : (
     <Link to={`/rooms`}>
-      <Button variant="outline-primary">Leave Race</Button>
+      <Button variant="outline-info">Leave Race</Button>
     </Link>
   );
 

@@ -44,14 +44,14 @@ class NavBar extends Component {
     return this.state.curr_user === null ? (
       <Nav className="ms-auto">
         <Button
-          variant="outline-primary"
+          variant="outline-info"
           onClick={() => this.setState({ show_login: true })}
           className="me-3"
         >
           Login
         </Button>
         <Button
-          variant="outline-primary"
+          variant="outline-info"
           onClick={() => this.setState({ show_sign_up: true })}
         >
           Sign Up
@@ -62,7 +62,7 @@ class NavBar extends Component {
         <Link className="nav-link" to={"/user/" + this.state.curr_user}>
           {this.state.curr_user}
         </Link>
-        <Button variant="outline-primary" onClick={() => this.logout()}>
+        <Button variant="outline-info" onClick={() => this.logout()}>
           Logout
         </Button>
       </Nav>
@@ -71,7 +71,7 @@ class NavBar extends Component {
 
   render() {
     return (
-      <Navbar variant="dark" bg="dark" expand="sm" className="mb-3">
+      <Navbar variant="dark" expand="sm" className="mb-3">
         <Container fluid>
           <Link className="navbar-brand" to="/">
             CodeRacer

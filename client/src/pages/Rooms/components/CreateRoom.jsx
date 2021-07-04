@@ -8,7 +8,7 @@ const CreateRoom = (props) => {
         Don't like any of the rooms you see? Click the button below to create a
         new room!
       </p>
-      <Button variant="outline-primary" onClick={props.createRoom}>
+      <Button variant="outline-info" onClick={props.createRoom}>
         Create Room
       </Button>
     </Container>

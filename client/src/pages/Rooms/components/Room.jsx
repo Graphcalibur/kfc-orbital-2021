@@ -22,7 +22,7 @@ const Room = (props) => {
       </Col>
       <Col md="3">
         <Button
-          variant="outline-primary"
+          variant="outline-info"
           className="float-end"
           onClick={onClickJoinRoom}
         >

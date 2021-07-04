@@ -15,11 +15,7 @@ const TypingStats = (props) => {
     if (props.is_solo) {
       return (
         <span>
-          <Button
-            onClick={props.reset}
-            variant="outline-primary"
-            className="me-4"
-          >
+          <Button onClick={props.reset} variant="outline-info" className="me-4">
             Try Again
           </Button>
 
@@ -28,7 +24,7 @@ const TypingStats = (props) => {
               props.getCode();
               props.reset();
             }}
-            variant="outline-primary"
+            variant="outline-info"
             className="me-4"
           >
             New Practice
@@ -40,7 +36,7 @@ const TypingStats = (props) => {
         <span>
           <Button
             onClick={() => props.backToWaiting(history)}
-            variant="outline-primary"
+            variant="outline-info"
             className="me-4"
           >
             Back to Waiting Room
