@@ -93,11 +93,15 @@ class Race extends Component {
   };
 
   startTyping = () => {
-    this.setState({
-      typing: true,
-      started: true,
-    });
-    this.text_input.focus();
+    this.setState(
+      {
+        typing: true,
+        started: true,
+      },
+      () => {
+        this.text_input.focus();
+      }
+    );
   };
 
   /* TODO: Not sure if this is still needed? */
