@@ -25,7 +25,7 @@ class Home extends Component {
       });
   }
 
-  getLeaderboard = () => {
+  generateLeaderboard = (scorelist) => {
     const { leaderboard } = this.state;
 
     if (leaderboard.length === 0) {

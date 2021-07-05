@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 
 import Typing from "./components/Typing";
+import {
+  getCodeLength,
+  handleSubmitGeneric,
+  handleInputChangeGeneric,
+} from "./HelperFunctions";
 
 class SoloTyping extends Component {
   state = {
@@ -100,89 +105,30 @@ class SoloTyping extends Component {
       matches the current line being typed. If it does, clear
       the input and move on to the next line */
   handleSubmit = (event) => {
-    if (event.key === "Enter" && this.state.typing) {
-      const { curr_input, code, curr_line_num } = this.state;
+    const new_state = handleSubmitGeneric(event, this.state, this.stopTyping);
 
-      if (curr_input === code[curr_line_num].trim()) {
-        const new_state = {
-          curr_input: "",
-          first_wrong: 0,
-          curr_line_num: curr_line_num + 1,
-        };
-
-        if (curr_line_num === code.length - 1) {
-          new_state.typing = false;
-          this.stopTyping();
-        }
-
-        this.setState(new_state);
-      }
+    if (new_state !== null) {
+      this.setState(new_state);
     }
-  };
-
-  /* Get first wrong character in input */
-  getFirstWrong = (line, curr_input) => {
-    const trimmed_line = line.trim();
-    let i = 0;
-
-    for (; i < trimmed_line.length && i < curr_input.length; i++) {
-      if (trimmed_line.charAt(i) !== curr_input.charAt(i)) {
-        break;
-      }
-    }
-
-    return i;
   };
 
   /* Check for wrong inputs whenever the input changes */
   handleInputChange = (event) => {
-    if (!this.state.started) {
-      this.startTyping();
-    }
-    const { code, curr_line_num, curr_input } = this.state;
-
-    const new_input = event.target.value;
-    const new_first_wrong = this.getFirstWrong(code[curr_line_num], new_input);
-    let new_typed_wrong = this.state.typed_wrong;
-
-    /* Only count wrong characters if user added characters to the input */
-    if (
-      curr_input.length < new_input.length &&
-      new_first_wrong < new_input.length
-    ) {
-      new_typed_wrong++;
-    }
-
-    this.setState({
-      typed_wrong: new_typed_wrong,
-      first_wrong: new_first_wrong,
-      curr_input: new_input,
-    });
-  };
-
-  /* Returns length of code */
-  getCodeLength = () => {
-    const { code } = this.state;
-    let code_length = 0;
-
-    for (let i = 0; i < code.length; i++) {
-      code_length +=
-        code[i].trim().length; /* Don't count starting whitespace */
-    }
-
-    return code_length;
+    this.setState(
+      handleInputChangeGeneric(event.target.value, this.state, this.startTyping)
+    );
   };
 
   /* WPM = (# of chars in code / 5) / time in minutes */
   getWPM = () => {
-    const code_length = this.getCodeLength();
+    const code_length = getCodeLength(this.state.code);
     return Math.round(code_length / 5 / (this.state.elapsed_time / 60000));
   };
 
   /* Accuracy = (# of chars in code / # of chars typed including wrong) * 100
        Formula does * 1000 / 10 so that it's accurate to the first decimal place */
   getAccuracy = () => {
-    const code_length = this.getCodeLength();
+    const code_length = getCodeLength(this.state.code);
     return (
       Math.round(
         (code_length / (this.state.typed_wrong + code_length)) * 1000
@@ -211,7 +157,7 @@ class SoloTyping extends Component {
         cannot_type={ended}
         wpm={this.getWPM()}
         accuracy={this.getAccuracy()}
-        code_length={this.getCodeLength()}
+        code_length={getCodeLength(this.state.code)}
         getTopText={() => <span></span>}
         reset={this.reset}
         getCode={this.getCode}
