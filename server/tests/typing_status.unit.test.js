@@ -41,7 +41,7 @@ test('can correctly reflect partial progress', () => {
 test('can correctly reflect finished state', () => {
     let ts = new TypingStatus(mock_snippet, fixed_time, {});
     jest.advanceTimersByTime(6500);
-    ts.update_with({mistypes: 4, line_no: 3, current_line: ".<-.<.+++.------.--------.>>+.>++."});
+    ts.update_with({mistypes: 4, line_no: 4, current_line: ""});
     ts.mark_as_finished();
     expect(ts.is_finished).toBe(true);
     expect(ts.speed).toBeCloseTo(201.230769);
