@@ -19,6 +19,7 @@ class Race extends Component {
     curr_input: "",
 
     first_wrong: 0,
+    typed_wrong: 0,
 
     typing: false,
     started: false,
@@ -39,7 +40,6 @@ class Race extends Component {
   componentDidMount() {
     /* Get countdown and start typing when the countdown ends */
     this.props.socket.on("start-game-countdown", (data) => {
-      console.log("Countdown received");
       this.setState({ countdown: data["seconds_to_start"] });
 
       if (data["seconds_to_start"] === 0) {
@@ -83,6 +83,11 @@ class Race extends Component {
     if (!this.state.keep_room) {
       this.props.socket.emit("leave-room");
     }
+
+    this.props.socket.removeAllListeners("start-game-countdown");
+    this.props.socket.removeAllListeners("update-race-state");
+    this.props.socket.removeAllListeners("signal-game-end");
+    this.props.socket.removeAllListeners("check-current-login-return");
   }
 
   sendPlayerState = () => {
@@ -120,18 +125,21 @@ class Race extends Component {
           matches the current line being typed. If it does, clear
           the input and move on to the next line */
   handleSubmit = (event) => {
-    const new_state = handleSubmitGeneric(event, this.state, this.stopTyping);
+    const new_state = handleSubmitGeneric(event, this.state);
 
     if (new_state !== null) {
-      this.setState(new_state);
+      this.setState(new_state, () => {
+        if (curr_line_num === code.length - 1) this.stopTyping();
+      });
     }
   };
 
   /* Check for wrong inputs whenever the input changes and sends player state */
   handleInputChange = (event) => {
     this.setState(
-      handleInputChangeGeneric(event.target.value, this.state, this.startTyping)
-    );
+      handleInputChangeGeneric(event.target.value, this.state, this.startTyping), () => {
+        this.sendPlayerState();
+      });
 
     this.sendPlayerState();
   };

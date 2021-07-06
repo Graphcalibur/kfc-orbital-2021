@@ -6,7 +6,7 @@ expect.extend({toBeDeepCloseTo, toMatchCloseTo});
 
 jest.useFakeTimers();
 const get_mock_socket = () => {
-    return {on: jest.fn(), emit: jest.fn()};
+    return {on: jest.fn(), emit: jest.fn(), removeAllListeners: jest.fn()};
 };
 
 const mock_io = {
@@ -86,13 +86,13 @@ describe('manual updating through update_player_state', () => {
     });
     test('can finish game for player 1', () => {
         jest.advanceTimersByTime(7000);
-        game.update_player_state(player_list[0].user, {mistypes: 5, line_no: 3, current_line: ".<-.<.+++.------.--------.>>+.>++." });
+        game.update_player_state(player_list[0].user, {mistypes: 5, line_no: 4, current_line: "" });
         expect(game.is_finished).toBe(false);
         expect(game.player_states).toEqual([
             {user: {id: 5, username: "testuser237"},
              mistypes: 5,
-             current_line: ".<-.<.+++.------.--------.>>+.>++.",
-             line_no: 3},
+             current_line: ".<-.a",
+             line_no: 4},
             {user: {id: 6, username: "gaganabayungtest"},
              mistypes: 0, 
              line_no: 0,
@@ -109,7 +109,7 @@ describe('manual updating through update_player_state', () => {
             ], 3);
             done();
         };
-        game.update_player_state(player_list[1].user, {mistypes: 7, line_no: 3, current_line: ".<-.<.+++.------.--------.>>+.>++."});
+        game.update_player_state(player_list[1].user, {mistypes: 7, line_no: 4, current_line: ""});
     });
 });
 
@@ -173,12 +173,12 @@ describe('socket communication', () => {
     });
     test('can update player state', () => {
         jest.advanceTimersByTime(667); // time since start: 1.667 s
-        player1_update_listener({mistypes:0, line_no:3, current_line: ".<-.<.+++.------.--------.>>+.>++."});
+        player1_update_listener({mistypes:0, line_no:4, current_line: ""});
         const current_states = [
             {user: {id: 5, username: "testuser237"},
              mistypes: 0,
-             line_no: 3,
-             current_line: ".<-.<.+++.------.--------.>>+.>++."},
+             line_no: 4,
+             current_line: ""},
             {user: {id: 6, username: "gaganabayungtest"},
              mistypes: 0, 
              line_no: 0,
@@ -198,8 +198,8 @@ describe('socket communication', () => {
         const current_states = [
             {user: {id: 5, username: "testuser237"},
              mistypes: 0,
-             line_no: 3,
-             current_line: ".<-.<.+++.------.--------.>>+.>++."},
+             line_no: 4,
+             current_line: ""},
             {user: {id: 6, username: "gaganabayungtest"},
              mistypes: 3,
              line_no: 3,
@@ -213,18 +213,21 @@ describe('socket communication', () => {
         expect(mock_io.in).lastCalledWith(socketio_room);
         expect(mock_io.emit).lastCalledWith('update-race-state', current_update);
     })
-    test('can finish game', (done) => {
+    test('can finish game and remove all listeners', (done) => {
         game.game_finish_cb = () => {
             expect(Score.register.mock.calls[0]).toBeDeepCloseTo(
                 [10, 784.643, 100, true, 5], 3);
             expect(Score.register.mock.calls[1]).toBeDeepCloseTo(
                 [10, 201.230, 97.321, true, 6], 3);
+            for (const player of player_list) {
+                expect(player.socket.removeAllListeners).toHaveBeenCalledWith("update-player-state");
+            }
             done();
         };
 
         // give update that finishes game
         jest.advanceTimersByTime(500); // time since start: 6.5s
         console.log("game done", new Date(), game.game_start_time);
-        player2_update_listener({mistypes:3, line_no:3, current_line: ".<-.<.+++.------.--------.>>+.>++."});
+        player2_update_listener({mistypes:3, line_no:4, current_line: ""});
     })
 });

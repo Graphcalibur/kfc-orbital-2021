@@ -109,6 +109,7 @@ class Login extends Component {
               <Form.Control
                 required
                 placeholder="Username"
+                id="username"
                 value={this.state.username}
                 onChange={(event) => this.handleUsernameChange(event)}
               />
@@ -123,6 +124,7 @@ class Login extends Component {
                 required
                 type="password"
                 placeholder="Password"
+                id="password"
                 value={this.state.password}
                 onChange={(event) => this.handlePasswordChange(event)}
               />
