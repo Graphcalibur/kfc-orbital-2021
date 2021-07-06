@@ -47,4 +47,11 @@ test('can reject non-existent users', async () => {
     }
 });
 
-
+test('can create username mapping', async () => {
+    const user_mapping = await User.username_id_mapping([1, 3]);
+    const expected_mapping = new Map([
+        [1, new User(1, "abacaba123")],
+        [3, new User(3, "testuser")]
+    ])
+    expect(user_mapping).toEqual(expected_mapping);
+})

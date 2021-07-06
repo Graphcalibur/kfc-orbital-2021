@@ -186,6 +186,7 @@ let Score = class Score {
      */
     static async all_recent_scores(time_window) {
         const recent_scores = await con_pool.query("SELECT * FROM score " +
+         "INNER JOIN code_snippet ON score.snippetid = code_snippet.id " +
          "WHERE time BETWEEN DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL ? SECOND) " +
          "AND CURRENT_TIMESTAMP()",
          [time_window]);
