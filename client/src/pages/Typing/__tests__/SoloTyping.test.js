@@ -1,6 +1,4 @@
-import "jsdom-global/register";
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
 import SoloTyping from "../SoloTyping";
 import { shallow } from "enzyme";
 
@@ -12,12 +10,8 @@ import { shallow } from "enzyme";
 */
 
 const setup = () => {
-  SoloTyping.WrappedComponent.prototype.componentDidMount = () => {
-    return 0;
-  };
-  SoloTyping.WrappedComponent.prototype.componentDidMount = () => {
-    return 0;
-  };
+  SoloTyping.WrappedComponent.prototype.componentDidMount = () => null;
+
   const wrapper = shallow(
     <SoloTyping.WrappedComponent match={{ params: { lang: "Python" } }} />
   );

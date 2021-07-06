@@ -26,23 +26,17 @@ export const getFirstWrong = (line, curr_input) => {
 /* When pressing enter, check if the text in the input
       matches the current line being typed. If it does, clear
       the input and move on to the next line */
-export const handleSubmitGeneric = (event, state, stopTyping) => {
+export const handleSubmitGeneric = (event, state) => {
   if (event.key === "Enter" && state.typing) {
     const { curr_input, code, curr_line_num } = state;
 
     if (curr_input === code[curr_line_num].trim()) {
-      const new_state = {
+      return {
         curr_input: "",
         first_wrong: 0,
         curr_line_num: curr_line_num + 1,
+        typing: curr_line_num < code.length - 1
       };
-
-      if (curr_line_num === code.length - 1) {
-        new_state.typing = false;
-        stopTyping();
-      }
-
-      return new_state;
     }
   }
 
