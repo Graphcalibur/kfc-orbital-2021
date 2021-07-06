@@ -74,6 +74,16 @@ let User = class User {
             return new User(userid, username);
         }
     }
+    /**
+     * Given a list of ids, return a map that maps those ids to their User objects.
+     * @param {number[]} ids 
+     * @returns {Map<number,User>}
+     */
+    static async username_id_mapping(ids) {
+        const users_result = await con_pool.query("SELECT id, username FROM user WHERE id IN ?;", [[ids]]);
+        const user_map = new Map(users_result.map(res => [res.id, new User(res.id, res.username)]));
+        return user_map;
+    }
     /* Instantiate a User object from the given credentials.
      * If successful, return the User object corresponding to the authenticated user.
      * Throws NoUserExistsError, IncorrectPasswordError, and Error (in case of unknown database error).
@@ -133,7 +143,7 @@ let User = class User {
             " WHERE " + conditions
             + " ORDER BY time DESC LIMIT ?, ?",
             params.concat([from, count]));
-        return query_results.map(res => new Score(res.playid, res.id, res.speed, Number(res.accuracy), Date.parse(res.time) / 1000, res.context, res.userid));
+        return query_results.map(res => Score.from_database_row(res));
     }
 };
 
@@ -161,7 +171,28 @@ let Score = class Score {
         const server_timestamp = await con_pool.query("SELECT UNIX_TIMESTAMP(time) AS time FROM score WHERE playid=?", insert_score_result.insertId);
         return new Score(insert_score_result.insertId, snippetid, speed, acc, server_timestamp[0].time, isMultiplayer ? "Multiplayer" : "Solo", userid);
     }
+    /**
+     * Construct a Score object from a full row of the Score database.
+     * @param {TextRow} res 
+     */
+    static from_database_row(res) {
+        return new Score(res.playid, res.id, res.speed, Number(res.accuracy),
+                Date.parse(res.time) / 1000, res.context, res.userid)
+    }
+    /**
+     * Return a list of Score objects, indicating all scores registered
+     * from `time_window` seconds ago until now.
+     * @param {number} time_window 
+     */
+    static async all_recent_scores(time_window) {
+        const recent_scores = await con_pool.query("SELECT * FROM score " +
+         "WHERE time BETWEEN DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL ? SECOND) " +
+         "AND CURRENT_TIMESTAMP()",
+         [time_window]);
+        return recent_scores.map(res => Score.from_database_row(res));
+    }
 };
+
 
 User.errors = errors;
 module.exports.User = User;

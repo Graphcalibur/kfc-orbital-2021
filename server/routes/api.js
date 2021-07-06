@@ -19,6 +19,8 @@ router.get('/stats/:username/summary', user_controller.check_user_exists, stat_c
 
 router.get('/stats/:username/scorelist', user_controller.check_user_exists, stat_controller.scorelist);
 
+router.get('/stats/allscores/', stat_controller.allscores);
+
 /* Registration and authentication endpoints */
 router.post('/register', user_controller.register);
 
