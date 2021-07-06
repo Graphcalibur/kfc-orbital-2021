@@ -63,6 +63,11 @@ let Game = class Game {
             this.update_player_state(user, msg);
         });
     }
+    /* Deregister any listeners for update-player-state.
+     */
+    deregister_update_listener(socket) {
+        socket.removeAllListeners("update-player-state");
+    }
     /* Mark the player as finished, logging the time they finished.
      * If all players are finished, finish the game.
      */
@@ -129,6 +134,9 @@ let Game = class Game {
     // Clean up by saving the scores of all registered users.
     finish_game() {
         clearInterval(this.broadcast_update_handle);
+        for (const player of this.players) {
+            this.deregister_update_listener(player.socket);
+        }
         const get_scores = async () => {
             let final_scores = new Map();
             for (const [user, status] of this.current_status.entries()) {
