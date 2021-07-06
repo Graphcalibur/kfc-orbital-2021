@@ -19,11 +19,8 @@ let TypingStatus = class TypingStatus {
     }
     /* Check if this TypingState represents a finished state.
      */
-    get is_finished() {
-        const last_line_idx = this.snippet.line_count - 1;
-        const final_line = this.snippet.code.split("\n")[last_line_idx].trim();  
-        return (this.line_no + 1 >= this.snippet.line_count) &&
-            (this.current_line.trim() == final_line);
+    get is_finished() { 
+        return this.line_no >= this.snippet.line_count;
     }
     /*  Return an object with only this TypingState's mistypes, line_no, and current_line
     *   properties.

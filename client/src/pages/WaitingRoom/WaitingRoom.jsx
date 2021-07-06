@@ -47,6 +47,10 @@ class WaitingRoom extends Component {
   componentWillUnmount() {
     if (!this.state.keep_room) this.leaveRoom();
     clearInterval(this.state.refresh_timer);
+
+    this.props.socket.removeAllListeners("set-snippet");
+    this.props.socket.removeAllListeners("get-room-status-return");
+    this.props.socket.removeAllListeners("check-current-login-return");
   }
 
   getRoomStatus = () => {

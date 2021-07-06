@@ -17,6 +17,7 @@ class Race extends Component {
     curr_input: "",
 
     first_wrong: 0,
+    typed_wrong: 0,
 
     typing: false,
     started: false,
@@ -37,7 +38,6 @@ class Race extends Component {
   componentDidMount() {
     /* Get countdown and start typing when the countdown ends */
     this.props.socket.on("start-game-countdown", (data) => {
-      console.log("Countdown received");
       this.setState({ countdown: data["seconds_to_start"] });
 
       if (data["seconds_to_start"] === 0) {
@@ -82,9 +82,19 @@ class Race extends Component {
     if (!this.state.keep_room) {
       this.props.socket.emit("leave-room");
     }
+
+    this.props.socket.removeAllListeners("start-game-countdown");
+    this.props.socket.removeAllListeners("update-race-state");
+    this.props.socket.removeAllListeners("signal-game-end");
+    this.props.socket.removeAllListeners("check-current-login-return");
   }
 
   sendPlayerState = () => {
+    console.log([
+      this.state.typed_wrong,
+      this.state.curr_line_num,
+      this.state.curr_input,
+    ]);
     this.props.socket.emit("update-player-state", {
       mistypes: this.state.typed_wrong,
       line_no: this.state.curr_line_num,
@@ -127,14 +137,15 @@ class Race extends Component {
           curr_input: "",
           first_wrong: 0,
           curr_line_num: curr_line_num + 1,
+          typing: curr_line_num < code.length - 1
         };
 
-        if (curr_line_num === code.length - 1) {
-          new_state.typing = false;
-          this.stopTyping();
-        }
-
-        this.setState(new_state);
+        this.setState(new_state, () => {
+          if (curr_line_num === code.length - 1) {
+            new_state.typing = false;
+            this.stopTyping();
+          }
+        });
       }
     }
   };
@@ -172,13 +183,16 @@ class Race extends Component {
       new_typed_wrong++;
     }
 
-    this.setState({
-      typed_wrong: new_typed_wrong,
-      first_wrong: new_first_wrong,
-      curr_input: new_input,
-    });
-
-    this.sendPlayerState();
+    this.setState(
+      {
+        typed_wrong: new_typed_wrong,
+        first_wrong: new_first_wrong,
+        curr_input: new_input,
+      },
+      () => {
+        this.sendPlayerState();
+      }
+    );
   };
 
   /* Returns length of code */
