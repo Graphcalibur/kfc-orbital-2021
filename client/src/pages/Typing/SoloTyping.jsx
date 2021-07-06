@@ -104,13 +104,15 @@ class SoloTyping extends Component {
   /* When pressing enter, check if the text in the input
       matches the current line being typed. If it does, clear
       the input and move on to the next line */
-  handleSubmit = (event) => {
-    const new_state = handleSubmitGeneric(event, this.state, this.stopTyping);
-
-    if (new_state !== null) {
-      this.setState(new_state);
-    }
-  };
+      handleSubmit = (event) => {
+        const new_state = handleSubmitGeneric(event, this.state);
+    
+        if (new_state !== null) {
+          this.setState(new_state, () => {
+            if (curr_line_num === code.length - 1) this.stopTyping();
+          });
+        }
+      };
 
   /* Check for wrong inputs whenever the input changes */
   handleInputChange = (event) => {
