@@ -86,13 +86,13 @@ describe('manual updating through update_player_state', () => {
     });
     test('can finish game for player 1', () => {
         jest.advanceTimersByTime(7000);
-        game.update_player_state(player_list[0].user, {mistypes: 5, line_no: 3, current_line: ".<-.<.+++.------.--------.>>+.>++." });
+        game.update_player_state(player_list[0].user, {mistypes: 5, line_no: 4, current_line: "" });
         expect(game.is_finished).toBe(false);
         expect(game.player_states).toEqual([
             {user: {id: 5, username: "testuser237"},
              mistypes: 5,
-             current_line: ".<-.<.+++.------.--------.>>+.>++.",
-             line_no: 3},
+             current_line: ".<-.a",
+             line_no: 4},
             {user: {id: 6, username: "gaganabayungtest"},
              mistypes: 0, 
              line_no: 0,
@@ -109,7 +109,7 @@ describe('manual updating through update_player_state', () => {
             ], 3);
             done();
         };
-        game.update_player_state(player_list[1].user, {mistypes: 7, line_no: 3, current_line: ".<-.<.+++.------.--------.>>+.>++."});
+        game.update_player_state(player_list[1].user, {mistypes: 7, line_no: 4, current_line: ""});
     });
 });
 
@@ -173,12 +173,12 @@ describe('socket communication', () => {
     });
     test('can update player state', () => {
         jest.advanceTimersByTime(667); // time since start: 1.667 s
-        player1_update_listener({mistypes:0, line_no:3, current_line: ".<-.<.+++.------.--------.>>+.>++."});
+        player1_update_listener({mistypes:0, line_no:4, current_line: ""});
         const current_states = [
             {user: {id: 5, username: "testuser237"},
              mistypes: 0,
-             line_no: 3,
-             current_line: ".<-.<.+++.------.--------.>>+.>++."},
+             line_no: 4,
+             current_line: ""},
             {user: {id: 6, username: "gaganabayungtest"},
              mistypes: 0, 
              line_no: 0,
@@ -198,8 +198,8 @@ describe('socket communication', () => {
         const current_states = [
             {user: {id: 5, username: "testuser237"},
              mistypes: 0,
-             line_no: 3,
-             current_line: ".<-.<.+++.------.--------.>>+.>++."},
+             line_no: 4,
+             current_line: ""},
             {user: {id: 6, username: "gaganabayungtest"},
              mistypes: 3,
              line_no: 3,
@@ -225,6 +225,6 @@ describe('socket communication', () => {
         // give update that finishes game
         jest.advanceTimersByTime(500); // time since start: 6.5s
         console.log("game done", new Date(), game.game_start_time);
-        player2_update_listener({mistypes:3, line_no:3, current_line: ".<-.<.+++.------.--------.>>+.>++."});
+        player2_update_listener({mistypes:3, line_no:4, current_line: ""});
     })
 });
