@@ -32,7 +32,7 @@ module.exports.scorelist = async function(req, res) {
 };
 
 module.exports.allscores = async function(req, res) {
-    const time_window = req.timewindow || 86400; // number of seconds in a day
+    const time_window = req.query.timewindow || 86400; // number of seconds in a day
     const recent_scores = await Score.all_recent_scores(time_window);
     const unique_user_ids = [...new Set(recent_scores.map(score => score.userid))];
     const username_mapping = await User.username_id_mapping(unique_user_ids);

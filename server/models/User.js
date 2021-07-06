@@ -80,6 +80,9 @@ let User = class User {
      * @returns {Map<number,User>}
      */
     static async username_id_mapping(ids) {
+        if (!ids.length) {
+            return new Map();
+        }
         const users_result = await con_pool.query("SELECT id, username FROM user WHERE id IN ?;", [[ids]]);
         const user_map = new Map(users_result.map(res => [res.id, new User(res.id, res.username)]));
         return user_map;
