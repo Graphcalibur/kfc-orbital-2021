@@ -129,7 +129,7 @@ class Race extends Component {
 
     if (new_state !== null) {
       this.setState(new_state, () => {
-        if (curr_line_num === code.length - 1) this.stopTyping();
+        if (new_state.curr_line_num === this.state.code.length) this.stopTyping();
       });
     }
   };
@@ -243,7 +243,6 @@ class Race extends Component {
         handleSubmit={this.handleSubmit}
         handleInputChange={this.handleInputChange}
         setRef={(input) => {
-          console.log("reffed");
           this.text_input = input;
         }}
       />

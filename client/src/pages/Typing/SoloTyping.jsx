@@ -109,7 +109,7 @@ class SoloTyping extends Component {
     
         if (new_state !== null) {
           this.setState(new_state, () => {
-            if (curr_line_num === code.length - 1) this.stopTyping();
+            if (new_state.curr_line_num === this.state.code.length) this.stopTyping();
           });
         }
       };
