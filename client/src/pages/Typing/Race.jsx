@@ -60,7 +60,6 @@ class Race extends Component {
     });
 
     this.props.socket.on("signal-game-end", (data) => {
-      console.log(data);
       this.setState({
         game_ended: true,
         scores: data["scores"],
@@ -90,11 +89,6 @@ class Race extends Component {
   }
 
   sendPlayerState = () => {
-    console.log([
-      this.state.typed_wrong,
-      this.state.curr_line_num,
-      this.state.curr_input,
-    ]);
     this.props.socket.emit("update-player-state", {
       mistypes: this.state.typed_wrong,
       line_no: this.state.curr_line_num,
