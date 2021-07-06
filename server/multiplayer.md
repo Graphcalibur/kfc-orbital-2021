@@ -215,9 +215,10 @@ During a race, the client is expected to send the following message periodically
     }
 ```
 This notifies the server of the current progress of the player.
-If `line_no` indicates the last line, and `current_line` exactly
-matches the last line of the snippet, this will register
-a score in the database, and the client can stop sending `update-player-state` messages.
+If `line_no` is at least the number of lines in the snippet,
+this is considered a state where the player has finished typing.
+If such a message is sent, if this will register
+a score in the database if the user is logged in, and the client can stop sending `update-player-state` messages.
 
 
 
