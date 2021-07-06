@@ -6,7 +6,7 @@ expect.extend({toBeDeepCloseTo, toMatchCloseTo});
 
 jest.useFakeTimers();
 const get_mock_socket = () => {
-    return {on: jest.fn(), emit: jest.fn()};
+    return {on: jest.fn(), emit: jest.fn(), removeAllListeners: jest.fn()};
 };
 
 const mock_io = {
@@ -213,12 +213,15 @@ describe('socket communication', () => {
         expect(mock_io.in).lastCalledWith(socketio_room);
         expect(mock_io.emit).lastCalledWith('update-race-state', current_update);
     })
-    test('can finish game', (done) => {
+    test('can finish game and remove all listeners', (done) => {
         game.game_finish_cb = () => {
             expect(Score.register.mock.calls[0]).toBeDeepCloseTo(
                 [10, 784.643, 100, true, 5], 3);
             expect(Score.register.mock.calls[1]).toBeDeepCloseTo(
                 [10, 201.230, 97.321, true, 6], 3);
+            for (const player of player_list) {
+                expect(player.socket.removeAllListeners).toHaveBeenCalledWith("update-player-state");
+            }
             done();
         };
 
