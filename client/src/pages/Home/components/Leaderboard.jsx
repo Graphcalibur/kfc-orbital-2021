@@ -13,8 +13,8 @@ const Leaderboard = (props) => {
 
       {leaderboard.length === 0 ? (
         <p className="text">
-          Looks like no one has done any races today. Perhaps you can snag the
-          top spot!
+          Looks like no one has done enough races today to qualify for the
+          leaderboard. Perhaps you can snag the top spot!
         </p>
       ) : (
         <span>
@@ -34,7 +34,7 @@ const Leaderboard = (props) => {
             <LeaderboardSpot
               key={i}
               rank={i + 1}
-              name={spot["name"]}
+              name={spot["username"]}
               speed={spot["speed"]}
             />
           ))}

@@ -11,7 +11,7 @@ import Leaderboard from "./components/Leaderboard";
 class Home extends Component {
   state = {
     user: null,
-    leaderboard: [{ name: "abacaba123", speed: 60 }],
+    leaderboard: [],
   };
 
   componentDidMount() {
@@ -23,14 +23,47 @@ class Home extends Component {
         const new_curr_user = data === null ? data : data["username"];
         this.setState({ user: new_curr_user });
       });
+
+    fetch("/api/stats/allscores")
+      .then((res) => res.json())
+      .then(this.generateLeaderboard);
   }
 
+  /* Generates the daily leaderboard based on the given scorelist.
+  Only displays users with >= 5 plays and rankings are based on 
+  average WPM */
   generateLeaderboard = (scorelist) => {
-    const { leaderboard } = this.state;
+    const data = {};
+    const leaderboard = [];
 
-    if (leaderboard.length === 0) {
-      return;
-    }
+    /* Creates dictionary of users and their scores and # of plays */
+    scorelist.forEach((score) => {
+      const username = score["username"];
+      const speed = score["speed"];
+      const length = 1;
+
+      if (username in data) {
+        data[username]["speed"] += speed;
+        data[username]["length"] += length;
+      } else {
+        data[username] = { speed: speed, length: length };
+      }
+    });
+
+    /* Collect all the users with >= 5 plays and their data into an array */
+    Object.keys(data).forEach((key) => {
+      if (data[key]["length"] >= 5) {
+        leaderboard.push({
+          username: key,
+          speed:
+            Math.round((data[key]["speed"] / data[key]["length"]) * 10) / 10,
+        });
+      }
+    });
+
+    /* Sort array in order of descending speed */
+    leaderboard.sort((a, b) => b["speed"] - a["speed"]);
+    this.setState({ leaderboard: leaderboard });
   };
 
   render() {
