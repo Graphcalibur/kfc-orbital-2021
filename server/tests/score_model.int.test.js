@@ -79,3 +79,10 @@ test('can retrieve scorelist filtered for language', async () => {
     expect(playcount).toBe(2);
 });
 
+// This is a weak test, since it does not check if the scores
+// past 10 seconds are excluded; but time is hard to control
+// in this suite
+test('can retrieve plays of the day', async () => {
+    const all_scores = await Score.all_recent_scores(10);
+    expect(all_scores).toEqual(registered_plays)
+});

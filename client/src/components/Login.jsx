@@ -104,7 +104,7 @@ class Login extends Component {
             validated={this.state.validated}
             onSubmit={this.handleSubmit}
           >
-            <Form.Group className="mb-3" controlId="username">
+            <Form.Group className="mb-3">
               <Form.Label>Username</Form.Label>
               <Form.Control
                 required
@@ -118,7 +118,7 @@ class Login extends Component {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="password">
+            <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 required
@@ -140,7 +140,7 @@ class Login extends Component {
                 Forgot password?
               </Link>
 
-              <Button variant="primary" type="submit">
+              <Button variant="outline-info" type="submit">
                 Login
               </Button>
             </div>

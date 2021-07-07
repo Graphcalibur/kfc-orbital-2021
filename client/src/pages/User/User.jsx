@@ -198,14 +198,14 @@ class User extends Component {
 
   render() {
     return (
-      <Container fluid="sm">
+      <Container fluid="lg">
         <h1 className="text">
           {this.state.user_exists
             ? this.state.name + "'s Profile"
             : "The user does not exist."}
         </h1>
 
-        <Container fluid="sm" className="shadow p-3 box">
+        <Container className="p-3 box">
           <Tabs defaultActiveKey="all">
             <Tab eventKey="all" title="All Stats">
               <Stats

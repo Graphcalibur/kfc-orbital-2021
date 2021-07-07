@@ -13,7 +13,7 @@ const SideInfo = (props) => {
   );
 
   return (
-    <Container className="shadow p-3 ms-3 align-content-start box">
+    <Container className="p-3 ms-3 align-content-start box">
       <p className="text">
         <b>Language:</b> {props.language}
         <br />
@@ -23,7 +23,7 @@ const SideInfo = (props) => {
       </p>
 
       <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
-        <Button variant="outline-primary">How to Play</Button>
+        <Button variant="outline-info">How to Play</Button>
       </OverlayTrigger>
     </Container>
   );

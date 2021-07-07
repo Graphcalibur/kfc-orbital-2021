@@ -2,10 +2,12 @@ import React, { Component } from "react";
 
 import PlayerState from "./components/PlayerState";
 import Typing from "./components/Typing";
-
-// TODO: Handle error where user enters Race without entering a room
-// TODO: Handle user leaving a Race early
-// TODO: Add Countdown
+import {
+  getFirstWrong,
+  getCodeLength,
+  handleSubmitGeneric,
+  handleInputChangeGeneric,
+} from "./HelperFunctions";
 
 class Race extends Component {
   state = {
@@ -123,83 +125,23 @@ class Race extends Component {
           matches the current line being typed. If it does, clear
           the input and move on to the next line */
   handleSubmit = (event) => {
-    if (event.key === "Enter" && this.state.typing) {
-      const { curr_input, code, curr_line_num } = this.state;
+    const new_state = handleSubmitGeneric(event, this.state);
 
-      if (curr_input === code[curr_line_num].trim()) {
-        const new_state = {
-          curr_input: "",
-          first_wrong: 0,
-          curr_line_num: curr_line_num + 1,
-          typing: curr_line_num < code.length - 1
-        };
-
-        this.setState(new_state, () => {
-          if (curr_line_num === code.length - 1) {
-            new_state.typing = false;
-            this.stopTyping();
-          }
-        });
-      }
+    if (new_state !== null) {
+      this.setState(new_state, () => {
+        if (new_state.curr_line_num === this.state.code.length) this.stopTyping();
+      });
     }
-  };
-
-  /* Get first wrong character in input */
-  getFirstWrong = (line, curr_input) => {
-    const trimmed_line = line.trim();
-    let i = 0;
-
-    for (; i < trimmed_line.length && i < curr_input.length; i++) {
-      if (trimmed_line.charAt(i) !== curr_input.charAt(i)) {
-        break;
-      }
-    }
-
-    return i;
   };
 
   /* Check for wrong inputs whenever the input changes and sends player state */
   handleInputChange = (event) => {
-    if (!this.state.started) {
-      this.startTyping();
-    }
-    const { code, curr_line_num, curr_input } = this.state;
-
-    const new_input = event.target.value;
-    const new_first_wrong = this.getFirstWrong(code[curr_line_num], new_input);
-    let new_typed_wrong = this.state.typed_wrong;
-
-    /* Only count wrong characters if user added characters to the input */
-    if (
-      curr_input.length < new_input.length &&
-      new_first_wrong < new_input.length
-    ) {
-      new_typed_wrong++;
-    }
-
     this.setState(
-      {
-        typed_wrong: new_typed_wrong,
-        first_wrong: new_first_wrong,
-        curr_input: new_input,
-      },
-      () => {
+      handleInputChangeGeneric(event.target.value, this.state, this.startTyping), () => {
         this.sendPlayerState();
-      }
-    );
-  };
+      });
 
-  /* Returns length of code */
-  getCodeLength = () => {
-    const { code } = this.state;
-    let code_length = 0;
-
-    for (let i = 0; i < code.length; i++) {
-      code_length +=
-        code[i].trim().length; /* Don't count starting whitespace */
-    }
-
-    return code_length;
+    this.sendPlayerState();
   };
 
   /* Calculates progress of a player in % */
@@ -208,15 +150,12 @@ class Race extends Component {
     const line_no = player_state["line_no"];
     if (line_no >= code.length) return 100;
 
-    let curr_len = this.getFirstWrong(
-      code[line_no],
-      player_state["current_line"]
-    );
+    let curr_len = getFirstWrong(code[line_no], player_state["current_line"]);
     for (let i = 0; i < line_no; i++) {
       curr_len += code[i].trim().length;
     }
 
-    return Math.round((curr_len * 100) / this.getCodeLength());
+    return Math.round((curr_len * 100) / getCodeLength(code));
   };
 
   /* Decide which text to render above the main typing container
@@ -225,12 +164,19 @@ class Race extends Component {
   Game Not Started --> Countdown
   */
   getTopText = () => {
-    if (this.state.game_ended) {
+    if (this.state.countdown === 100) {
+      return (
+        <span className="text mb-3">
+          Hmm. It doesn't seem like you're in a race.
+        </span>
+      );
+    } else if (this.state.game_ended) {
       return (
         <span className="mb-3">
           {this.state.scores.map((score) => (
             <PlayerState
               player={score["user"]["username"]}
+              is_curr={score["user"]["username"] === this.state.curr_player}
               state_name="Score"
               state_value={score["score"]["speed"]}
               state_suffix=" WPM"
@@ -241,11 +187,12 @@ class Race extends Component {
     } else if (this.state.started && this.state.player_states.length > 0) {
       return (
         <span className="mb-3">
-          {this.state.player_states.map((player_state) => (
+          {this.state.player_states.map((state) => (
             <PlayerState
-              player={player_state["user"]["username"]}
+              player={state["user"]["username"]}
+              is_curr={state["user"]["username"] === this.state.curr_player}
               state_name="Progress"
-              state_value={this.getPlayerProgress(player_state)}
+              state_value={this.getPlayerProgress(state)}
               state_suffix="%"
             />
           ))}
@@ -288,9 +235,8 @@ class Race extends Component {
         cannot_type={!this.state.typing}
         wpm={this.state.curr_player_score["speed"]}
         accuracy={this.state.curr_player_score["acc"]}
-        code_length={this.getCodeLength()}
+        code_length={getCodeLength(this.state.code)}
         getTopText={this.getTopText}
-        getBackBtn={() => <span></span>}
         reset={() => null}
         getCode={() => null}
         backToWaiting={this.backToWaitingRoom}

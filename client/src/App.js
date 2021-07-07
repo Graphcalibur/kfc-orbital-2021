@@ -16,7 +16,6 @@ import WaitingRoom from "./pages/WaitingRoom/WaitingRoom";
 /* BACKEND TODO:
 1) Round off WPM speed to the nearest integer in races
 2) Race doesn't start until at least 2 people are in
-3) Server-side storage for socket data
 4) Race automatically ends after a certain time?
 5) Race ends on hittin enter instead of automatically when last line is correct?
 */

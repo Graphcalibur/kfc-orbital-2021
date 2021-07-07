@@ -82,6 +82,17 @@ Accepts the following optional parameters:
 - `?lang=` Filter for plays that were made only using snippets in this language.
 - `?context=` (Only accepts either `Solo` or `Multiplayer`) Filter for plays made in either solo mode or multiplayer mode.
 
+### `GET` `/stats/allscores/`
+
+Returns a list of Score objects, each containing some recent play made. 
+
+**Note**: Each Score object here contains an extra property, `username`, which is the
+username of the User who made the play.
+
+Accepts the following optional parameters:
+- `?timewindow=` (default 86400, the number of seconds in a day)
+  This endpoint will return plays made from `timewindow` seconds ago until now.
+
 
 ## Authentication
 

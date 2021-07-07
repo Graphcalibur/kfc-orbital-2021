@@ -30,3 +30,16 @@ module.exports.scorelist = async function(req, res) {
     res.json({playcount: scorecount,
               score_window: scorelist});
 };
+
+module.exports.allscores = async function(req, res) {
+    const time_window = req.query.timewindow || 86400; // number of seconds in a day
+    const recent_scores = await Score.all_recent_scores(time_window);
+    const unique_user_ids = [...new Set(recent_scores.map(score => score.userid))];
+    const username_mapping = await User.username_id_mapping(unique_user_ids);
+    const attach_username = (score) => { // Helper function that adds username information
+        let score_with_username = score;
+        score_with_username.username = username_mapping.get(score.userid).username;
+        return score_with_username;
+    };
+    res.json(recent_scores.map(attach_username));
+};

@@ -73,8 +73,8 @@ class Rooms extends Component {
         </h1>
 
         <Row className="mt-3">
-          <Col md="8">{this.displayRooms()}</Col>
-          <Col md="4">
+          <Col md="7">{this.displayRooms()}</Col>
+          <Col md="4" className="ms-5">
             <Filters />
             <CreateRoom createRoom={this.createRoom} />
           </Col>

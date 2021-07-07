@@ -4,9 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 
 import Player from "./components/Player";
 
-// TODO: Error handling if user goes into waitingroom without joining a room
 // TODO: Improve layout
-// TODO: Mention race will begin when all players are ready
 
 class WaitingRoom extends Component {
   state = {
@@ -91,7 +89,7 @@ class WaitingRoom extends Component {
               name={player["user"]["username"]}
               status={player["status"]}
               key={player["user"]["username"]}
-              is_curr={player["user"]["username"] === this.state.curr_user}
+              is_curr={player["user"]["username"] === this.state.curr_player}
             />
           ))}
           <Row className="mt-3">
@@ -111,7 +109,7 @@ class WaitingRoom extends Component {
         <h1 className="text">
           <b>Waiting Room</b>
         </h1>
-        <Container className="shadow p-3 box text">
+        <Container className="p-3 box text">
           <Row>
             <Col md="3">
               <b>Player Name</b>

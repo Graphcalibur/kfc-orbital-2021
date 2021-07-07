@@ -5,13 +5,17 @@ import { Container, Row } from "react-bootstrap";
 const ChooseLanguage = () => {
   const langs = ["Python", "C++", "All Languages"];
   return (
-    <Container fluid="sm" className="shadow p-4 mt-3 box">
-      <b className="text">Select the language to practice on:</b>
-      <Row className="mt-3 justify-content-evenly">
-        {langs.map((lang) => (
-          <CodeLinkBtn language={lang} key={lang} id={lang} />
-        ))}
-      </Row>
+    <Container>
+      <h3 className="text">
+        <b>Select a language to practice on:</b>
+      </h3>
+      <Container fluid="lg" className="p-4 mt-3 box">
+        <Row className="justify-content-evenly">
+          {langs.map((lang) => (
+            <CodeLinkBtn language={lang} key={lang} id={lang} />
+          ))}
+        </Row>
+      </Container>
     </Container>
   );
 };
