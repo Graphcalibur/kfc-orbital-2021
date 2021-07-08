@@ -64,7 +64,7 @@ class Race extends Component {
 
     this.props.socket.on("signal-game-end", (data) => {
       /* Round speed to nearest integer and acc to first decimal place */
-      data["scores"].map((score) => {
+      const scores = data["scores"].map((score) => {
         score["score"]["speed"] = Math.round(score["score"]["speed"]);
         score["score"]["acc"] = Math.round(score["score"]["acc"] * 10) / 10;
         return score;
@@ -72,8 +72,8 @@ class Race extends Component {
 
       this.setState({
         game_ended: true,
-        scores: data["scores"],
-        curr_player_score: this.getCurrPlayerScore(data["scores"]),
+        scores: scores,
+        curr_player_score: this.getCurrPlayerScore(scores),
       });
     });
 
