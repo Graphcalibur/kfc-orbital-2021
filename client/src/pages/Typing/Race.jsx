@@ -64,7 +64,7 @@ class Race extends Component {
 
     this.props.socket.on("signal-game-end", (data) => {
       /* Round speed to nearest integer and acc to first decimal place */
-      const scores = data["scores"].map((score) => {
+      data["scores"].map((score) => {
         score["score"]["speed"] = Math.round(score["score"]["speed"]);
         score["score"]["acc"] = Math.round(score["score"]["acc"] * 10) / 10;
         return score;
