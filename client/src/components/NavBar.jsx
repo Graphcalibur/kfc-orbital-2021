@@ -88,6 +88,9 @@ class NavBar extends Component {
               <Link className="nav-link" to="/lang">
                 Practice
               </Link>
+              <Link className="nav-link" to="/vim">
+                Vim
+              </Link>
             </Nav>
 
             {this.getLoginButtons()}
