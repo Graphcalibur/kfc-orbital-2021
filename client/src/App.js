@@ -31,6 +31,7 @@ class App extends Component {
 
   componentDidMount() {
     socket.on("set-snippet", (snippet) => {
+      console.log(snippet["snippet"]);
       this.setState({ race_snippet: snippet["snippet"] });
     });
 

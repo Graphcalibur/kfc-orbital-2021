@@ -35,6 +35,7 @@ class Race extends Component {
     curr_player_score: { speed: 0, acc: 0 },
 
     keep_room: false,
+    rand_num: Math.floor(Math.random() * 6),
   };
 
   componentDidMount() {
@@ -62,10 +63,17 @@ class Race extends Component {
     });
 
     this.props.socket.on("signal-game-end", (data) => {
+      /* Round speed to nearest integer and acc to first decimal place */
+      const scores = data["scores"].map((score) => {
+        score["score"]["speed"] = Math.round(score["score"]["speed"]);
+        score["score"]["acc"] = Math.round(score["score"]["acc"] * 10) / 10;
+        return score;
+      });
+
       this.setState({
         game_ended: true,
-        scores: data["scores"],
-        curr_player_score: this.getCurrPlayerScore(data["scores"]),
+        scores: scores,
+        curr_player_score: this.getCurrPlayerScore(scores),
       });
     });
 
@@ -129,7 +137,8 @@ class Race extends Component {
 
     if (new_state !== null) {
       this.setState(new_state, () => {
-        if (new_state.curr_line_num === this.state.code.length) this.stopTyping();
+        if (new_state.curr_line_num === this.state.code.length)
+          this.stopTyping();
       });
     }
   };
@@ -137,9 +146,15 @@ class Race extends Component {
   /* Check for wrong inputs whenever the input changes and sends player state */
   handleInputChange = (event) => {
     this.setState(
-      handleInputChangeGeneric(event.target.value, this.state, this.startTyping), () => {
+      handleInputChangeGeneric(
+        event.target.value,
+        this.state,
+        this.startTyping
+      ),
+      () => {
         this.sendPlayerState();
-      });
+      }
+    );
 
     this.sendPlayerState();
   };
@@ -164,22 +179,25 @@ class Race extends Component {
   Game Not Started --> Countdown
   */
   getTopText = () => {
+    const { game_ended, rand_num } = this.state;
+
     if (this.state.countdown === 100) {
       return (
         <span className="text mb-3">
           Hmm. It doesn't seem like you're in a race.
         </span>
       );
-    } else if (this.state.game_ended) {
+    } else if (game_ended) {
       return (
         <span className="mb-3">
-          {this.state.scores.map((score) => (
+          {this.state.scores.map((score, i) => (
             <PlayerState
               player={score["user"]["username"]}
               is_curr={score["user"]["username"] === this.state.curr_player}
-              state_name="Score"
-              state_value={score["score"]["speed"]}
-              state_suffix=" WPM"
+              progress={100}
+              score={score["score"]["speed"]}
+              ended={game_ended}
+              color={(i + rand_num) % 6}
             />
           ))}
         </span>
@@ -187,13 +205,14 @@ class Race extends Component {
     } else if (this.state.started && this.state.player_states.length > 0) {
       return (
         <span className="mb-3">
-          {this.state.player_states.map((state) => (
+          {this.state.player_states.map((state, i) => (
             <PlayerState
               player={state["user"]["username"]}
               is_curr={state["user"]["username"] === this.state.curr_player}
-              state_name="Progress"
-              state_value={this.getPlayerProgress(state)}
-              state_suffix="%"
+              progress={this.getPlayerProgress(state)}
+              score={0}
+              ended={game_ended}
+              color={(i + rand_num) % 6}
             />
           ))}
         </span>

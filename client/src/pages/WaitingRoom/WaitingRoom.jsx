@@ -122,7 +122,7 @@ class WaitingRoom extends Component {
           {this.getPlayerStatus()}
 
           <Button
-            variant="outline-primary"
+            variant="outline-info"
             className="me-4 mt-3"
             onClick={this.changeStatus}
           >
@@ -131,7 +131,7 @@ class WaitingRoom extends Component {
 
           <Link to={`/rooms`}>
             <Button
-              variant="outline-primary"
+              variant="outline-info"
               onClick={this.leaveRoom}
               className="mt-3"
             >
