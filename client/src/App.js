@@ -12,7 +12,7 @@ import Rooms from "./pages/Rooms/Rooms";
 import SoloTyping from "./pages/Typing/SoloTyping";
 import User from "./pages/User/User";
 import WaitingRoom from "./pages/WaitingRoom/WaitingRoom";
-import Vim from "./pages/Vim/Vim";
+import VimTutorial from "./pages/Vim/VimTutorial";
 
 /* BACKEND TODO:
 2) Race doesn't start until at least 2 people are in
@@ -66,7 +66,7 @@ class App extends Component {
               />
             )}
           />
-          <Route path="/vim" component={Vim} />
+          <Route path="/vim/tutorial/:part?" component={VimTutorial} />
           <Route component={Error} />
         </Switch>
       </div>
