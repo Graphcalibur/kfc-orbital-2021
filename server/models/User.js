@@ -102,6 +102,39 @@ let User = class User {
             throw new IncorrectPasswordError(username);
         }
     }
+    /** 
+     * Check if the user has the given permission.
+     * @param {String} permission_name
+     * @returns {Promise<Boolean>}
+     */
+    async has_permission(permission_name) {
+        // This query checks using the user_role, role_permission, and permission tables
+        // if there's a result that matches with the user ID and permission name.
+        const permission_query_result = await con_pool.query(
+            "SELECT COUNT(*) FROM user_role " +
+            "INNER JOIN role_permission ON user_role.role_id = role_permission.role_id " +
+            "INNER JOIN permission ON role_permission.permission_id = permission.id " +
+            "WHERE permission.permission_name=? AND user_role.user_id=?;",
+            [permission_name, this.id]
+        );
+        return permission_query_result["COUNT(*)"] > 0;
+    }
+    /** Get a list of all permissions the user has.
+     * @returns {Promise<List<String>>}
+     */
+    get permission_list() {
+        const async_wrapper = async () => {
+            const permission_query_result = await con_pool.query(
+                "SELECT DISTINCT permission.permission_name FROM user_role " +
+                "INNER JOIN role_permission ON user_role.role_id = role_permission.role_id " +
+                "INNER JOIN permission ON role_permission.permission_id = permission.id " +
+                "WHERE user_role.user_id=?;",
+                [this.id]
+            );
+            return permission_query_result.map(res => res.permission_name);
+        };
+        return async_wrapper();
+    }
     build_scorelist_query_conditions(filters) {
         let query = ['userid = ?'];
         let params = [this.id];

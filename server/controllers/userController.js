@@ -47,6 +47,10 @@ exports.current_login = function(req, res) {
     }
 };
 
+exports.permission_list = async function(req, res) {
+    res.json(await req.user.permission_list);
+}
+
 /* Help passport handle authentication */
 passport.serializeUser(function (user, cb) {
     cb(null, JSON.stringify(user));
@@ -102,6 +106,18 @@ exports.require_auth = function(check_username) {
             res.json({message: "No valid login found"});
         }
     };
+};
+
+exports.check_permission = async function(permission_name) {
+    return function(req, res, next) {
+        if (req.user.has_permission(permission_name)) {
+            next();
+        } else {
+            res.status(401);
+            if (req.user) res.json({message: "Current user does not have valid permissions"});
+            else res.json({message: "No valid login found"});
+        }
+    }
 };
 
 /* Middleware to check that user exists.

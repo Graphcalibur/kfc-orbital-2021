@@ -12,6 +12,11 @@ var stat_controller = require('../controllers/statController');
 /* GET code snippet. */
 router.get('/code', code_snippet_controller.code_snippet);
 
+/* Check permission list */
+router.get('/permission-list/', 
+    user_controller.require_auth(false),
+    user_controller.permission_list);
+
 /* Endpoints for registering and viewing statistics */
 router.post('/stats/upload/:snippetid(\\d+)/:speed(\\d+)wpm/:acc/', stat_controller.upload);
 

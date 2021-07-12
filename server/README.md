@@ -31,6 +31,15 @@ This returns an array with a single element, representing a code snippet object.
 
 Supports the optional parameter `?lang=` to indicate a language for the snippet to fetch.
 
+### `POST` `/code/upload`
+
+Uploads a code snippet for use in races.
+
+Accepts `language` and `code` parameters via form-encoded input. 
+
+**Note**: You must be logged in as a user with the `upload-code` permission. Otherwise,
+this endpoint returns 401.
+
 ## User Statistics
 
 ### `POST` `/stats/upload/[snippetid]/[speed]wpm/[accuracy]`
@@ -96,6 +105,9 @@ Accepts the following optional parameters:
 
 ## Authentication
 
+Each user has a list of permissions, which controls what resources they
+have access to.
+
 ### `POST` `/register`
 
 Register a new user to the website. Accepts `username` and `password` parameters via form-encoded input.
@@ -122,6 +134,11 @@ form `{message: [error message]}`. If you are, return a single string containing
 ### `GET` `/current-login`
 
 If there is a valid login, return the User that login corresponds to. If not, return `null`.
+
+### `GET` `/permission-list`
+
+Return a list of permissions the current logged-in user has. If there is no
+currently logged-in user, return `null`.
 
 ### `POST` `/logout`
 
