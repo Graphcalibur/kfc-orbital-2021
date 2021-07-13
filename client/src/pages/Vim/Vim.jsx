@@ -15,7 +15,6 @@ const Vim = (props) => {
       <CodeMirror
         value={props.text}
         options={{
-          mode: "text/x-java",
           theme: "cobalt",
           lineNumbers: true,
           keyMap: "vim",

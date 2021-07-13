@@ -1,20 +1,96 @@
 [{
     "title": "Introduction",
 "instructions": [
-    "Test1",
-    "Test2",
-    "Test3"
+    "Welcome! The goal of this tutorial is to teach you the most useful Vim commands in a hands-on environment.",
+    "By the end, we hope that you will be knowledgable enough to confidently write programs in Vim.",
+    "Each part of this tutorial will introduce a new command and task you with using it to correct the text below. Only when the text is correct can you move on.",
+    "For now, the text is already correct, so simply click Next to go to the next part. If needed, you can reset the editor to its initial state by clicking Reset.",
+    "NOTE: This tutorial mainly serves as a more user-friendly version of VimTutor, hence many of the parts are based on segments from VimTutor."
 ],
-"initial_text": "Hi! I'm a bouncl red ball!",
-"goal_text": "Hi! I'm a bouncy red ball!"
+"initial_text": "Welcome to Vim!",
+"goal_text": "Welcome to Vim!"
 },
 {
-    "title": "222",
+    "title": "Moving the Cursor",
 "instructions": [
-    "ee",
-    "Tesfft2",
-    "gg"
+    "In Vim, there are two ways to move the cursor: the cursor keys (up, down, left, right) or h, j, k, and l.",
+    "The letter keys correspond to the following movements: h - left, j - down, k - up, l - right.",
+    "You can remember that h is on the left so it moves left, l is on the right so it moves right, and j looks like a down arrow.",
+    "For now, try moving the cursor around in the editor below. The text below is already correct, so just click Next when you're ready to move on.",
+    "NOTE: If you're unsure about something or you want to cancel a command, press the ESC key. That will bring you back to Normal mode."
 ],
-"initial_text": "Hi! I'm a gggg red ball!\nlol",
-"goal_text":"Hi! I'm a bouncy red ball!\nlol"
+"initial_text": "You can use either the cursor keys or hjkl to move around.\nHowever, many Vim veterans find that hjkl is much faster when you get used to it!\nIsn't that something?",
+"goal_text": "You can use either the cursor keys or hjkl to move around.\nHowever, many Vim veterans find that hjkl is much faster when you get used to it!\nIsn't that something?"
+},
+{
+    "title": "Inserting and Editing Text",
+"instructions": [
+    "Currently, the Vim Editor is in Normal Mode, which lets you enter commands but doesn't let you insert text.",
+    "To be able to insert and edit text, press the i key. This will bring you to Insert mode.",
+    "The first line in the text below is unfinished. Complete it so it matches the second line.",
+    "To do this, move your cursor to the character that's after where you want to insert the text, then press i and correct the line.",
+    "After each error is fixed, press ESC to go back to Normal mode and repeat the previous step for the next error."
+],
+"initial_text": "It seems smen forgot to some wds in line!\nIt seems like someone forgot to type some words in this line!",
+"goal_text": "It seems like someone forgot to type some words in this line!\nIt seems like someone forgot to type some words in this line!"
+},
+{
+    "title": "Deleting Text",
+"instructions": [
+    "Like all other commands, to delete text, first makre sure you are in Normal Mode.",
+    "Move the cursor to the character you want to delete, and press the x key to delete it.",
+    "The line below has many duplicate letters. Delete them to be able to move on to the next part."
+],
+"initial_text": "I thhinkkk I haaave ddddouble visiooon.",
+"goal_text": "I think I have double vision."
+},
+{
+    "title": "Appending Text",
+    "instructions": [
+        "To append text after a certain character, first make sure you are in Normal Mode.",
+        "Move the cursor to the character that's before where you want to insert the text, then press the a key and type in the text.",
+        "Alternatively, you can press A instead to append text to the end of the line.",
+        "Use these commands to complete the first line below so that it matches the second line.",
+        "NOTE: i, a, and A all bring you into Insert Mode, but they differ in where they insert the characters."
+    ],
+    "initial_text": "Someone forg to compl this li\nSomeone forgot to complete this line...",
+    "goal_text": "Someone forgot to complete this line...\nSomeone forgot to complete this line..."
+},
+{
+    "title": "Replacing Text",
+    "instructions": [
+        "To replace text, first make sure you are in Normal Mode.",
+        "Move the cursor to the character you want to replace, then press the r key and type the replacement character.",
+        "Alternatively, you can press R instead to replace as many characters as you want instead of just one.",
+        "Use these commands to edit the first line below so that it matches the second line.",
+        "NOTE: Both r and R bring you into Replace mode, but r only stays in it for one character."
+    ],
+    "initial_text": "I ate x xxxxx and xx xxxxxxxxx for lunch.\nI ate 1 apple and 10 dumplings for lunch.",
+    "goal_text": "I ate 1 apple and 10 dumplings for lunch.\nI ate 1 apple and 10 dumplings for lunch."
+},
+{
+    "title": "Motions",
+    "instructions": [
+        "One way to move around quickly in Vim is by using commands called motions. Motions will move your cursor around as follows:",
+        "w - to the first character of the next word",
+        "e - to the last character of the current word",
+        "$ - to the last character of the line",
+        "Try using these motions to move the cursor around on the text below. It's already correct so you don't have to edit anything.",
+        "Motions can also be used with certain operators, as you'll see..."
+    ],
+    "initial_text": "Motions are pretty neat, aren't they?\nMuch faster than holding left or right!",
+    "goal_text": "Motions are pretty neat, aren't they?\nMuch faster than holding left or right!"
+},{
+    "title": "Deleting Text with Motions",
+    "instructions": [
+        "A faster way to delete text is to use the d operator with motions. Their usage is below:",
+        "dw - Delete up to and excluding the first character of the next word",
+        "de - Delete up to and including the last character of the current word",
+        "d$ - Delete up to and including the last character of the line",
+        "To use these combinations, make sure you're in normal mode and just press the d key and then the motion you want.",
+        "You can also press the d key twice (dd) to delete an entire line.",
+        "Use these commands to delete all the x's and unnecessary spaces in the text below."
+    ],
+    "initial_text": "Help!xxxx There's an xxxxx epidemic in here! xxxxxxxxxxx\nxxxxxxxxxxxxxxxxx xxxxxxx xxxxxxxxxxxxx",
+    "goal_text": "Help! There's an epidemic in here!"
 }]

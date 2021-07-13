@@ -5,6 +5,18 @@ import Vim from "./Vim";
 
 const tutorial_data = require("./VimTutorialData.json");
 
+/* TODO:
+- Store results of texts in other parts so that if you hit back
+you don't have to redo the lesson?
+- Parts to finish:
+  - Numbers as motions
+  - Undo
+  - Put
+  - Change
+  - Find
+  - Replace
+  - */
+
 class VimTutorial extends Component {
   state = {
     part: 0,
@@ -49,6 +61,7 @@ class VimTutorial extends Component {
           this.updatePart(this.state.part - 1);
         }}
         variant="outline-info"
+        className="mb-4 me-4"
       >
         Back
       </Button>
@@ -66,10 +79,15 @@ class VimTutorial extends Component {
         variant="outline-info"
         style={{ float: "right" }}
         disabled={this.state.text !== this.state.goal_text}
+        className="mb-4"
       >
         Next
       </Button>
     );
+  };
+
+  reset = () => {
+    this.setState({ text: this.state.initial_text });
   };
 
   onVimChange = (editor, data, value) => {
@@ -91,7 +109,7 @@ class VimTutorial extends Component {
           </b>
         </h5>
 
-        <ul className="text">
+        <ul className="text" style={{ width: "80%" }}>
           {this.state.instructions.map((instruction, i) => (
             <li key={i}>{instruction}</li>
           ))}
@@ -100,6 +118,10 @@ class VimTutorial extends Component {
         <Vim text={this.state.text} onVimChange={this.onVimChange} />
 
         {this.getBackBtn()}
+
+        <Button onClick={this.reset} variant="outline-info" className="mb-4">
+          Reset
+        </Button>
 
         {this.getNextBtn()}
       </Container>

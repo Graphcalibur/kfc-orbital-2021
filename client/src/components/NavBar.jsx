@@ -88,7 +88,7 @@ class NavBar extends Component {
               <Link className="nav-link" to="/lang">
                 Practice
               </Link>
-              <Link className="nav-link" to="/vim">
+              <Link className="nav-link" to="/vim/tutorial/">
                 Vim
               </Link>
             </Nav>
