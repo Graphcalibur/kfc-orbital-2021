@@ -19,7 +19,7 @@ The sample SQL database lets you test user authentication with user `abacaba123`
 
 ## Gameplay
 
-### `GET` `/code`
+### `GET` `/code/fetch`
 
 Fetch a code snippet. 
 

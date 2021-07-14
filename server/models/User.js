@@ -117,7 +117,7 @@ let User = class User {
             "WHERE permission.permission_name=? AND user_role.user_id=?;",
             [permission_name, this.id]
         );
-        return permission_query_result["COUNT(*)"] > 0;
+        return permission_query_result[0]["COUNT(*)"] > 0;
     }
     /** Get a list of all permissions the user has.
      * @returns {Promise<List<String>>}

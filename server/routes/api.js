@@ -10,7 +10,13 @@ var user_controller = require('../controllers/userController');
 var stat_controller = require('../controllers/statController');
 
 /* GET code snippet. */
-router.get('/code', code_snippet_controller.code_snippet);
+router.get('/code/fetch', code_snippet_controller.code_snippet);
+
+/* Upload snippet. */
+router.post('/code/upload',
+    user_controller.require_auth(false),
+    user_controller.check_permission('upload-code'),
+    code_snippet_controller.upload);
 
 /* Check permission list */
 router.get('/permission-list/', 

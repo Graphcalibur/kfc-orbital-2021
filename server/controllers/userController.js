@@ -75,9 +75,10 @@ passport.use(new LocalStrategy(
     }
 ));
 
-/* Middleware for a login endpoint.
+/** Middleware for a login endpoint.
  * Checks that the given credentials are correct. Returns a 401 if they are not correct.
  * Only passes control to the next handler if authentication is correct.
+ * @type {Function}
  */
 exports.check_authentication = function(req, res, next) {
     passport.authenticate('local', function (err, user, info) {
@@ -93,9 +94,12 @@ exports.check_authentication = function(req, res, next) {
     })(req, res, next);
 };
 
-/* Middleware for a protected endpoint.
+/** Middleware for a protected endpoint.
  * Checks that the session has a given login. Returns a 401 if not.
  * Only passes control to the next handler if there is a valid login.
+ * @param {Boolean} check_username Set this to true if the username
+ *  of the request should be checked, and false if it is only the presence
+ *  of a valid login thatis being checked.
  */
 exports.require_auth = function(check_username) {
     return function(req, res, next) {
@@ -108,21 +112,30 @@ exports.require_auth = function(check_username) {
     };
 };
 
-exports.check_permission = async function(permission_name) {
-    return function(req, res, next) {
-        if (req.user.has_permission(permission_name)) {
+/** Middleware for permission checking.
+ *  Assumes that there is a currently logged in user,
+ *  and checks that the logged in user has the permission.
+ *  If yes, continue the chain; if no, return 404.
+ *  @param {String} permission_name
+ *  @returns {Function}
+ * 
+ */
+exports.check_permission = function(permission_name) {
+    return async function(req, res, next) {
+        if (await req.user.has_permission(permission_name)) {
             next();
         } else {
             res.status(401);
-            if (req.user) res.json({message: "Current user does not have valid permissions"});
-            else res.json({message: "No valid login found"});
+            res.json({message: "Current user does not have valid permissions",
+                missing_permission: permission_name});
         }
     }
 };
 
-/* Middleware to check that user exists.
+/** Middleware to check that user exists.
  * Requires that the route has req.params.username set up.
  * Returns a 404 if not, proceeds with the chain otherwise.
+ * @type {Function}
  */
 exports.check_user_exists = async function(req, res, next) {
     try {
