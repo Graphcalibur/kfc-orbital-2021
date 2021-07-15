@@ -55,6 +55,21 @@ let CodeSnippet = class CodeSnippet {
             return [new CodeSnippet(result.id, result.language, result.code)];
         }
     }
+    /**
+     * Create a CodeSnippet, and upload it to the database. Return the
+     * created CodeSnippet.
+     * @param {String} language
+     * @param {String} code
+     * @returns {Promise<CodeSnippet>}
+     */
+    static async upload(language, code) {
+        const upload_snippet_result = await con_pool.query(
+            "INSERT INTO code_snippet SET language=?, code=?",
+            [language, code]
+        );
+        const id = upload_snippet_result.insertId;
+        return new CodeSnippet(id, language, code)
+    }
 };
 
 module.exports.CodeSnippet = CodeSnippet;

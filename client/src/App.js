@@ -13,10 +13,13 @@ import SoloTyping from "./pages/Typing/SoloTyping";
 import User from "./pages/User/User";
 import WaitingRoom from "./pages/WaitingRoom/WaitingRoom";
 import VimTutorial from "./pages/Vim/VimTutorial";
+import UploadCode from "./pages/UploadCode/UploadCode";
 
-/* BACKEND TODO:
-2) Race doesn't start until at least 2 people are in
-4) Race automatically ends after a certain time?
+/* TODO:
+1) Race doesn't start until at least 2 people are in
+2) Race automatically ends after a certain time?
+3) Make logging in HTTPS secure
+4) Add more languages and code
 */
 
 const socket = socketIOClient("/", {
@@ -67,6 +70,7 @@ class App extends Component {
             )}
           />
           <Route path="/vim/tutorial/:part?" component={VimTutorial} />
+          <Route path="/uploadcode" component={UploadCode} />
           <Route component={Error} />
         </Switch>
       </div>

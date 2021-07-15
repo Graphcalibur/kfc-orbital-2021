@@ -10,6 +10,7 @@ class NavBar extends Component {
     show_login: false,
     show_sign_up: false,
     curr_user: null,
+    can_upload_code: false,
   };
 
   /* Get logged in user when the component first appears */
@@ -23,6 +24,13 @@ class NavBar extends Component {
       .then((data) => {
         const new_curr_user = data === null ? data : data["username"];
         this.setState({ curr_user: new_curr_user });
+      });
+
+    fetch("/api/permission-list", { credentials: "include" })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res !== null && res[0] === "upload-code")
+          this.setState({ can_upload_code: true });
       });
   }
 
@@ -91,6 +99,21 @@ class NavBar extends Component {
               <Link className="nav-link" to="/vim/tutorial/">
                 Vim
               </Link>
+
+              <a
+                className="nav-link"
+                href="https://forms.gle/4AyL1Topw5GPmfnEA"
+              >
+                Contribute
+              </a>
+
+              {this.state.can_upload_code ? (
+                <Link className="nav-link" to="/uploadcode">
+                  Upload Code
+                </Link>
+              ) : (
+                <span></span>
+              )}
             </Nav>
 
             {this.getLoginButtons()}
