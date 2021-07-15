@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, Container } from "react-bootstrap";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Vim from "./Vim";
 
 const tutorial_data = require("./VimTutorialData.json");
