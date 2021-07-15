@@ -41,6 +41,85 @@ INSERT INTO `code_snippet` VALUES (1,'C++','for (int i = 0; i < 10; ++i)\n    co
 UNLOCK TABLES;
 
 --
+-- Table structure for table `permission`
+--
+
+DROP TABLE IF EXISTS `permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `permission` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `permission_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `permission_name_UNIQUE` (`permission_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `permission`
+--
+
+LOCK TABLES `permission` WRITE;
+/*!40000 ALTER TABLE `permission` DISABLE KEYS */;
+INSERT INTO `permission` VALUES (1,'upload-code');
+/*!40000 ALTER TABLE `permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role`
+--
+
+DROP TABLE IF EXISTS `role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `role` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(60) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`role_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role`
+--
+
+LOCK TABLES `role` WRITE;
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES (1,'admin');
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role_permission`
+--
+
+DROP TABLE IF EXISTS `role_permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `role_permission` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `role_id` int NOT NULL,
+  `permission_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk__role_permission__role_idx` (`role_id`),
+  KEY `fk__role_permission__permission_idx` (`permission_id`),
+  CONSTRAINT `fk__role_permission__permission` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk__role_permission__role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role_permission`
+--
+
+LOCK TABLES `role_permission` WRITE;
+/*!40000 ALTER TABLE `role_permission` DISABLE KEYS */;
+INSERT INTO `role_permission` VALUES (1,1,1);
+/*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `score`
 --
 
@@ -61,7 +140,7 @@ CREATE TABLE `score` (
   KEY `fk_snippetid_idx` (`snippetid`),
   CONSTRAINT `fk__scores__code_snippet` FOREIGN KEY (`snippetid`) REFERENCES `code_snippet` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk__scores__user` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +149,7 @@ CREATE TABLE `score` (
 
 LOCK TABLES `score` WRITE;
 /*!40000 ALTER TABLE `score` DISABLE KEYS */;
-INSERT INTO `score` VALUES (1,NULL,2,100,97.21000,'2021-06-04 13:25:44','Solo'),(2,1,1,84,96.40000,'2021-06-03 13:13:07','Solo'),(3,1,2,66,99.23000,'2021-06-07 20:45:57','Solo'),(4,1,2,68,98.24000,'2021-06-07 21:01:55','Solo'),(5,1,2,78,98.82000,'2021-06-09 21:09:55','Solo'),(6,NULL,2,82,99.85000,'2021-06-09 21:11:43','Solo'),(7,1,2,80,97.05000,'2021-06-09 21:12:10','Solo');
+INSERT INTO `score` VALUES (1,NULL,2,100,97.21000,'2021-06-04 13:25:44','Solo'),(2,1,1,84,96.40000,'2021-06-03 13:13:07','Solo'),(3,1,2,66,99.23000,'2021-06-07 20:45:57','Solo'),(4,1,2,68,98.24000,'2021-06-07 21:01:55','Solo'),(5,1,2,78,98.82000,'2021-06-09 21:09:55','Solo'),(6,NULL,2,82,99.85000,'2021-06-09 21:11:43','Solo'),(7,1,2,80,97.05000,'2021-06-09 21:12:10','Solo'),(8,1,2,59,100.00000,'2021-06-28 19:36:57','Multiplayer'),(9,1,2,102,100.00000,'2021-07-06 19:38:29','Solo'),(10,1,1,49,100.00000,'2021-07-06 19:48:13','Multiplayer'),(11,1,1,48,100.00000,'2021-07-06 19:48:13','Multiplayer');
 /*!40000 ALTER TABLE `score` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,6 +203,35 @@ LOCK TABLES `user_password` WRITE;
 INSERT INTO `user_password` VALUES (1,'$argon2i$v=19$m=4096,t=3,p=1$xab4nXTRrjj4rI8h7ZFwrg$ppi7zEuNI+O1tHYWaa+y2y2jrNkH1JtI/7u7YurBcbs'),(2,'$argon2i$v=19$m=4096,t=3,p=1$UdWdK3H9Sr9X1CETg45dRw$qLRYoWt73giHe8wz1PtgszC8JKKgt0iXBZKK5GF2E6c'),(3,'$argon2i$v=19$m=4096,t=3,p=1$rsOluG4gtCjam9y5EykaKw$0wYIvD2YSW+5mJc5H5WH/WjZuuPkJ+hBmZ4o9Mrr7Qw');
 /*!40000 ALTER TABLE `user_password` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `user_role`
+--
+
+DROP TABLE IF EXISTS `user_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_role` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `role_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk__user_role__user_idx` (`user_id`),
+  KEY `fk__user_role__role_idx` (`role_id`),
+  CONSTRAINT `fk__user_role__role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
+  CONSTRAINT `fk__user_role__user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_role`
+--
+
+LOCK TABLES `user_role` WRITE;
+/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+INSERT INTO `user_role` VALUES (1,1,1);
+/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -134,4 +242,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-09 21:13:00
+-- Dump completed on 2021-07-13  2:12:08

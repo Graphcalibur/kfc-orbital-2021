@@ -36,7 +36,7 @@ class SoloTyping extends Component {
   /* Fetches code from backend */
   getCode = () => {
     const { lang } = this.props.match.params;
-    let url = "/api/code";
+    let url = "/api/code/fetch";
 
     if (lang !== undefined) {
       url += "?lang=" + lang;
@@ -104,15 +104,16 @@ class SoloTyping extends Component {
   /* When pressing enter, check if the text in the input
       matches the current line being typed. If it does, clear
       the input and move on to the next line */
-      handleSubmit = (event) => {
-        const new_state = handleSubmitGeneric(event, this.state);
-    
-        if (new_state !== null) {
-          this.setState(new_state, () => {
-            if (new_state.curr_line_num === this.state.code.length) this.stopTyping();
-          });
-        }
-      };
+  handleSubmit = (event) => {
+    const new_state = handleSubmitGeneric(event, this.state);
+
+    if (new_state !== null) {
+      this.setState(new_state, () => {
+        if (new_state.curr_line_num === this.state.code.length)
+          this.stopTyping();
+      });
+    }
+  };
 
   /* Check for wrong inputs whenever the input changes */
   handleInputChange = (event) => {
