@@ -36,9 +36,10 @@ class SoloTyping extends Component {
   /* Fetches code from backend */
   getCode = () => {
     const { lang } = this.props.match.params;
+    const valid_langs = ["Python", "C%2B%2B"];
     let url = "/api/code/fetch";
 
-    if (lang !== undefined) {
+    if (lang !== undefined && valid_langs.includes(lang)) {
       url += "?lang=" + lang;
     }
 

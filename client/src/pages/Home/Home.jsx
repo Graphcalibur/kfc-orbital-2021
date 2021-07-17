@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 import control_panel from "./images/control_panel.png";
 import spaceship from "./images/spaceship.png";

@@ -22,12 +22,19 @@ class VimTutorial extends Component {
 
   componentDidMount() {
     let { part } = this.props.match.params;
-    if (part === undefined) part = 0;
-    else part = parseInt(part, 10);
+
+    part = parseInt(part, 10);
+
+    /* Default to part 0 if the parameter is not a number
+    or is greater than the number of tutorial parts */
+    if (isNaN(part) || part >= tutorial_data.length) {
+      part = 0;
+    }
 
     this.updatePart(part);
   }
 
+  /* Update the state with the data of the passed part */
   updatePart = (part) => {
     this.setState(
       {
@@ -37,14 +44,11 @@ class VimTutorial extends Component {
         initial_text: tutorial_data[part]["initial_text"],
         goal_text: tutorial_data[part]["goal_text"],
       },
-      this.resetText
+      this.reset
     );
   };
 
-  resetText = () => {
-    this.setState({ text: this.state.initial_text });
-  };
-
+  /* Returns back button if not on the first part */
   getBackBtn = () => {
     return this.state.part === 0 ? (
       <span></span>
@@ -61,6 +65,7 @@ class VimTutorial extends Component {
     );
   };
 
+  /* Returns next button if not on the last part */
   getNextBtn = () => {
     return this.state.part === tutorial_data.length - 1 ? (
       <span></span>
@@ -79,6 +84,7 @@ class VimTutorial extends Component {
     );
   };
 
+  /* Reset text in vim editor to the initial text of the current part */
   reset = () => {
     this.setState({ text: this.state.initial_text });
   };

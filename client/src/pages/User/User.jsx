@@ -34,15 +34,7 @@ class User extends Component {
     const url = "/api/stats/" + user + "/summary" + context;
 
     fetch(url)
-      .then((res) => {
-        /* Check if user exists */
-        if (false) {
-          // TODO: Check if user exists
-          return null;
-        } else {
-          return res.json();
-        }
-      })
+      .then((res) => (res.status !== 200 ? null : res.json()))
       .then((data) => {
         /* Sets user_exists to false if user doesn't exist, otherwise sets the stats */
         if (data === null) {
@@ -75,15 +67,7 @@ class User extends Component {
       });
 
     fetch(url + (context === "" ? "?" : "&") + "recent=2")
-      .then((res) => {
-        /* Check if user exists */
-        if (false) {
-          // TODO: Check if user exists
-          return null;
-        } else {
-          return res.json();
-        }
-      })
+      .then((res) => (res.status !== 200 ? null : res.json()))
       .then((data) => {
         /* Sets user_exists to false if user doesn't exist, otherwise sets the stats */
         if (data === null) {
@@ -116,14 +100,7 @@ class User extends Component {
   getScorelist = (user, context) => {
     const url = "/api/stats/" + user + "/scorelist" + context;
     fetch(url)
-      .then((res) => {
-        if (false) {
-          // TODO: Check if user exists
-          return null;
-        } else {
-          return res.json();
-        }
-      })
+      .then((res) => (res.status !== 200 ? null : res.json()))
       .then((data) => {
         if (data !== null) {
           /* Don't bother calculating chart data if there is no score data */
@@ -202,7 +179,7 @@ class User extends Component {
         <h1 className="text">
           {this.state.user_exists
             ? this.state.name + "'s Profile"
-            : "The user does not exist."}
+            : "The user either does not exist or their data cannot be retrieved."}
         </h1>
 
         <Container className="p-3 box">
