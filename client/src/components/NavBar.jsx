@@ -96,12 +96,17 @@ class NavBar extends Component {
               <Link className="nav-link" to="/lang">
                 Practice
               </Link>
+              <Link className="nav-link" to="/vim/tutorial/">
+                Vim
+              </Link>
+
               <a
                 className="nav-link"
                 href="https://forms.gle/4AyL1Topw5GPmfnEA"
               >
                 Contribute
               </a>
+
               {this.state.can_upload_code ? (
                 <Link className="nav-link" to="/uploadcode">
                   Upload Code
