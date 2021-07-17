@@ -21,7 +21,9 @@ test('can make and list rooms', () => {
         room_code: generated_code_2,
         players: []
     });
-    expect(room_manager.list_rooms()).toEqual(expected_room_list);
+    const actual_room_set = new Set(room_manager.list_rooms());
+    const expected_room_set = new Set(expected_room_list);
+    expect(actual_room_set).toEqual(expected_room_set);
 });
 
 test('can add registered user to room', () => {
