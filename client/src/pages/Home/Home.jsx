@@ -2,11 +2,15 @@ import React, { Component } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
+import control_panel from "./images/control_panel.png";
 import spaceship from "./images/spaceship.png";
 import ufo from "./images/ufo.png";
+import vim_logo from "./images/vim.png";
 
 import ViewStats from "./components/ViewStats";
 import Leaderboard from "./components/Leaderboard";
+import HomeContainer from "./components/HomeContainer";
+import HomeRow from "./components/HomeRow";
 
 class Home extends Component {
   state = {
@@ -75,74 +79,66 @@ class Home extends Component {
         </center>
 
         <Container className="mt-4">
-          <h5 className="text">
-            <b>Improve Your Code Typing Skills</b>
-          </h5>
+          <HomeRow
+            header="Improve Your Code Typing Skills"
+            component_left={
+              <HomeContainer
+                header="Multiplayer Racing"
+                description="Test your code typing skills by racing against other
+                  people!"
+                btn_link="/rooms"
+                btn_text="Race Against Others"
+                image={spaceship}
+                col_text="7"
+                col_img="5"
+              />
+            }
+            component_right={
+              <HomeContainer
+                header="Solo Practice"
+                description="Practice your code typing skills at your own pace."
+                btn_link="/lang"
+                btn_text="Practice On Your Own"
+                image={ufo}
+                col_text="6"
+                col_img="6"
+              />
+            }
+          />
 
-          <Row className="justify-content-evenly">
-            <Col md="6" className="p-3" fluid="sm">
-              <Container className="p-3 box">
-                <Row className="justify-content-between">
-                  <Col md="7">
-                    <h3 className="text">
-                      <b>Multiplayer Racing</b>
-                    </h3>
-                    <p className="text">
-                      Test your code typing skills by racing against other
-                      people!
-                    </p>
-                    <Link to={`/rooms`}>
-                      <Button variant="outline-info">
-                        Race Against Others
-                      </Button>
-                    </Link>
-                  </Col>
+          <HomeRow
+            header="Build Confidence In Using Vim"
+            component_left={
+              <HomeContainer
+                header="Vim Tutorial"
+                description="Never tried Vim before? Learn the basics in this tutorial!"
+                btn_link="/vim/tutorial"
+                btn_text="Learn Vim"
+                image={vim_logo}
+                col_text="7"
+                col_img="5"
+              />
+            }
+            component_right={
+              <HomeContainer
+                header="Vim Practice"
+                description="Practice editing files in Vim as quickly as you can!"
+                btn_link="/lang"
+                btn_text="Practice Using Vim"
+                image={control_panel}
+                col_text="6"
+                col_img="6"
+              />
+            }
+          />
 
-                  <Col md="5">
-                    <img src={spaceship} alt="" />
-                  </Col>
-                </Row>
-              </Container>
-            </Col>
-
-            <Col md="6" className="p-3" fluid="sm">
-              <Container className="p-3 box">
-                <Row className="justify-content-between">
-                  <Col md="6">
-                    <h3 className="text">
-                      <b>Solo Practice</b>
-                    </h3>
-                    <p className="text">
-                      Practice your code typing skills at your own pace.
-                    </p>
-                    <Link to={`/lang`}>
-                      <Button variant="outline-info">
-                        Practice On Your Own
-                      </Button>
-                    </Link>
-                  </Col>
-
-                  <Col md="6">
-                    <img src={ufo} alt="" />
-                  </Col>
-                </Row>
-              </Container>
-            </Col>
-          </Row>
-
-          <h5 className="text mt-4">
-            <b>Your Progress and Others'</b>
-          </h5>
-
-          <Row className="justify-content-evenly">
-            <Col md="6" className="p-3" fluid="sm">
+          <HomeRow
+            header="Your Progress and Others'"
+            component_left={
               <Leaderboard leaderboard={this.state.leaderboard} />
-            </Col>
-
-            <Col md="6" className="p-3" fluid="sm">
-              <ViewStats user={this.state.user} />
-            </Col>
-          </Row>
+            }
+            component_right={<ViewStats user={this.state.user} />}
+          />
         </Container>
       </div>
     );
