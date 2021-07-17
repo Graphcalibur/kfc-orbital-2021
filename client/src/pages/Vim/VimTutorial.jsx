@@ -8,14 +8,7 @@ const tutorial_data = require("./VimTutorialData.json");
 /* TODO:
 - Store results of texts in other parts so that if you hit back
 you don't have to redo the lesson?
-- Parts to finish:
-  - Numbers as motions
-  - Undo
-  - Put
-  - Change
-  - Find
-  - Replace
-  - */
+*/
 
 class VimTutorial extends Component {
   state = {
