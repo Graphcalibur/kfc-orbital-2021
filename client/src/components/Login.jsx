@@ -108,6 +108,7 @@ class Login extends Component {
               <Form.Label>Username</Form.Label>
               <Form.Control
                 required
+                className="input"
                 placeholder="Username"
                 id="username"
                 value={this.state.username}
@@ -123,6 +124,7 @@ class Login extends Component {
               <Form.Control
                 required
                 type="password"
+                className="input"
                 placeholder="Password"
                 id="password"
                 value={this.state.password}

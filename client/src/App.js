@@ -29,6 +29,7 @@ const socket = socketIOClient("/", {
 class App extends Component {
   state = {
     race_snippet: { code: "", language: "", id: -1 },
+    room_code: "N/A",
   };
 
   componentDidMount() {
@@ -37,9 +38,11 @@ class App extends Component {
       this.setState({ race_snippet: snippet["snippet"] });
     });
 
-    socket.on("check-current-login-return", (user) => {
-      console.log(user);
+    /* TODO: When Dan finishes adding room code to the join-room-acknowledge message
+    socket.on("join-room-acknowledge", (data) => {
+      this.setState({ room_code: data["room_code"]})
     });
+    */
   }
 
   render() {
@@ -57,7 +60,13 @@ class App extends Component {
           />
           <Route
             path="/waitingroom"
-            render={(props) => <WaitingRoom {...props} socket={socket} />}
+            render={(props) => (
+              <WaitingRoom
+                {...props}
+                socket={socket}
+                room_code={this.state.room_code}
+              />
+            )}
           />
           <Route
             path="/race"

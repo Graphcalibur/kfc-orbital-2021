@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 
 import CreateRoom from "./components/CreateRoom";
 import Filters from "./components/Filters";
+import JoinRoomUsingCode from "./components/JoinRoomUsingCode";
 import Room from "./components/Room";
 
 class Rooms extends Component {
@@ -23,6 +24,8 @@ class Rooms extends Component {
       this.joinRoom(code["room_code"]);
     });
 
+    this.props.socket.on("join-room-acknowledge", this.switchToWaitingRoom);
+
     const timer = setInterval(() => {
       this.getRooms();
     }, 200);
@@ -36,6 +39,10 @@ class Rooms extends Component {
 
     this.props.socket.removeAllListeners("list-rooms-return");
     this.props.socket.removeAllListeners("create-room-return");
+    this.props.socket.removeListener(
+      "join-room-acknowledge",
+      this.switchToWaitingRoom
+    );
   }
 
   getRooms = () => {
@@ -48,6 +55,9 @@ class Rooms extends Component {
 
   joinRoom = (code) => {
     this.props.socket.emit("join-room", { room_code: code });
+  };
+
+  switchToWaitingRoom = () => {
     this.props.history.push(`/waitingroom`);
   };
 
@@ -66,6 +76,7 @@ class Rooms extends Component {
           joinRoom={() => {
             this.joinRoom(room["room_code"]);
           }}
+          is_private={false}
         />
       ))
     );
@@ -83,6 +94,7 @@ class Rooms extends Component {
           <Col md="4" className="ms-5">
             <Filters />
             <CreateRoom createRoom={this.createRoom} />
+            <JoinRoomUsingCode />
           </Col>
         </Row>
       </Container>

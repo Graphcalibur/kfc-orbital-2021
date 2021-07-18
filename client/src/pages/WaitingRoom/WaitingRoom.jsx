@@ -114,8 +114,14 @@ class WaitingRoom extends Component {
             <Col md="3">
               <b>Player Name</b>
             </Col>
-            <Col md="9">
+            <Col md="2">
               <b>Status</b>
+            </Col>
+            <Col md="2">
+              <b>Room Code:</b> {this.props.room_code}
+            </Col>
+            <Col md="5">
+              <b>Visibility:</b> {this.props.is_private ? "Private" : "Public"}
             </Col>
           </Row>
 
