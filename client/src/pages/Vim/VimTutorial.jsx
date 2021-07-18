@@ -5,47 +5,46 @@ import Vim from "./Vim";
 
 const tutorial_data = require("./VimTutorialData.json");
 
-/* TODO:
-- Store results of texts in other parts so that if you hit back
-you don't have to redo the lesson?
-*/
-
 class VimTutorial extends Component {
   state = {
     part: 0,
     title: "",
     instructions: [],
     initial_text: "",
+    visited: [],
     goal_text: "",
-    text: "",
+    text: [""],
   };
 
+  /* Create initial text array and update part depending
+  on the URL parameter given. */
   componentDidMount() {
-    let { part } = this.props.match.params;
+    const new_text = [];
 
+    for (let i = 0; i < tutorial_data.length; i++)
+      new_text.push(tutorial_data[i]["initial_text"]);
+
+    this.setState({ text: new_text });
+
+    let { part } = this.props.match.params;
     part = parseInt(part, 10);
 
     /* Default to part 0 if the parameter is not a number
     or is greater than the number of tutorial parts */
-    if (isNaN(part) || part >= tutorial_data.length) {
-      part = 0;
-    }
+    if (isNaN(part) || part >= tutorial_data.length) part = 0;
 
     this.updatePart(part);
   }
 
   /* Update the state with the data of the passed part */
   updatePart = (part) => {
-    this.setState(
-      {
-        part: part,
-        title: tutorial_data[part]["title"],
-        instructions: tutorial_data[part]["instructions"],
-        initial_text: tutorial_data[part]["initial_text"],
-        goal_text: tutorial_data[part]["goal_text"],
-      },
-      this.reset
-    );
+    this.setState({
+      part: part,
+      title: tutorial_data[part]["title"],
+      instructions: tutorial_data[part]["instructions"],
+      initial_text: tutorial_data[part]["initial_text"],
+      goal_text: tutorial_data[part]["goal_text"],
+    });
   };
 
   /* Returns back button if not on the first part */
@@ -76,7 +75,7 @@ class VimTutorial extends Component {
         }}
         variant="outline-info"
         style={{ float: "right" }}
-        disabled={this.state.text !== this.state.goal_text}
+        disabled={this.state.text[this.state.part] !== this.state.goal_text}
         className="mb-4"
       >
         Next
@@ -86,11 +85,16 @@ class VimTutorial extends Component {
 
   /* Reset text in vim editor to the initial text of the current part */
   reset = () => {
-    this.setState({ text: this.state.initial_text });
+    const new_text = this.state.text;
+    new_text[this.state.part] = this.state.initial_text;
+
+    this.setState({ text: new_text });
   };
 
   onVimChange = (editor, data, value) => {
-    this.setState({ text: value });
+    const new_text = this.state.text;
+    new_text[this.state.part] = value;
+    this.setState({ text: new_text });
   };
 
   render() {
@@ -114,7 +118,7 @@ class VimTutorial extends Component {
           ))}
         </ul>
 
-        <Vim text={this.state.text} onVimChange={this.onVimChange} />
+        <Vim text={this.state.text[part]} onVimChange={this.onVimChange} />
 
         {this.getBackBtn()}
 

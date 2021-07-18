@@ -4,8 +4,6 @@ import { Link, withRouter } from "react-router-dom";
 
 import Player from "./components/Player";
 
-// TODO: Improve layout
-
 class WaitingRoom extends Component {
   state = {
     refresh_timer: null,
