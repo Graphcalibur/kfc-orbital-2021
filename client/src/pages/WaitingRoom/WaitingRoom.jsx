@@ -25,10 +25,7 @@ class WaitingRoom extends Component {
       this.setState({ curr_player: player["username"] });
     });
 
-    this.props.socket.on("set-snippet", (player) => {
-      this.setState({ keep_room: true });
-      this.props.history.push(`/race`);
-    });
+    this.props.socket.on("set-snippet", this.onSetSnippet);
 
     const timer = setInterval(() => {
       this.getRoomStatus();
@@ -44,10 +41,15 @@ class WaitingRoom extends Component {
     if (!this.state.keep_room) this.leaveRoom();
     clearInterval(this.state.refresh_timer);
 
-    this.props.socket.removeAllListeners("set-snippet");
+    this.props.socket.removeListener("set-snippet", this.onSetSnippet);
     this.props.socket.removeAllListeners("get-room-status-return");
     this.props.socket.removeAllListeners("check-current-login-return");
   }
+
+  onSetSnippet = (player) => {
+    this.setState({ keep_room: true });
+    this.props.history.push(`/race`);
+  };
 
   getRoomStatus = () => {
     this.props.socket.emit("get-room-status");
