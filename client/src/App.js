@@ -14,6 +14,7 @@ import User from "./pages/User/User";
 import WaitingRoom from "./pages/WaitingRoom/WaitingRoom";
 import VimTutorial from "./pages/Vim/VimTutorial";
 import UploadCode from "./pages/UploadCode/UploadCode";
+import VimPractice from "./pages/Vim/VimPractice";
 
 /* TODO:
 1) Race doesn't start until at least 2 people are in
@@ -70,6 +71,7 @@ class App extends Component {
             )}
           />
           <Route path="/vim/tutorial/:part?" component={VimTutorial} />
+          <Route path="/vim/practice" component={VimPractice} />
           <Route path="/uploadcode" component={UploadCode} />
           <Route component={Error} />
         </Switch>

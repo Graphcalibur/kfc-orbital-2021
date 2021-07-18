@@ -122,7 +122,7 @@ class Home extends Component {
               <HomeContainer
                 header="Vim Practice"
                 description="Practice editing files in Vim as quickly as you can!"
-                btn_link="/lang"
+                btn_link="/vim/practice"
                 btn_text="Practice Using Vim"
                 image={control_panel}
                 col_text="6"
