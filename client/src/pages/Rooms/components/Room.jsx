@@ -1,15 +1,7 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
 import { Button, Col, Row } from "react-bootstrap";
 
 const Room = (props) => {
-  const history = useHistory();
-
-  const onClickJoinRoom = () => {
-    props.joinRoom(props.code);
-    history.push(`/waitingroom`);
-  };
-
   return (
     <Row className="mb-3 p-2 box text align-items-center">
       <Col md="4">
@@ -24,7 +16,7 @@ const Room = (props) => {
         <Button
           variant="outline-info"
           className="float-end"
-          onClick={onClickJoinRoom}
+          onClick={props.joinRoom}
         >
           Join Room
         </Button>

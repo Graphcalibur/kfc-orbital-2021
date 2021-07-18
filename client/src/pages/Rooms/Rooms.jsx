@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import { withRouter } from "react-router-dom";
 
 import CreateRoom from "./components/CreateRoom";
 import Filters from "./components/Filters";
@@ -18,9 +19,8 @@ class Rooms extends Component {
       this.setState({ rooms: rooms });
     });
 
-    /* For debugging purposes */
-    this.props.socket.on("join-room-acknowledge", (rooms) => {
-      console.log(rooms["user"]);
+    this.props.socket.on("create-room-return", (code) => {
+      this.joinRoom(code["room_code"]);
     });
 
     const timer = setInterval(() => {
@@ -33,6 +33,9 @@ class Rooms extends Component {
   /* When component unmounts, stop the timer */
   componentWillUnmount() {
     clearInterval(this.state.refresh_timer);
+
+    this.props.socket.removeAllListeners("list-rooms-return");
+    this.props.socket.removeAllListeners("create-room-return");
   }
 
   getRooms = () => {
@@ -45,6 +48,7 @@ class Rooms extends Component {
 
   joinRoom = (code) => {
     this.props.socket.emit("join-room", { room_code: code });
+    this.props.history.push(`/waitingroom`);
   };
 
   displayRooms = () => {
@@ -59,7 +63,9 @@ class Rooms extends Component {
           code={room["room_code"]}
           players={room["players"]}
           key={room["room_code"]}
-          joinRoom={this.joinRoom}
+          joinRoom={() => {
+            this.joinRoom(room["room_code"]);
+          }}
         />
       ))
     );
@@ -84,4 +90,4 @@ class Rooms extends Component {
   }
 }
 
-export default Rooms;
+export default withRouter(Rooms);
