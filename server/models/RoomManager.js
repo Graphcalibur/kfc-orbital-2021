@@ -194,9 +194,13 @@ class RoomManager {
     list_rooms() {
         return Object.values(this.room_list).map(room => room.get_room_data());
     }
-    /* Add a user to a room.
-     * This method takes in the user's connection socket, and the room code
-     * of the room they would like to join.
+    /** Add a user to a room.
+     * @param {Socket} user_socket
+     *     A socket connected to the user to be added. Must contain the extra user property.
+     * @param {string} room_code
+     *     The room code of the room to join.
+     * @returns {User|null} Return a User object corresponding to the current user, or `null`
+     *     if there is no such room.
      */
     add_user_to_room(user_socket, room_code) {
         if (this.room_list.hasOwnProperty(room_code)) {
@@ -204,6 +208,7 @@ class RoomManager {
             return user_socket.user;
         } else {
             user_socket.emit('error', {message: `Room ${room_code} does not exist`});
+            return null;
         }
     }
     /*
@@ -222,7 +227,9 @@ class RoomManager {
         });
         socket.on('join-room', (msg) => {
             const joined_user = this.add_user_to_room(socket, msg.room_code);
-            socket.emit('join-room-acknowledge', {user: joined_user});
+            if (joined_user) {
+                socket.emit('join-room-acknowledge', {user: joined_user, room_code: msg.room_code});
+            }
         });
     }
 };

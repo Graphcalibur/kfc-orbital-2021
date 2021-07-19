@@ -88,6 +88,7 @@ Server will then send a `join-room-acknowledge`, with the following data:
     ```
         data: { 
             user: (User object)
+            room_code: (Room code of room joined)
         }
     ```
 The User object contains `id` and `username` properties. If a valid `login-ws`

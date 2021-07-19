@@ -56,6 +56,7 @@ describe("room-related messaging", () => {
     );
     expect(join_room_result.user).toBeTruthy(); // check if it exists
     expect(join_room_result.user.id).toBeNull();
+    expect(join_room_result.room_code).toEqual(generated_room_code);
     expect(typeof join_room_result.user.username).toBe("string");
     current_user = join_room_result.user;
     console.log(current_user);
@@ -90,6 +91,7 @@ describe("room-related messaging", () => {
       { room_code: generated_room_code }
     );
     expect(join_room_result.user).toEqual(registered_user);
+    expect(join_room_result.room_code).toEqual(generated_room_code);
   });
   test("can update room listing", async () => {
     const room_list = await make_query_request(
