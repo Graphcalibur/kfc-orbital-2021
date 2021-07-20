@@ -65,7 +65,7 @@ Client can send the following messages related to joining multiplayer rooms:
 ### Type: create-room
 ```
     data: {
-        (nothing atm)
+        visibility: (A string, either 'public' or 'private')
     }
 ```
 Effect: Server will create a new room, sending back a create-room-return with the following data:
@@ -74,7 +74,9 @@ Effect: Server will create a new room, sending back a create-room-return with th
         room_code: (room code)
     }
 ```
-This is the code of the generated room.
+This is the code of the generated room. If the `visibility` parameter is `'private'`, 
+the room will be private, and if it is `'public'`, it will be public. Private rooms
+are not visible in the listing made by `list-rooms`.
 
 ### Type: join-room
 ```
@@ -88,6 +90,7 @@ Server will then send a `join-room-acknowledge`, with the following data:
     ```
         data: { 
             user: (User object)
+            room_code: (Room code of room joined)
         }
     ```
 The User object contains `id` and `username` properties. If a valid `login-ws`
@@ -111,6 +114,9 @@ Effect: Server will return a `list-rooms-return`, with the following data:
         )
     }
 ```
+
+Note that this listing will only contain public rooms.
+
 ### Type: leave-room
 ```
     data: {
