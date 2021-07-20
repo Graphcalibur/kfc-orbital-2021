@@ -10,6 +10,7 @@ class VimTutorial extends Component {
     part: 0,
     title: "",
     instructions: [],
+    task: "",
     initial_text: "",
     visited: [],
     goal_text: "",
@@ -42,6 +43,7 @@ class VimTutorial extends Component {
       part: part,
       title: tutorial_data[part]["title"],
       instructions: tutorial_data[part]["instructions"],
+      task: tutorial_data[part]["task"],
       initial_text: tutorial_data[part]["initial_text"],
       goal_text: tutorial_data[part]["goal_text"],
     });
@@ -117,6 +119,11 @@ class VimTutorial extends Component {
             <li key={i}>{instruction}</li>
           ))}
         </ul>
+
+        <p className="text">
+          <b>Your Task: </b>
+          {this.state.task}
+        </p>
 
         <Vim text={this.state.text[part]} onVimChange={this.onVimChange} />
 

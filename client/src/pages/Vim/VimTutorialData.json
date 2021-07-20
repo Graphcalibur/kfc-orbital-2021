@@ -1,48 +1,49 @@
 [{
     "title": "Introduction",
-"instructions": [
-    "Welcome! The goal of this tutorial is to teach you the most useful Vim commands in a hands-on environment.",
-    "By the end, we hope that you will be knowledgable enough to confidently write programs in Vim.",
-    "Each part of this tutorial will introduce a new command and task you with using it to correct the text below. Only when the text is correct can you move on.",
-    "For now, the text is already correct, so simply click Next to go to the next part. If needed, you can reset the editor to its initial state by clicking Reset.",
-    "NOTE: This tutorial mainly serves as a more user-friendly version of VimTutor, hence many of the parts are based on segments from VimTutor."
-],
-"initial_text": "Welcome to Vim!",
-"goal_text": "Welcome to Vim!"
+    "instructions": [
+        "Welcome! The goal of this tutorial is to teach you the most useful Vim commands in a hands-on environment.",
+        "By the end, we hope that you will be knowledgable enough to confidently write programs in Vim.",
+        "Each part of this tutorial will introduce a new command and require you to use it to complete the task below. Only when the task is completed can you move on.",
+        "If needed, you can reset the editor to its initial state by clicking Reset.",
+        "NOTE: This tutorial mainly serves as a more user-friendly version of VimTutor, hence many of the parts are based on segments from VimTutor."
+    ],
+    "task": "Just click Next to go to the next part.",
+    "initial_text": "Welcome to Vim!",
+    "goal_text": "Welcome to Vim!"
 },
 {
     "title": "Moving the Cursor",
-"instructions": [
-    "In Vim, there are two ways to move the cursor: the cursor keys (up, down, left, right) or h, j, k, and l.",
-    "The letter keys correspond to the following movements: h - left, j - down, k - up, l - right.",
-    "You can remember that h is on the left so it moves left, l is on the right so it moves right, and j looks like a down arrow.",
-    "For now, try moving the cursor around in the editor below. The text below is already correct, so just click Next when you're ready to move on.",
-    "NOTE: If you're unsure about something or you want to cancel a command, press the ESC key. That will bring you back to Normal mode."
-],
-"initial_text": "You can use either the cursor keys or hjkl to move around.\nHowever, many Vim veterans find that hjkl is much faster when you get used to it!\nIsn't that something?",
-"goal_text": "You can use either the cursor keys or hjkl to move around.\nHowever, many Vim veterans find that hjkl is much faster when you get used to it!\nIsn't that something?"
+    "instructions": [
+        "In Vim, there are two ways to move the cursor: the cursor keys (up, down, left, right) or h, j, k, and l.",
+        "The letter keys correspond to the following movements: h - left, j - down, k - up, l - right.",
+        "You can remember that h is on the left so it moves left, l is on the right so it moves right, and j looks like a down arrow.",
+        "NOTE: If you're unsure about something or you want to cancel a command, press the ESC key. That will bring you back to Normal mode."
+    ],
+    "task": "Move around with the cursor in the editor. There's no need for you to change anything; just click Next when you're ready to move on.",
+    "initial_text": "You can use either the cursor keys or hjkl to move around.\nHowever, many Vim veterans find that hjkl is much faster when you get used to it!\nIsn't that something?",
+    "goal_text": "You can use either the cursor keys or hjkl to move around.\nHowever, many Vim veterans find that hjkl is much faster when you get used to it!\nIsn't that something?"
 },
 {
     "title": "Inserting and Editing Text",
-"instructions": [
-    "Currently, the Vim Editor is in Normal Mode, which lets you enter commands but doesn't let you insert text.",
-    "To be able to insert and edit text, press the i key. This will bring you to Insert mode.",
-    "The first line in the text below is unfinished. Complete it so it matches the second line.",
-    "To do this, move your cursor to the character that's after where you want to insert the text, then press i and correct the line.",
-    "After each error is fixed, press ESC to go back to Normal mode and repeat the previous step for the next error."
-],
-"initial_text": "It seems smen forgot to some wds in line!\nIt seems like someone forgot to type some words in this line!",
-"goal_text": "It seems like someone forgot to type some words in this line!\nIt seems like someone forgot to type some words in this line!"
+    "instructions": [
+        "Currently, the Vim Editor is in Normal Mode, which lets you enter commands but doesn't let you insert text.",
+        "To be able to insert and edit text, move your cursor to the character that's after where you want to insert the text, then press i.",
+        "This will bring you to Insert mode, where you can type in whatever text you want.",
+        "If you need to insert text in multiple places, simply press the ESC key and go to the next place you want to insert text into."
+    ],
+    "task": "The first line in the text below is unfinished. Complete it so it matches the second line.",
+    "initial_text": "It seems smen forgot to some wds in line!\nIt seems like someone forgot to type some words in this line!",
+    "goal_text": "It seems like someone forgot to type some words in this line!\nIt seems like someone forgot to type some words in this line!"
 },
 {
     "title": "Deleting Text",
-"instructions": [
-    "Like all other commands, to delete text, first makre sure you are in Normal Mode.",
-    "Move the cursor to the character you want to delete, and press the x key to delete it.",
-    "The line below has many duplicate letters. Delete them to be able to move on to the next part."
-],
-"initial_text": "I thhinkkk I haaave ddddouble visiooon.",
-"goal_text": "I think I have double vision."
+    "instructions": [
+        "Like all other commands, to delete text, first make sure you are in Normal Mode.",
+        "Move the cursor to the character you want to delete, and press the x key to delete it."
+    ],
+    "task": "Delete all the duplicate letters in the line below.",
+    "initial_text": "I thhinkkk I haaave ddddouble visiooon.",
+    "goal_text": "I think I have double vision."
 },
 {
     "title": "Appending Text",
@@ -50,9 +51,9 @@
         "To append text after a certain character, first make sure you are in Normal Mode.",
         "Move the cursor to the character that's before where you want to insert the text, then press the a key and type in the text.",
         "Alternatively, you can press A instead to append text to the end of the line.",
-        "Use these commands to complete the first line below so that it matches the second line.",
         "NOTE: i, a, and A all bring you into Insert Mode, but they differ in where they insert the characters."
     ],
+    "task": "Complete the first line below so that it matches the second line.",
     "initial_text": "Someone forg to compl this li\nSomeone forgot to complete this line...",
     "goal_text": "Someone forgot to complete this line...\nSomeone forgot to complete this line..."
 },
@@ -62,9 +63,9 @@
         "To replace text, first make sure you are in Normal Mode.",
         "Move the cursor to the character you want to replace, then press the r key and type the replacement character.",
         "Alternatively, you can press R instead to replace as many characters as you want instead of just one.",
-        "Use these commands to edit the first line below so that it matches the second line.",
         "NOTE: Both r and R bring you into Replace mode, but r only stays in it for one character."
     ],
+    "task": "Replace all the x's in the first line below so that it matches the second line.",
     "initial_text": "I ate x xxxxx and xx xxxxxxxxx for lunch.\nI ate 1 apple and 10 dumplings for lunch.",
     "goal_text": "I ate 1 apple and 10 dumplings for lunch.\nI ate 1 apple and 10 dumplings for lunch."
 },
@@ -75,9 +76,9 @@
         "w - to the first character of the next word",
         "e - to the last character of the current word",
         "$ - to the last character of the line",
-        "Try using these motions to move the cursor around on the text below. It's already correct so you don't have to edit anything.",
         "Motions can also be used with certain operators, as you'll see..."
     ],
+    "task": "Use the motions to move the cursor around. There's no need for you to change anything; just click Next when you're ready to move on.",
     "initial_text": "Motions are pretty neat, aren't they?\nMuch faster than holding left or right!",
     "goal_text": "Motions are pretty neat, aren't they?\nMuch faster than holding left or right!"
 },
@@ -89,20 +90,20 @@
         "de - Delete up to and including the last character of the current word",
         "d$ - Delete up to and including the last character of the line",
         "To use these combinations, make sure you're in normal mode and just press the d key and then the motion you want.",
-        "You can also press the d key twice (dd) to delete an entire line.",
-        "Use these commands to delete all the x's and unnecessary spaces in the text below."
+        "You can also press the d key twice (dd) to delete an entire line."
     ],
-    "initial_text": "Help!xxxx There's an xxxxx epidemic in here! xxxxxxxxxxx\nxxxxxxxxxxxxxxxxx xxxxxxx xxxxxxxxxxxxx",
+    "task": "Delete all the x's and unnecessary spaces in the text below.",
+    "initial_text": "xxxx xxxxxxxxxxxxxx xx\nHelp!xxxx There's an xxxxx epidemic in here! xxxxxxxxxxx\nxxxxxxxxxxxxxxxxx xxxxxxx xxxxxxxxxxxxx",
     "goal_text": "Help! There's an epidemic in here!"
 },
 {
     "title": "Using Number Counts As Motions",
     "instructions": [
-        "Putting a number x before a motion repeats the motion x times.",
+        "Putting a number before a motion repeats the motion that many times.",
         "So 2w moves the cursor two words forward while 3e moves the cursor to the end of the third word forward.",
-        "Typing just 0 will move you to the beginning of the line.",
-        "Try using these motions to move the cursor around on the text below. It's already correct so you don't have to edit anything."
+        "Typing just 0 will move you to the beginning of the line."
     ],
+    "task": "Use the number motions to move the cursor around. There's no need for you to change anything; just click Next when you're ready to move on.",
     "initial_text": "Did you know you can use numbers for motions too?\nYou can even use them with delete operations\nas you'll see later...",
     "goal_text": "Did you know you can use numbers for motions too?\nYou can even use them with delete operations\nas you'll see later..."
 },
@@ -111,9 +112,9 @@
     "instructions": [
         "You can combine count motions with the delete command to delete multiple words or lines.",
         "So d2w would delete the next two words and 4dd would delete the next 4 lines.",
-        "You can even use counts for the x command to delete multiple characters, like 4x to delete 4 characters.",
-        "With this knowledge, try deleting all the x's and unnecessary spaces in the text below."
+        "You can even use counts for the x command to delete multiple characters, like 4x to delete 4 characters."
     ],
+    "task": "Delete all the x's and unnecessary spaces in the text below.",
     "initial_text": "Oh no!xxxx xxxx The epidemic xx xxx x has returned!\nSomexxxxxxxone please save us!\nxxx xx x\nxxxxxxxxx xxx xx\nxxxxxx xxxxx xxxxxxxxxxx",
     "goal_text": "Oh no! The epidemic has returned!\nSomeone please save us!"
 },
@@ -122,9 +123,9 @@
     "instructions": [
         "Vim lets you undo any changes you make by going into normal mode and pressing u.",
         "You can also redo the changes by presing Ctrl-R.",
-        "You can even combine these with counts: 4u will undo the last 4 changes made.",
-        "Try out undo and redo on the text below. It's already correct, so just undo all the changes you make at the end."
+        "You can even combine these with counts: 4u will undo the last 4 changes made."
     ],
+    "task": "Mess around with undoing and redoing changes. There's no need for you to change anything; just click Next when you're ready to move on.",
     "initial_text": "I can't think of any placeholder text to put here.\nJust use this to mess around with the undo/redo commands.",
     "goal_text": "I can't think of any placeholder text to put here.\nJust use this to mess around with the undo/redo commands."
 },
@@ -132,9 +133,9 @@
     "title": "Putting Deleted Text",
     "instructions": [
         "If you want to move some text somewhere else, you can delete it, move to where you want to place it, and then press the p key.",
-        "This will put the deleted text wherever your cursor is.",
-        "Use this command to put the list below in the proper numerical order."
+        "This will put the deleted text wherever your cursor is."
     ],
+    "task": "Put the list below in the proper numerical order.",
     "initial_text": "7) Deleting Text With Motions\n1) Moving the Cursor\n5) Replacing Text\n2) Inserting and Editing Text\n6) Motions\n3) Deleting Text\n4) Appending Text",
     "goal_text": "1) Moving the Cursor\n2) Inserting and Editing Text\n3) Deleting Text\n4) Appending Text\n5) Replacing Text\n6) Motions\n7) Deleting Text With Motions"
 },
@@ -143,9 +144,9 @@
     "instructions": [
         "To copy text, first make sure you are in Normal Mode. Then press the v key to go to Visual Mode.",
         "In Visual Mode, move the cursor to highlight the text you want to copy, then press the y key to copy it.",
-        "Now move the cursor to where you want to paste the text and press the p key to paste it.",
-        "Use these commands to copy-paste the line 'You take one out and pass it around' to each stanza in the text below."
+        "Now move the cursor to where you want to paste the text and press the p key to paste it."
     ],
+    "task": "Copy-paste the line 'You take one out and pass it around' to each stanza in the text below.",
     "initial_text": "100 bottles of beer in the wall\n100 bottles of beer\nYou take one out and pass it around\n99 bottles of beer in the wall\n\n99 bottles of beer in the wall\n99 bottles of beer\n\n98 bottles of beer in the wall\n\n98 bottles of beer in the wall\n98 bottles of beer\n\n97 bottles of beer in the wall",
     "goal_text": "100 bottles of beer in the wall\n100 bottles of beer\nYou take one out and pass it around\n99 bottles of beer in the wall\n\n99 bottles of beer in the wall\n99 bottles of beer\nYou take one out and pass it around\n98 bottles of beer in the wall\n\n98 bottles of beer in the wall\n98 bottles of beer\nYou take one out and pass it around\n97 bottles of beer in the wall"
 },
@@ -154,9 +155,9 @@
     "instructions": [
         "If you want to change text from a certain point onwards, you can press c and then a motion.",
         "This will delete the text specified by the motion and then put you in Insert Mode, allowing you to type the text you want.",
-        "For example, ce will delete the text to the end of the word, while c$ will delete to the end of the line.",
-        "Use these commands to change the first line to be the same as the second line below."
+        "For example, ce will delete the text to the end of the word, while c$ will delete to the end of the line."
     ],
+    "task": "Change the first line to be the same as the second line below.",
     "initial_text": "I like eating rice with some soy sauce and eggs.\nI love eating risotto with some spaghetti sauce and varnished with parsley.",
     "goal_text": "I love eating risotto with some spaghetti sauce and varnished with parsley.\nI love eating risotto with some spaghetti sauce and varnished with parsley."
 },
@@ -164,19 +165,19 @@
     "title": "Moving Around The File",
     "instructions": [
         "To go to a certain line, first make sure you're in Normal Mode, then type the line number you want to go to and press G.",
-        "You can also press G on its own to go to the last line, or gg to go to the first line.",
-        "Use these comands to insert the text 'Flag!' at the first line, the last line, line 12, and line 39."
+        "You can also press G on its own to go to the last line, or gg to go to the first line."
     ],
+    "task": "Insert the letter f at lines 1, 12, 39, and the last line.",
     "initial_text": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
-    "goal_text": "Flag!\n\n\n\n\n\n\n\n\n\n\nFlag!\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFlag!\n\n\n\n\n\n\n\n\n\n\n\nFlag!"
+    "goal_text": "f\n\n\n\n\n\n\n\n\n\n\nf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nf\n\n\n\n\n\n\n\n\n\n\n\nf"
 },
 {
     "title": "Finding Matching Brackets",
     "instructions": [
         "To find the matching pair of a (), {}, or [] bracket, first go into Normal Mode.",
-        "Place your cursor on the bracket whose matching pair you want to find, then press %. This will move the cursor to the matching pair.",
-        "Play around with this command using the text below. It's already correct so there's no need to edit anything."
+        "Place your cursor on the bracket whose matching pair you want to find, then press %. This will move the cursor to the matching pair."
     ],
+    "task": "Play around with the command on the text below. There's no need for you to change anything; just click Next when you're ready to move on.",
     "initial_text": "const lambda = () => {this.setState({array: [1, 2, 3], dictionary: {array: [4, 2]}}, () => {console.log('True')})}",
     "goal_text": "const lambda = () => {this.setState({array: [1, 2, 3], dictionary: {array: [4, 2]}}, () => {console.log('True')})}"
 },
@@ -186,9 +187,9 @@
         "To search for text in the file, first make sure you're in Normal Mode.",
         "Press / and type the text you want to search for, then press the ENTER key.",
         "To search for the text again, press n. You can also press N to search in the opposite direction.",
-        "You can also press ? instead of / to search backwards to begin with.",
-        "Using these commands for all occurences of the phrase 'abgghjr' in the text dump below and insert the letter 't' after each of them."
+        "You can also press ? instead of / to search backwards to begin with."
     ],
+    "task": "Search for all occurences of the phrase 'abgghjr' in the text dump below and insert the letter 't' after each of them.",
     "initial_text": "asmjvlnlqoiqeoqoinaspoqqpoefppfkpapapoeoeqkpo\na;lkjl;amm;mqrnpoqjowjp9r92j1kd\nlajlknqknlabgghjroeiapoiprrw\nasslfkd;lafkfkfa;alfklsk;flk;aeabgghjrff\nlksalkflksfalfkoefjojao\nlasklkfkelklkqoq929u29fjjaljv\nasfeoqjfqpfja;shihe;v\nasassaabgghjr;ls;ai3r0ipoqq\nmsamlmkmklamkkkal\n[aorpq[[fav;ihiahihhajhkaadvnc",
     "goal_text": "asmjvlnlqoiqeoqoinaspoqqpoefppfkpapapoeoeqkpo\na;lkjl;amm;mqrnpoqjowjp9r92j1kd\nlajlknqknlabgghjrtoeiapoiprrw\nasslfkd;lafkfkfa;alfklsk;flk;aeabgghjrtff\nlksalkflksfalfkoefjojao\nlasklkfkelklkqoq929u29fjjaljv\nasfeoqjfqpfja;shihe;v\nasassaabgghjrt;ls;ai3r0ipoqq\nmsamlmkmklamkkkal\n[aorpq[[fav;ihiahihhajhkaadvnc"
 },
@@ -197,13 +198,12 @@
     "instructions": [
         "To substitute the first occurence of a text with another text, first make sure you're in Normal Mode.",
         "Then type :s/[old]/[new] where [old] is the text to be replaced and [new] is the text you're going to replace it with.",
-        "There are also other options you can do depending the kind of substitution you want:",
-        ":s/[old]/[new]/g - Substitute all [old] with [new] in the line",
-        ":[start],[end]s/[old]/[new]/g - Substitute all [old] with [new] within lines [start] to [end]",
-        ":%s/[old]/[new]/g - Substitute all [old] with [new] in the whole file",
-        ":%s/[old]/[new]/gc - Same as above but adds a prompt each time on whether to substitute or not",
-        "Use these commands to substitute all occurences of 'abgghjr' with 'wwfts' and occurences of 'fefe' in lines 2-3 with 'zxzx'"
+        "There are also other options you can do for substitution:",
+        ":s/[old]/[new]/g - Substitute in the line",
+        ":[a],[b]s/[old]/[new]/g - Substitute within lines [a] to [b]",
+        ":%s/[old]/[new]/g - Substitute in the whole file"
     ],
+    "task": "Substitute all occurences of 'abgghjr' with 'wwfts' and occurences of 'fefe' in lines 2-3 with 'zxzx'",
     "initial_text": "asmjvlnlqoiqeoqoinaspoqqfefeppfkpapapoeoeqkpo\na;lkjl;amm;mqrnfefejowjp9r92j1kd\nleeeeerrqqdarerefefeajlknqknlabgghjroeiapoifefe\nasslfkd;lafkfkfa;alfkfefeflk;aeabgghjrff\nlksalkflksfalfkoefjojao\nlasklkfkelklkqoq929u29fjjaljv\nasfeoqjfefeja;shihefefe\nasassaabgghjr;ls;ai3r0ipoqq\nmsamlmkmklamkkkal\n[aorpq[[fav;ihiafefehihhajhkaadvnc",
     "goal_text": "asmjvlnlqoiqeoqoinaspoqqfefeppfkpapapoeoeqkpo\na;lkjl;amm;mqrnzxzxjowjp9r92j1kd\nleeeeerrqqdarerezxzxajlknqknlwwftsoeiapoizxzx\nasslfkd;lafkfkfa;alfkfefeflk;aewwftsff\nlksalkflksfalfkoefjojao\nlasklkfkelklkqoq929u29fjjaljv\nasfeoqjfefeja;shihefefe\nasassawwfts;ls;ai3r0ipoqq\nmsamlmkmklamkkkal\n[aorpq[[fav;ihiafefehihhajhkaadvnc"
 },
