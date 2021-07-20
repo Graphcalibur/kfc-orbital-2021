@@ -207,7 +207,9 @@ class RoomManager {
      * @returns {List<Room>}
      */
     list_public_rooms() {
-        return this.list_rooms().filter(room => room.is_public);
+        return Object.values(this.room_list)
+            .filter(room => room.is_public)
+            .map(room => room.get_room_data());
     }
     /** Add a user to a room.
      * @param {Socket} user_socket

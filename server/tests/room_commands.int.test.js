@@ -41,7 +41,7 @@ describe("room-related messaging", () => {
       socket,
       "create-room",
       "create-room-return",
-      {}
+      {visibility: 'public'}
     );
     expect(typeof create_room_result.room_code).toBe("string");
     generated_room_code = create_room_result.room_code;
