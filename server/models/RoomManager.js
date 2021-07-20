@@ -23,6 +23,7 @@ class Room {
         this.ready_state = {}; // Object with usernames as key, and ready state as value
         this.manager = options.manager;
         this.current_game = null;
+        this.visibility = options.visibility;
     }
     /*
      * Check if the room is empty.
@@ -30,6 +31,9 @@ class Room {
      */
     is_empty() {
         return this.players.length === 0;
+    }
+    get is_public() {
+        return this.visibility === "public";
     }
     /* Return an array denoting the current ready/not ready
      * status of the players. Each element of the array is an object of the structure
@@ -176,11 +180,16 @@ class RoomManager {
         return random.random_string(ROOM_CODE_ALPHABET, ROOM_CODE_LENGTH)
     }
     /* 
-     * Given a room code,
-     * create a empty room with that code.
+     * Given a room code and visibility status,
+     * create a empty room with that code and visibility status.
      */
-    create_room(room_code) {
-        this.room_list[room_code] = new Room({io: this.io, room_code: room_code, manager: this}); 
+    create_room(room_code, visibility) {
+        this.room_list[room_code] = new Room(
+            {io: this.io, 
+             room_code: room_code,
+             manager: this, 
+             visibility
+            }); 
     }
     /* Deletes a room, given its room code.
      *
@@ -189,14 +198,26 @@ class RoomManager {
         delete this.room_list[room_code];
     }
     /* 
-     * Return a list of all rooms this RoomManager currently keeping track of.
+     * Return a list of all rooms this RoomManager is currently keeping track of.
      */
     list_rooms() {
         return Object.values(this.room_list).map(room => room.get_room_data());
     }
-    /* Add a user to a room.
-     * This method takes in the user's connection socket, and the room code
-     * of the room they would like to join.
+    /** Return a list of all public rooms this RoomManager is currently keeping track of.
+     * @returns {List<Room>}
+     */
+    list_public_rooms() {
+        return Object.values(this.room_list)
+            .filter(room => room.is_public)
+            .map(room => room.get_room_data());
+    }
+    /** Add a user to a room.
+     * @param {Socket} user_socket
+     *     A socket connected to the user to be added. Must contain the extra user property.
+     * @param {string} room_code
+     *     The room code of the room to join.
+     * @returns {User|null} Return a User object corresponding to the current user, or `null`
+     *     if there is no such room.
      */
     add_user_to_room(user_socket, room_code) {
         if (this.room_list.hasOwnProperty(room_code)) {
@@ -204,6 +225,7 @@ class RoomManager {
             return user_socket.user;
         } else {
             user_socket.emit('error', {message: `Room ${room_code} does not exist`});
+            return null;
         }
     }
     /*
@@ -214,15 +236,17 @@ class RoomManager {
     register_manager_commands(socket) {
         socket.on('create-room', (msg) => {
             const new_room_code = this.generate_room_code();
-            this.create_room(new_room_code);
+            this.create_room(new_room_code, msg.visibility);
             socket.emit('create-room-return', {room_code: new_room_code});
         });
         socket.on('list-rooms', (msg) => {
-            socket.emit('list-rooms-return', this.list_rooms()); 
+            socket.emit('list-rooms-return', this.list_public_rooms()); 
         });
         socket.on('join-room', (msg) => {
             const joined_user = this.add_user_to_room(socket, msg.room_code);
-            socket.emit('join-room-acknowledge', {user: joined_user});
+            if (joined_user) {
+                socket.emit('join-room-acknowledge', {user: joined_user, room_code: msg.room_code});
+            }
         });
     }
 };

@@ -35,7 +35,7 @@ export const handleSubmitGeneric = (event, state) => {
         curr_input: "",
         first_wrong: 0,
         curr_line_num: curr_line_num + 1,
-        typing: curr_line_num < code.length - 1
+        typing: curr_line_num < code.length - 1,
       };
     }
   }
@@ -66,4 +66,17 @@ export const handleInputChangeGeneric = (new_input, state, startTyping) => {
     first_wrong: new_first_wrong,
     curr_input: new_input,
   };
+};
+
+/* Calculates progress of a player in % */
+export const getPlayerProgress = (code, player_state) => {
+  const line_no = player_state["line_no"];
+  if (line_no >= code.length) return 100;
+
+  let curr_len = getFirstWrong(code[line_no], player_state["current_line"]);
+  for (let i = 0; i < line_no; i++) {
+    curr_len += code[i].trim().length;
+  }
+
+  return Math.round((curr_len * 100) / getCodeLength(code));
 };

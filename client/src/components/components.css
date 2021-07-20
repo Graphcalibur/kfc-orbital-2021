@@ -1,0 +1,26 @@
+.navbar {
+  background-color: #0d2a3f;
+}
+
+.nav-item .dropdown-menu {
+  background-color: #16202a !important;
+}
+
+.nav-item .dropdown-menu a:hover {
+  background-image: none;
+  background-color: #233243;
+}
+
+.nav-item .dropdown-menu .dropdown-item a {
+  color: white;
+}
+
+.modal .modal-content {
+  background-color: #16202a;
+  color: white;
+}
+
+.form-group .form-control {
+  background-color: #233243 !important;
+  color: white !important;
+}

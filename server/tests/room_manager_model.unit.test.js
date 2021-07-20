@@ -10,8 +10,8 @@ test('can generate room codes', () => {
 let generated_code_1 = room_manager.generate_room_code();
 let generated_code_2 = room_manager.generate_room_code();
 test('can make and list rooms', () => {
-    room_manager.create_room(generated_code_1);
-    room_manager.create_room(generated_code_2);
+    room_manager.create_room(generated_code_1, 'public');
+    room_manager.create_room(generated_code_2, 'private');
     let expected_room_list = []; 
     expected_room_list.push({
         room_code: generated_code_1,
@@ -22,8 +22,11 @@ test('can make and list rooms', () => {
         players: []
     });
     const actual_room_set = new Set(room_manager.list_rooms());
+    const public_room_set = new Set(room_manager.list_public_rooms());
     const expected_room_set = new Set(expected_room_list);
+    const expected_public_room_set = new Set(expected_room_list.slice(0, 1));
     expect(actual_room_set).toEqual(expected_room_set);
+    expect(public_room_set).toEqual(expected_public_room_set);
 });
 
 test('can add registered user to room', () => {
