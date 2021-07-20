@@ -11,6 +11,7 @@ class Rooms extends Component {
   state = {
     rooms: [],
     refresh_timer: null,
+    err_msg: "",
   };
 
   /* When component mounts, set socket to listen to list of rooms,
@@ -26,6 +27,10 @@ class Rooms extends Component {
 
     this.props.socket.on("join-room-acknowledge", this.switchToWaitingRoom);
 
+    this.props.socket.on("error", (msg) => {
+      this.setState({ err_msg: msg["message"] });
+    });
+
     const timer = setInterval(() => {
       this.getRooms();
     }, 200);
@@ -39,6 +44,7 @@ class Rooms extends Component {
 
     this.props.socket.removeAllListeners("list-rooms-return");
     this.props.socket.removeAllListeners("create-room-return");
+    this.props.socket.removeAllListeners("error");
     this.props.socket.removeListener(
       "join-room-acknowledge",
       this.switchToWaitingRoom
@@ -49,8 +55,10 @@ class Rooms extends Component {
     this.props.socket.emit("list-rooms", "PLACEHOLDER");
   };
 
-  createRoom = () => {
-    this.props.socket.emit("create-room");
+  createRoom = (is_private) => {
+    const visibility = is_private ? "private" : "public";
+    console.log(visibility);
+    this.props.socket.emit("create-room", { visibility: visibility });
   };
 
   joinRoom = (code) => {
@@ -76,7 +84,6 @@ class Rooms extends Component {
           joinRoom={() => {
             this.joinRoom(room["room_code"]);
           }}
-          is_private={false}
         />
       ))
     );
@@ -94,7 +101,10 @@ class Rooms extends Component {
           <Col md="4" className="ms-5">
             <Filters />
             <CreateRoom createRoom={this.createRoom} />
-            <JoinRoomUsingCode />
+            <JoinRoomUsingCode
+              joinRoom={this.joinRoom}
+              err_msg={this.state.err_msg}
+            />
           </Col>
         </Row>
       </Container>

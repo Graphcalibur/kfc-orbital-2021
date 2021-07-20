@@ -39,11 +39,9 @@ class App extends Component {
       this.setState({ race_snippet: snippet["snippet"] });
     });
 
-    /* TODO: When Dan finishes adding room code to the join-room-acknowledge message
     socket.on("join-room-acknowledge", (data) => {
-      this.setState({ room_code: data["room_code"]})
+      this.setState({ room_code: data["room_code"] });
     });
-    */
   }
 
   render() {

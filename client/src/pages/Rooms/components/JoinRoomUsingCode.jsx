@@ -6,7 +6,7 @@ const JoinRoomUsingCode = (props) => {
 
   return (
     <Container className="text mt-3 p-3 box">
-      <h3 className>
+      <h3>
         <b>Join Room Using Code</b>
       </h3>
 
@@ -24,7 +24,21 @@ const JoinRoomUsingCode = (props) => {
         }}
       />
 
-      <Button variant="outline-info">Join Room</Button>
+      <Button
+        className="mb-2"
+        variant="outline-info"
+        onClick={() => {
+          props.joinRoom(text);
+        }}
+      >
+        Join Room
+      </Button>
+
+      {props.err_msg === "" ? (
+        <span></span>
+      ) : (
+        <div style={{ fontSize: "80%", color: "#ff1a1a" }}>{props.err_msg}</div>
+      )}
     </Container>
   );
 };
