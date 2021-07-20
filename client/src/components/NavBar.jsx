@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Navbar, Nav } from "react-bootstrap";
+import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+
+import "./components.css";
 
 import Login from "./Login";
 import SignUp from "./SignUp";
@@ -96,9 +98,14 @@ class NavBar extends Component {
               <Link className="nav-link" to="/lang">
                 Practice
               </Link>
-              <Link className="nav-link" to="/vim/tutorial/">
-                Vim
-              </Link>
+              <NavDropdown title="Vim">
+                <NavDropdown.Item>
+                  <Link to="/vim/tutorial/">Tutorial</Link>
+                </NavDropdown.Item>
+                <NavDropdown.Item>
+                  <Link to="/vim/practice/">Practice</Link>
+                </NavDropdown.Item>
+              </NavDropdown>
 
               <a
                 className="nav-link"

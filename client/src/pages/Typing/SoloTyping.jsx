@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import PlayerState from "./components/PlayerState";
 
 import Typing from "./components/Typing";
 import {
   getCodeLength,
+  getPlayerProgress,
   handleSubmitGeneric,
   handleInputChangeGeneric,
 } from "./HelperFunctions";
@@ -26,6 +28,8 @@ class SoloTyping extends Component {
     start_time: 0,
     elapsed_time: 0,
     timer: null,
+
+    rand_num: Math.floor(Math.random() * 6),
   };
 
   componentDidMount() {
@@ -36,9 +40,10 @@ class SoloTyping extends Component {
   /* Fetches code from backend */
   getCode = () => {
     const { lang } = this.props.match.params;
+    const valid_langs = ["Python", "C%2B%2B"];
     let url = "/api/code/fetch";
 
-    if (lang !== undefined) {
+    if (lang !== undefined && valid_langs.includes(lang)) {
       url += "?lang=" + lang;
     }
 
@@ -139,6 +144,23 @@ class SoloTyping extends Component {
     );
   };
 
+  getTopText = (ended) => {
+    const score = ended ? this.getWPM() : 0;
+    return (
+      <PlayerState
+        player="You"
+        is_curr={false}
+        progress={getPlayerProgress(this.state.code, {
+          line_no: this.state.curr_line_num,
+          current_line: this.state.curr_input,
+        })}
+        score={score}
+        ended={ended}
+        color={this.state.rand_num}
+      />
+    );
+  };
+
   render() {
     const ended = this.state.started && !this.state.typing;
 
@@ -161,7 +183,7 @@ class SoloTyping extends Component {
         wpm={this.getWPM()}
         accuracy={this.getAccuracy()}
         code_length={getCodeLength(this.state.code)}
-        getTopText={() => <span></span>}
+        getTopText={this.getTopText}
         reset={this.reset}
         getCode={this.getCode}
         backToWaiting={() => null}

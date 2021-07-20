@@ -10,8 +10,6 @@ import rocket_brown from "../images/rocket_brown.png";
 import race_end from "../images/race_end.png";
 
 const PlayerState = (props) => {
-  //const max_div_width = 350;
-  //const div_width = Math.floor((max_div_width * props.progress) / 100);
   const colors = [
     rocket_red,
     rocket_green,
@@ -31,12 +29,16 @@ const PlayerState = (props) => {
           style={{
             background: "rgba(0, 0, 0, 0)",
             height: "1px",
-            width: `${props.progress * 0.74}%`,
+            width: `${props.progress * 0.7}%`,
             float: "left",
           }}
         />
-        <img src={colors[props.color]} alt="" style={{ float: "left" }} />
-        <img src={race_end} alt="" style={{ float: "right" }} />
+        <img
+          src={colors[props.color]}
+          alt=""
+          style={{ float: "left", width: "20%" }}
+        />
+        <img src={race_end} alt="" style={{ float: "right", width: "10%" }} />
       </Col>
       <Col md="4">
         {props.ended

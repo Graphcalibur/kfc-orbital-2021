@@ -9,12 +9,13 @@
 ## Pages directory
 
 - / -> Home page
-- /solotyping/[language] -> Page for the solo typing practice, with an optional parameter for practicing only on code from a certain language
 - /lang -> Page for choosing which language to practice
-- /user/[user] -> Page for viewing a user's profile
+- /race -> Page for the actual race. One must be in a valid room, otherwise the page will display a "You don't seem to be in a race" message.
 - /rooms -> Page for viewing and joining rooms
-- /waitingroom -> Page for waiting in a room before the race starts
-- /race -> Page for the actual race
+- /solotyping/[language] -> Page for the solo typing practice, with an optional parameter for practicing only on code from [language]. If no valid parameter is given, a random code snippet from any language is used.
+- /user/[user] -> Page for viewing the user profile of [user]. If the user does not exist, the page will display a "The user does not exist" message.
+- /waitingroom -> Page for waiting in a room before the race starts. One must be in a valid room, otherwise the page will display a "You don't seem to be in a room" message.
+- /vim/tutorial/[part] -> Page for the vim tutorial, with an optional parameter for starting the tutorial from part [part]. If no valid parameter is given, it starts at part 0.
 - Any other url will display a "404 Error Page Not Found."
 
 ## Image Sources
@@ -23,3 +24,5 @@
 - Rocket: https://wikiclipart.com/wp-content/uploads/2017/01/Rocket-clipart-free-images-4.png
 - UFO: https://www.clipartmax.com/png/full/21-213902_ufo-clipart.png
 - Speedometer: https://www.clipartmax.com/png/full/142-1421212_speedometer-clip-art.png
+- Vim Logo: https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Vimlogo.svg/1200px-Vimlogo.svg.png
+- Control Panel: https://clipartart.com/categories/control-panel-clipart.html

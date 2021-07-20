@@ -3,8 +3,8 @@ import React, { Component } from "react";
 import PlayerState from "./components/PlayerState";
 import Typing from "./components/Typing";
 import {
-  getFirstWrong,
   getCodeLength,
+  getPlayerProgress,
   handleSubmitGeneric,
   handleInputChangeGeneric,
 } from "./HelperFunctions";
@@ -159,20 +159,6 @@ class Race extends Component {
     this.sendPlayerState();
   };
 
-  /* Calculates progress of a player in % */
-  getPlayerProgress = (player_state) => {
-    const { code } = this.state;
-    const line_no = player_state["line_no"];
-    if (line_no >= code.length) return 100;
-
-    let curr_len = getFirstWrong(code[line_no], player_state["current_line"]);
-    for (let i = 0; i < line_no; i++) {
-      curr_len += code[i].trim().length;
-    }
-
-    return Math.round((curr_len * 100) / getCodeLength(code));
-  };
-
   /* Decide which text to render above the main typing container
   Game Ended --> Players' Scores
   Game In Progress --> Players' Progress
@@ -209,7 +195,7 @@ class Race extends Component {
             <PlayerState
               player={state["user"]["username"]}
               is_curr={state["user"]["username"] === this.state.curr_player}
-              progress={this.getPlayerProgress(state)}
+              progress={getPlayerProgress(this.state.code, state)}
               score={0}
               ended={game_ended}
               color={(i + rand_num) % 6}

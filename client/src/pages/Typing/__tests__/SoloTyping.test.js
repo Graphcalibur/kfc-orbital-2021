@@ -50,6 +50,8 @@ describe("Testing whole SoloTyping page", () => {
       start_time: 0,
       elapsed_time: 0,
       timer: null,
+
+      rand_num: instance.state.rand_num,
     });
   });
 
