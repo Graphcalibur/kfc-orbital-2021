@@ -7,7 +7,6 @@ class SignUp extends Component {
     email: "",
     password: "",
     confirm_password: "",
-    validated: false,
     failed_sign_up: 0,
   };
 
@@ -33,7 +32,6 @@ class SignUp extends Component {
     const form = event.currentTarget;
     event.preventDefault();
     event.stopPropagation();
-    this.setState({ validated: true });
 
     if (
       !form.checkValidity() ||
@@ -118,11 +116,7 @@ class SignUp extends Component {
         </Modal.Header>
 
         <Modal.Body>
-          <Form
-            noValidate
-            validated={this.state.validated}
-            onSubmit={this.handleSubmit}
-          >
+          <Form onSubmit={this.handleSubmit}>
             <Form.Group className="mb-3" controlId="username">
               <Form.Label>Username</Form.Label>
               <Form.Control
@@ -131,9 +125,6 @@ class SignUp extends Component {
                 value={this.state.username}
                 onChange={(event) => this.handleUsernameChange(event)}
               />
-              <Form.Control.Feedback type="invalid">
-                Please enter a valid username.
-              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="email">
@@ -144,9 +135,6 @@ class SignUp extends Component {
                 value={this.state.email}
                 onChange={(event) => this.handleEmailChange(event)}
               />
-              <Form.Control.Feedback type="invalid">
-                Please enter a valid email.
-              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -159,9 +147,6 @@ class SignUp extends Component {
                 value={password}
                 onChange={(event) => this.handlePasswordChange(event)}
               />
-              <Form.Control.Feedback type="invalid">
-                Please enter a valid password.
-              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -173,11 +158,17 @@ class SignUp extends Component {
                 id="confirm"
                 value={confirm_password}
                 onChange={(event) => this.handleConfirmChange(event)}
-                isInvalid={password !== confirm_password}
               />
-              <Form.Control.Feedback type="invalid">
-                This must be the same as your password.
-              </Form.Control.Feedback>
+              {password === confirm_password ? (
+                <span></span>
+              ) : (
+                <p
+                  className="mt-2"
+                  style={{ fontSize: "80%", color: "#ff1a1a" }}
+                >
+                  This must be the same as your password.
+                </p>
+              )}
             </Form.Group>
 
             {this.failedSignUpText()}
