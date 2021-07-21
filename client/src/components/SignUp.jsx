@@ -127,6 +127,7 @@ class SignUp extends Component {
               <Form.Label>Username</Form.Label>
               <Form.Control
                 required
+                className="input"
                 placeholder="Username"
                 value={this.state.username}
                 onChange={(event) => this.handleUsernameChange(event)}
@@ -140,6 +141,7 @@ class SignUp extends Component {
               <Form.Label>Email (Optional)</Form.Label>
               <Form.Control
                 type="email"
+                className="input"
                 placeholder="Email"
                 value={this.state.email}
                 onChange={(event) => this.handleEmailChange(event)}
@@ -154,6 +156,7 @@ class SignUp extends Component {
               <Form.Control
                 required
                 type="password"
+                className="input"
                 placeholder="Password"
                 id="password"
                 value={password}
@@ -169,6 +172,7 @@ class SignUp extends Component {
               <Form.Control
                 required
                 type="password"
+                className="input"
                 placeholder="Confirm Password"
                 id="confirm"
                 value={confirm_password}

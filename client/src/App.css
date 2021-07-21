@@ -48,6 +48,11 @@
   box-shadow: rgba(0, 0, 0, 0.6) 0px 18px 25px 8px;
 }
 
+.input {
+  background-color: #233243 !important;
+  color: white !important;
+}
+
 .box .nav-link {
   color: #00ffff !important;
 }

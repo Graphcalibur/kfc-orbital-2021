@@ -1,14 +1,17 @@
 import React, { Component } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import { withRouter } from "react-router-dom";
 
 import CreateRoom from "./components/CreateRoom";
 import Filters from "./components/Filters";
+import JoinRoomUsingCode from "./components/JoinRoomUsingCode";
 import Room from "./components/Room";
 
 class Rooms extends Component {
   state = {
     rooms: [],
     refresh_timer: null,
+    err_msg: "",
   };
 
   /* When component mounts, set socket to listen to list of rooms,
@@ -18,9 +21,14 @@ class Rooms extends Component {
       this.setState({ rooms: rooms });
     });
 
-    /* For debugging purposes */
-    this.props.socket.on("join-room-acknowledge", (rooms) => {
-      console.log(rooms["user"]);
+    this.props.socket.on("create-room-return", (code) => {
+      this.joinRoom(code["room_code"]);
+    });
+
+    this.props.socket.on("join-room-acknowledge", this.switchToWaitingRoom);
+
+    this.props.socket.on("error", (msg) => {
+      this.setState({ err_msg: msg["message"] });
     });
 
     const timer = setInterval(() => {
@@ -33,18 +41,32 @@ class Rooms extends Component {
   /* When component unmounts, stop the timer */
   componentWillUnmount() {
     clearInterval(this.state.refresh_timer);
+
+    this.props.socket.removeAllListeners("list-rooms-return");
+    this.props.socket.removeAllListeners("create-room-return");
+    this.props.socket.removeAllListeners("error");
+    this.props.socket.removeListener(
+      "join-room-acknowledge",
+      this.switchToWaitingRoom
+    );
   }
 
   getRooms = () => {
     this.props.socket.emit("list-rooms", "PLACEHOLDER");
   };
 
-  createRoom = () => {
-    this.props.socket.emit("create-room");
+  createRoom = (is_private) => {
+    const visibility = is_private ? "private" : "public";
+    console.log(visibility);
+    this.props.socket.emit("create-room", { visibility: visibility });
   };
 
   joinRoom = (code) => {
     this.props.socket.emit("join-room", { room_code: code });
+  };
+
+  switchToWaitingRoom = () => {
+    this.props.history.push(`/waitingroom`);
   };
 
   displayRooms = () => {
@@ -59,7 +81,9 @@ class Rooms extends Component {
           code={room["room_code"]}
           players={room["players"]}
           key={room["room_code"]}
-          joinRoom={this.joinRoom}
+          joinRoom={() => {
+            this.joinRoom(room["room_code"]);
+          }}
         />
       ))
     );
@@ -77,6 +101,10 @@ class Rooms extends Component {
           <Col md="4" className="ms-5">
             <Filters />
             <CreateRoom createRoom={this.createRoom} />
+            <JoinRoomUsingCode
+              joinRoom={this.joinRoom}
+              err_msg={this.state.err_msg}
+            />
           </Col>
         </Row>
       </Container>
@@ -84,4 +112,4 @@ class Rooms extends Component {
   }
 }
 
-export default Rooms;
+export default withRouter(Rooms);

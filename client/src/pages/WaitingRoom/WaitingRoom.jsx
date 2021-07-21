@@ -114,8 +114,12 @@ class WaitingRoom extends Component {
             <Col md="3">
               <b>Player Name</b>
             </Col>
-            <Col md="9">
+            <Col md="2">
               <b>Status</b>
+            </Col>
+            <Col md="7">
+              <b>Room Code:</b> {this.props.room_code} (share this with others
+              so they can join, too!)
             </Col>
           </Row>
 
