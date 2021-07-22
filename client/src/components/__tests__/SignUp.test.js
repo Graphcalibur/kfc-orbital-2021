@@ -18,11 +18,10 @@ describe("Testing SignUp component", () => {
     password.simulate("change", { target: { value: "lol" } });
     confirm.simulate("change", { target: { value: "lol" } });
 
-    expect(confirm.prop("isInvalid")).toEqual(false);
+    expect(wrapper.exists("p")).toEqual(false);
 
     password.simulate("change", { target: { value: "rofl" } });
-    confirm = wrapper.find("#confirm"); /* Update confirm */
 
-    expect(confirm.prop("isInvalid")).toEqual(true);
+    expect(wrapper.exists("p")).toEqual(true);
   });
 });
