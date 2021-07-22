@@ -6,7 +6,7 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/cobalt.css";
 
 /* Needed to have Java syntax highlighting */
-require("codemirror/mode/clike/clike");
+// require("codemirror/mode/clike/clike");
 require("codemirror/keymap/vim");
 
 const Vim = (props) => {

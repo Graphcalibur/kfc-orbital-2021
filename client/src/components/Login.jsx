@@ -6,7 +6,6 @@ class Login extends Component {
   state = {
     username: "",
     password: "",
-    validated: false,
     failed_login: 0,
   };
 
@@ -27,10 +26,6 @@ class Login extends Component {
       necessary data */
     event.preventDefault();
     event.stopPropagation();
-
-    /* Gets the form to check the validity of each input
-    field */
-    this.setState({ validated: true });
 
     if (!form.checkValidity()) return;
 
@@ -99,11 +94,7 @@ class Login extends Component {
         </Modal.Header>
 
         <Modal.Body>
-          <Form
-            noValidate
-            validated={this.state.validated}
-            onSubmit={this.handleSubmit}
-          >
+          <Form onSubmit={this.handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Username</Form.Label>
               <Form.Control
@@ -114,9 +105,6 @@ class Login extends Component {
                 value={this.state.username}
                 onChange={(event) => this.handleUsernameChange(event)}
               />
-              <Form.Control.Feedback type="invalid">
-                Please enter your username.
-              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -130,9 +118,6 @@ class Login extends Component {
                 value={this.state.password}
                 onChange={(event) => this.handlePasswordChange(event)}
               />
-              <Form.Control.Feedback type="invalid">
-                Please enter your password.
-              </Form.Control.Feedback>
             </Form.Group>
 
             {this.failed_loginText()}
