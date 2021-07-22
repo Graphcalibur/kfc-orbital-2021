@@ -26,9 +26,12 @@
     -->
     <title>React App</title>
     <script>
-      var host = "www.URL.com" || "URL.com";
-      if ((host == window.location.host) && (window.location.protocol != "https:")){
+      var host1 = "www.URL.com";
+      var host2 = "URL.com";
+      if ((host1 == window.location.host) && (window.location.protocol != "https:")){
       window.location.protocol = "https";
+      } else if ((host2 == window.location.host) && (window.location.protocol != "https:")) {
+        window.location.protocol = "https";
       }
       </script>
   </head>
