@@ -5,20 +5,28 @@ import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/cobalt.css";
 
-/* Needed to have Java syntax highlighting */
-// require("codemirror/mode/clike/clike");
-require("codemirror/keymap/vim");
+import "codemirror/keymap/vim";
+import "codemirror/mode/clike/clike";
 
 const Vim = (props) => {
+  const options = {
+    theme: "cobalt",
+    lineNumbers: true,
+    keyMap: "vim",
+    readOnly: props.read_only ? "nocursor" : false,
+  };
+
+  if (props.is_practice) {
+    options.mode = "text/x-java";
+  } else {
+    options.mode = "xml";
+  }
+
   return (
     <Container className="box mb-4">
       <CodeMirror
         value={props.text}
-        options={{
-          theme: "cobalt",
-          lineNumbers: true,
-          keyMap: "vim",
-        }}
+        options={options}
         onBeforeChange={props.onVimChange}
         onChange={(editor, data, value) => {}}
       />

@@ -125,7 +125,12 @@ class VimTutorial extends Component {
           {this.state.task}
         </p>
 
-        <Vim text={this.state.text[part]} onVimChange={this.onVimChange} />
+        <Vim
+          text={this.state.text[part]}
+          onVimChange={this.onVimChange}
+          is_practice={false}
+          read_only={false}
+        />
 
         {this.getBackBtn()}
 
