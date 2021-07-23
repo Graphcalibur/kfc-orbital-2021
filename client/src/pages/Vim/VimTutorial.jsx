@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Button, Container } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
-import Vim from "./Vim";
+import Vim from "./components/Vim";
 
-const tutorial_data = require("./VimTutorialData.json");
+const tutorial_data = require("./data/VimTutorialData.json");
 
 class VimTutorial extends Component {
   state = {

@@ -6,7 +6,7 @@ import "../Typing.css";
 import Code from "./Code";
 import SideInfo from "./SideInfo";
 import TypingStats from "./TypingStats";
-import Timer from "./Timer";
+import Timer from "../../../components/Timer";
 import TypingInput from "./TypingInput";
 
 const Typing = (props) => {

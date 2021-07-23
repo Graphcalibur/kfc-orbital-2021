@@ -1,5 +1,4 @@
 import React from "react";
-import { Container } from "react-bootstrap";
 import { Controlled as CodeMirror } from "react-codemirror2";
 
 import "codemirror/lib/codemirror.css";
@@ -13,7 +12,7 @@ const Vim = (props) => {
     theme: "cobalt",
     lineNumbers: true,
     keyMap: "vim",
-    readOnly: props.read_only ? "nocursor" : false,
+    readOnly: props.read_only,
   };
 
   if (props.is_practice) {
@@ -23,14 +22,13 @@ const Vim = (props) => {
   }
 
   return (
-    <Container className="box mb-4">
-      <CodeMirror
-        value={props.text}
-        options={options}
-        onBeforeChange={props.onVimChange}
-        onChange={(editor, data, value) => {}}
-      />
-    </Container>
+    <CodeMirror
+      value={props.text}
+      options={options}
+      onBeforeChange={props.onVimChange}
+      onChange={(editor, data, value) => {}}
+      className="box mb-4"
+    />
   );
 };
 
