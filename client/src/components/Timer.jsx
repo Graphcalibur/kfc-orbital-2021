@@ -8,7 +8,11 @@ const Timer = (props) => {
 
   /* Color time gray when not typing */
   const colorTime = () =>
-    props.typing ? { color: "#FFFFFF" } : { color: "#AAAAAA" };
+    props.ended
+      ? { color: "#00e600" }
+      : props.started
+      ? { color: "#FFFFFF" }
+      : { color: "#AAAAAA" };
 
   const mins = padZeroes(Math.floor(elapsed_time / 60000));
   const secs = padZeroes(Math.floor(elapsed_time / 1000) % 60);
