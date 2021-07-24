@@ -128,7 +128,7 @@ class VimTutorial extends Component {
         <Vim
           text={this.state.text[part]}
           onVimChange={this.onVimChange}
-          is_practice={false}
+          language="None"
           read_only={false}
         />
 

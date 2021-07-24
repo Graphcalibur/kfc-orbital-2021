@@ -19,6 +19,7 @@ class VimPractice extends Component {
     goal_text: "",
 
     id: "",
+    language: "",
 
     editing: false,
     started: false,
@@ -35,7 +36,7 @@ class VimPractice extends Component {
   }
 
   getCode = () => {
-    fetch("/api/code/fetch?lang=java")
+    fetch("/api/code/fetch")
       .then((res) => res.json())
       .then((res) => res[0])
       .then((data) => {
@@ -43,6 +44,7 @@ class VimPractice extends Component {
           {
             goal_text: data["code"],
             id: data["id"],
+            language: data["language"],
           },
           this.createInititalText
         );
@@ -59,7 +61,7 @@ class VimPractice extends Component {
 
     /* Adds 4 singular words and 4 multiple words into the string */
     for (let i = 0; i < 2; i++) {
-      for (let addition = 0; addition < 0; addition++) {
+      for (let addition = 0; addition < 4; addition++) {
         const loc = this.generateRN(0, initial_text.length - 1);
         const str = errors[i][this.generateRN(0, errors[i].length - 1)];
         initial_text =
@@ -192,7 +194,7 @@ class VimPractice extends Component {
             <Vim
               text={this.state.text}
               onVimChange={this.onVimChange}
-              is_practice={true}
+              language={this.state.language}
               read_only={ended}
             />
           </Col>
@@ -201,7 +203,7 @@ class VimPractice extends Component {
             <Vim
               text={this.state.goal_text}
               onVimChange={this.onVimChange}
-              is_practice={true}
+              language={this.state.language}
               read_only={true}
             />
           </Col>

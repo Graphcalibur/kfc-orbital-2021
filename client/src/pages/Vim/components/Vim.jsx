@@ -6,20 +6,23 @@ import "codemirror/theme/cobalt.css";
 
 import "codemirror/keymap/vim";
 import "codemirror/mode/clike/clike";
+import "codemirror/mode/python/python";
 
 const Vim = (props) => {
+  const language_to_mode = {
+    Java: "text/x-java",
+    Python: "python",
+    "C++": "text/x-c++src",
+    None: "xml" /* trust me on this */,
+  };
+
   const options = {
     theme: "cobalt",
     lineNumbers: true,
     keyMap: "vim",
+    mode: language_to_mode[props.language],
     readOnly: props.read_only,
   };
-
-  if (props.is_practice) {
-    options.mode = "text/x-java";
-  } else {
-    options.mode = "xml";
-  }
 
   return (
     <CodeMirror
