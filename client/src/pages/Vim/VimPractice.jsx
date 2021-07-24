@@ -31,7 +31,11 @@ class VimPractice extends Component {
   };
 
   componentDidMount() {
-    fetch("/api/code/fetch?lang=vim")
+    this.getCode();
+  }
+
+  getCode = () => {
+    fetch("/api/code/fetch?lang=java")
       .then((res) => res.json())
       .then((res) => res[0])
       .then((data) => {
@@ -43,7 +47,7 @@ class VimPractice extends Component {
           this.createInititalText
         );
       });
-  }
+  };
 
   /* Returns a random number from lo to hi, inclusive */
   generateRN = (lo, hi) => {
@@ -98,6 +102,21 @@ class VimPractice extends Component {
   };
 
   reset = () => {
+    this.setState({
+      editing: false,
+      started: false,
+
+      error: 0,
+
+      start_time: 0,
+      elapsed_time: 0,
+      timer: null,
+    });
+
+    this.resetText();
+  };
+
+  resetText = () => {
     this.setState({ text: this.state.initial_text });
   };
 
@@ -130,12 +149,16 @@ class VimPractice extends Component {
     this.setState({ error: -1 });
   };
 
-  getCheckTooltip = () => {
+  getCheckText = () => {
     const { error } = this.state;
     return error === 0 ? (
-      <Tooltip>No errors found.</Tooltip>
+      <span></span>
+    ) : error === -1 ? (
+      <span className="text">No errors found.</span>
     ) : (
-      <Tooltip>The first error found is at line {this.state.error}.</Tooltip>
+      <span className="text">
+        The first error found is at line {this.state.error}.
+      </span>
     );
   };
 
@@ -159,7 +182,8 @@ class VimPractice extends Component {
 
         <Timer
           elapsed_time={this.state.elapsed_time}
-          typing={this.state.editing}
+          ended={ended}
+          started={this.state.started}
         />
 
         <Row className="mt-3">
@@ -183,27 +207,52 @@ class VimPractice extends Component {
           </Col>
         </Row>
 
-        <Button variant="outline-info" className="me-4" onClick={this.reset}>
+        <Button
+          variant="outline-info"
+          className="me-3"
+          onClick={this.resetText}
+          disabled={ended}
+        >
           Reset
         </Button>
 
         <OverlayTrigger
           trigger="click"
           placement="top"
-          overlay={this.getCheckTooltip()}
+          overlay={this.getInstructionTooltip()}
         >
-          <Button variant="outline-info" className="me-4">
-            Check
+          <Button variant="outline-info" className="me-3">
+            Instructions
           </Button>
         </OverlayTrigger>
 
-        <OverlayTrigger
-          trigger="click"
-          placement="top"
-          overlay={this.getInstructionTooltip()}
+        <Button variant="outline-info" className="me-3" onClick={this.check}>
+          Check
+        </Button>
+
+        {this.getCheckText()}
+
+        <Button
+          variant="outline-info"
+          onClick={() => {
+            this.getCode();
+            this.reset();
+          }}
+          style={{ float: "right" }}
+          disabled={!ended}
         >
-          <Button variant="outline-info">Instructions</Button>
-        </OverlayTrigger>
+          New Practice
+        </Button>
+
+        <Button
+          variant="outline-info"
+          className="me-3"
+          onClick={this.reset}
+          style={{ float: "right" }}
+          disabled={!ended}
+        >
+          Try Again
+        </Button>
       </Container>
     );
   }
