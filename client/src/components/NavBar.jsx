@@ -107,12 +107,14 @@ class NavBar extends Component {
                 </NavDropdown.Item>
               </NavDropdown>
 
-              <a
-                className="nav-link"
-                href="https://forms.gle/4AyL1Topw5GPmfnEA"
-              >
-                Contribute
-              </a>
+              <NavDropdown title="Contribute">
+                <NavDropdown.Item href="https://forms.gle/4AyL1Topw5GPmfnEA">
+                  Submit Code
+                </NavDropdown.Item>
+                <NavDropdown.Item href="https://forms.gle/NWcYNUKjgwG8NvbN7">
+                  Give Feedback
+                </NavDropdown.Item>
+              </NavDropdown>
 
               {this.state.can_upload_code ? (
                 <Link className="nav-link" to="/uploadcode">

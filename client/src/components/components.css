@@ -11,11 +11,27 @@
   background-color: #233243;
 }
 
-.nav-item .dropdown-menu .dropdown-item a {
+.nav-item .dropdown-menu a {
   color: white;
 }
 
 .modal .modal-content {
   background-color: #16202a;
   color: white;
+}
+
+.close ::before {
+  content: "X";
+  visibility: visible;
+  color: white;
+  font-weight: bold;
+  margin-left: -35px;
+}
+
+.sr-only::before {
+  visibility: hidden;
+}
+
+.close {
+  visibility: hidden;
 }
