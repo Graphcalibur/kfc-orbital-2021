@@ -232,7 +232,6 @@ class Race extends Component {
         curr_input={this.state.curr_input}
         first_wrong={this.state.first_wrong}
         typed_wrong={this.state.typed_wrong}
-        typing={this.state.typing}
         started={this.state.started}
         elapsed_time={this.state.elapsed_time}
         ended={this.state.game_ended}
