@@ -3,7 +3,15 @@ import CodeLinkBtn from "./components/CodeLinkBtn.jsx";
 import { Container, Row } from "react-bootstrap";
 
 const ChooseLanguage = () => {
-  const langs = ["Python", "C++", "All Languages"];
+  const langs = [
+    "Python",
+    "C++",
+    "Java",
+    "Ruby",
+    "Javascript",
+    "PHP",
+    "All Languages",
+  ];
   return (
     <Container>
       <h3 className="text">
