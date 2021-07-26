@@ -6,7 +6,7 @@ import "../Typing.css";
 import Code from "./Code";
 import SideInfo from "./SideInfo";
 import TypingStats from "./TypingStats";
-import Timer from "./Timer";
+import Timer from "../../../components/Timer";
 import TypingInput from "./TypingInput";
 
 const Typing = (props) => {
@@ -33,7 +33,11 @@ const Typing = (props) => {
       <Row className="mt-3">
         <Col md="9">
           <Container className="p-3 box">
-            <Timer elapsed_time={props.elapsed_time} typing={props.typing} />
+            <Timer
+              elapsed_time={props.elapsed_time}
+              ended={props.ended}
+              started={props.started}
+            />
 
             <Code
               code={props.code}
