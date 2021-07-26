@@ -92,8 +92,8 @@
         "To use these combinations, make sure you're in normal mode and just press the d key and then the motion you want.",
         "You can also press the d key twice (dd) to delete an entire line."
     ],
-    "task": "Delete all the x's and unnecessary spaces in the first paragraph so it matches the second paragraph.",
-    "initial_text": "xxxx xxxxxxxxxxxxxx xx\nHelp!xxxx There's an xxxxx epidemic in here! xxxxxxxxxxx\nxxxxxxxxxxxxxxxxx xxxxxxx xxxxxxxxxxxxx\nCome savexx us, xxxxxxx quick!\n\nHelp! There's an epidemic in here!\nCome save us, quick!",
+    "task": "Delete all the x's in the first paragraph so that it matches the second paragraph.",
+    "initial_text": "xxxx xxxxxxxxxxxxxx xx\nHelp!xxxx There's an xxxxx epidemic in here!xxxxxxxxxxx\nxxxxxxxxxxxxxxxxx xxxxxxx xxxxxxxxxxxxx\nCome savexx us, xxxxxxx quick!\n\nHelp! There's an epidemic in here!\nCome save us, quick!",
     "goal_text": "Help! There's an epidemic in here!\nCome save us, quick!\n\nHelp! There's an epidemic in here!\nCome save us, quick!"
 },
 {
@@ -114,7 +114,7 @@
         "So d2w would delete the next two words and 4dd would delete the next 4 lines.",
         "You can even use counts for the x command to delete multiple characters, like 4x to delete 4 characters."
     ],
-    "task": "Delete all the x's and unnecessary spaces in the first paragraph so it matches the second paragraph.",
+    "task": "Delete all the x's in the first paragraph so that it matches the second paragraph.",
     "initial_text": "Oh no!xxxx xxxx The epidemic xx xxx x has returned!\nSomexxxxxxxone please save us!\nxxx xx x\nxxxxxxxxx xxx xx\nxxxxxx xxxxx xxxxxxxxxxx\n\nOh no! The epidemic has returned!\nSomeone please save us!",
     "goal_text": "Oh no! The epidemic has returned!\nSomeone please save us!\n\nOh no! The epidemic has returned!\nSomeone please save us!"
 },
