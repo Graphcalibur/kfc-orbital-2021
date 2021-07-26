@@ -55,7 +55,7 @@ module.exports = async () => {
         });
     };
 
-    function setup_websocket_server() {
+    function setup_server() {
         const http = require('http');
         const {setup_server} = require('../socker/socketController');
 
@@ -70,7 +70,8 @@ module.exports = async () => {
             cookie: {secure: false}
         });
 
-        http_server = http.createServer();
+        const http_app = require("../app")(session);
+        http_server = http.createServer(http_app);
         setup_server(http_server, session);
         http_server.listen(test_port); 
 
@@ -79,7 +80,7 @@ module.exports = async () => {
 
     await save_testdb_to_backup();
     await load_testdb();
-    setup_websocket_server();
+    setup_server();
 
     console.log("Finished global setup");
 };
