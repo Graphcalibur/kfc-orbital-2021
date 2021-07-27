@@ -5,6 +5,7 @@ import control_panel from "./images/control_panel.png";
 import spaceship from "./images/spaceship.png";
 import ufo from "./images/ufo.png";
 import vim_logo from "./images/vim.png";
+import logo from "./images/logo.png";
 
 import ViewStats from "./components/ViewStats";
 import Leaderboard from "./components/Leaderboard";
@@ -73,7 +74,7 @@ class Home extends Component {
     return (
       <div>
         <center className="text">
-          <h1 style={{ fontSize: "70px" }}>CodeRacer</h1>
+          <img src={logo} alt="" />
           <h5>Making typing code fun, exciting, and competitive.</h5>
         </center>
 
