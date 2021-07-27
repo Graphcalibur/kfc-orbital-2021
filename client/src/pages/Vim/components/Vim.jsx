@@ -22,7 +22,7 @@ class Vim extends Component {
       lineNumbers: true,
       keyMap: "vim",
       mode: language_to_mode[this.props.language],
-      readOnly: this.props.read_only,
+      readOnly: this.props.read_only ? "nocursor" : false,
     },
     mode: "Normal",
     command: "",

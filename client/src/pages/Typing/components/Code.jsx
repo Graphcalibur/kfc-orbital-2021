@@ -6,7 +6,7 @@ const Code = (props) => {
     <div className="mt-3">
       {props.code.map((line, i) => (
         <label
-          className="form-label code text"
+          className="form-label code text unselectable"
           key={i}
           id={"line" + i.toString()}
         >
