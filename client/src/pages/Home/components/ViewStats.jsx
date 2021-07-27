@@ -15,7 +15,7 @@ const ViewStats = (props) => {
           Check out your WPM and Accuracy to see how you've improved over time!
         </p>
         <Link to={`/user/` + props.user}>
-          <Button variant="outline-primary">View Your Stats</Button>
+          <Button variant="outline-info">View Your Stats</Button>
         </Link>
       </span>
     );
