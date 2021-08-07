@@ -26,14 +26,16 @@ class NavBar extends Component {
       .then((data) => {
         const new_curr_user = data === null ? data : data["username"];
         this.setState({ curr_user: new_curr_user });
-      });
+      })
+      .catch((error) => console.log(error));
 
     fetch("/api/permission-list", { credentials: "include" })
       .then((res) => res.json())
       .then((res) => {
         if (res !== null && res[0] === "upload-code")
           this.setState({ can_upload_code: true });
-      });
+      })
+      .catch((error) => console.log(error));
   }
 
   /* Logs out and refreshes the page */
@@ -43,9 +45,11 @@ class NavBar extends Component {
     fetch("/api/logout", {
       method: "POST",
       credentials: "include",
-    }).then((res) => {
-      window.location.reload();
-    });
+    })
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((error) => console.log(error));
   };
 
   /* Returns username and Logout button if a user if logged in, or

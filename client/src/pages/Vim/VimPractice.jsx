@@ -25,6 +25,7 @@ class VimPractice extends Component {
     started: false,
 
     error: 0,
+    fetch_error: false,
 
     start_time: 0,
     elapsed_time: 0,
@@ -48,6 +49,13 @@ class VimPractice extends Component {
           },
           this.createInititalText
         );
+      })
+      .catch((error) => {
+        this.setState({
+          goal_text:
+            "There was an error in retrieving the code.\nPlease try again later.",
+          fetch_error: true,
+        });
       });
   };
 

@@ -47,6 +47,8 @@ describe("Testing whole SoloTyping page", () => {
       typing: false,
       started: false,
 
+      error: false,
+
       start_time: 0,
       elapsed_time: 0,
       timer: null,

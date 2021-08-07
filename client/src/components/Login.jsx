@@ -50,15 +50,17 @@ class Login extends Component {
       }),
     };
 
-    fetch("/api/authuser", requestOptions).then((res) => {
-      if (res.status === 200) {
-        window.location.reload();
-      } else if (res.status === 401) {
-        this.setState({ failed_login: 1 });
-      } else {
-        this.setState({ failed_login: 2 });
-      }
-    });
+    fetch("/api/authuser", requestOptions)
+      .then((res) => {
+        if (res.status === 200) {
+          window.location.reload();
+        } else if (res.status === 401) {
+          this.setState({ failed_login: 1 });
+        } else {
+          this.setState({ failed_login: 2 });
+        }
+      })
+      .catch((error) => this.setState({ failed_login: 2 }));
   };
 
   failed_loginText = () => {

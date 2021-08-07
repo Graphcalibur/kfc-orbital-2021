@@ -21,13 +21,15 @@ class UploadCode extends Component {
         language: this.state.language,
         code: this.state.code,
       }),
-    }).then((res) => {
-      if (res.status === 200) {
-        this.setState({ upload_state: 1 });
-      } else {
-        this.setState({ upload_state: res.status });
-      }
-    });
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          this.setState({ upload_state: 1 });
+        } else {
+          this.setState({ upload_state: res.status });
+        }
+      })
+      .catch((error) => this.setState({ upload_state: "Unknown" }));
   };
 
   render() {
