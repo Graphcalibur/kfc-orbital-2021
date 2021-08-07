@@ -62,22 +62,26 @@ class SignUp extends Component {
 
     /* Automatically logs the user in after successful sign up. If sign up is
       not successful, displays an error message */
-    fetch("/api/register", requestOptions).then((res) => {
-      if (res.status === 200) {
-        this.props.socket.emit("login-ws", {
-          username: this.state.username,
-          password: this.state.password,
-        });
+    fetch("/api/register", requestOptions)
+      .then((res) => {
+        if (res.status === 200) {
+          this.props.socket.emit("login-ws", {
+            username: this.state.username,
+            password: this.state.password,
+          });
 
-        fetch("/api/authuser", requestOptions2).then((res) => {
-          window.location.reload();
-        });
-      } else if (res.status === 409) {
-        this.setState({ failed_sign_up: 1 });
-      } else {
-        this.setState({ failed_sign_up: 2 });
-      }
-    });
+          fetch("/api/authuser", requestOptions2)
+            .then((res) => {
+              window.location.reload();
+            })
+            .catch((error) => console.log(error));
+        } else if (res.status === 409) {
+          this.setState({ failed_sign_up: 1 });
+        } else {
+          this.setState({ failed_sign_up: 2 });
+        }
+      })
+      .catch((error) => this.setState({ failed_sign_up: 2 }));
   };
 
   failedSignUpText = () => {

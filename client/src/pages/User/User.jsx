@@ -64,7 +64,8 @@ class User extends Component {
             });
           }
         }
-      });
+      })
+      .catch((error) => console.log(error));
 
     fetch(url + (context === "" ? "?" : "&") + "recent=2")
       .then((res) => (res.status !== 200 ? null : res.json()))
@@ -93,7 +94,8 @@ class User extends Component {
             });
           }
         }
-      });
+      })
+      .catch((error) => console.log(error));
   };
 
   /* Fetch list of scores from backend */
@@ -108,7 +110,8 @@ class User extends Component {
             this.calculateChartData(data["score_window"], context);
           }
         }
-      });
+      })
+      .catch((error) => console.log(error));
   };
 
   /* Calculate x and y data for each data point in the progress chart

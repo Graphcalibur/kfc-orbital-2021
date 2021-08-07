@@ -29,6 +29,8 @@ class SoloTyping extends Component {
     elapsed_time: 0,
     timer: null,
 
+    error: false,
+
     rand_num: Math.floor(Math.random() * 6),
   };
 
@@ -63,7 +65,15 @@ class SoloTyping extends Component {
           language: data["language"],
           id: data["id"],
         });
-      });
+      })
+      .catch((error) =>
+        this.setState({
+          code: [
+            "There was an error in retrieving the code. Please try again later.",
+          ],
+          error: true,
+        })
+      );
   };
 
   startTyping = () => {
@@ -109,8 +119,11 @@ class SoloTyping extends Component {
           `/api/stats/upload/` +
           `${this.state.id}/${this.getWPM()}wpm/${this.getAccuracy()}`;
 
-        fetch(url, { method: "POST", credentials: "include" });
-      });
+        fetch(url, { method: "POST", credentials: "include" }).catch((error) =>
+          console.log(error)
+        );
+      })
+      .catch((error) => console.log(error));
   };
 
   /* When pressing enter, check if the text in the input
@@ -185,7 +198,7 @@ class SoloTyping extends Component {
         elapsed_time={this.state.elapsed_time}
         ended={ended}
         is_solo={true}
-        cannot_type={ended}
+        cannot_type={ended || this.state.error}
         wpm={this.getWPM()}
         accuracy={this.getAccuracy()}
         code_length={getCodeLength(this.state.code)}

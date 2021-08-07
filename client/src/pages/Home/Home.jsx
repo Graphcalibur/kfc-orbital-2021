@@ -26,11 +26,13 @@ class Home extends Component {
       .then((data) => {
         const new_curr_user = data === null ? data : data["username"];
         this.setState({ user: new_curr_user });
-      });
+      })
+      .catch((error) => console.log(error));
 
     fetch("/api/stats/allscores")
       .then((res) => res.json())
-      .then(this.generateLeaderboard);
+      .then(this.generateLeaderboard)
+      .catch((error) => console.log(error));
   }
 
   /* Generates the daily leaderboard based on the given scorelist.
