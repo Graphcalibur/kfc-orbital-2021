@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import { Controlled as CodeMirror } from "react-codemirror2";
+import { Controlled as CodeMirror } from "react17-codemirror2";
 
 class UploadCode extends Component {
   state = {

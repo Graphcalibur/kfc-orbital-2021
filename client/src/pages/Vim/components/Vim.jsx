@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Controlled as CodeMirror } from "react-codemirror2";
+import { Controlled as CodeMirror } from "react17-codemirror2";
 
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/cobalt.css";

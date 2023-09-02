@@ -5,11 +5,11 @@ import { useHistory } from "react-router-dom";
 // TODO: Show "Log in to update your stats" if user is not logged in
 
 const TypingStats = (props) => {
+  const history = useHistory();
   /* Show no stats if typing test hasn't ended */
   if (!props.ended) return <span></span>;
 
   const { accuracy, wpm } = props;
-  const history = useHistory();
 
   const getButtons = () => {
     if (props.is_solo) {
