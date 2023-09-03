@@ -20,8 +20,8 @@ var setup_app = (session) => {
   app.use(sslRedirect());
 
   // view engine setup
-  // app.set("views", path.join(__dirname, "views"));
-  // app.set("view engine", "jade");
+  //app.set("views", path.join(__dirname, "views"));
+  //app.set("view engine", "jade");
 
   app.use(cors({ credentials: true, origin: true }));
   app.use(logger("dev"));
@@ -64,7 +64,7 @@ var setup_app = (session) => {
 
     // render the error page
     res.status(err.status || 500);
-    res.render("error");
+    //res.render("error");
   });
   return app;
 };
