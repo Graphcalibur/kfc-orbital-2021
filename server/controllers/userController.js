@@ -1,10 +1,7 @@
-const mysql = require('mysql2');
-const argon2 = require('argon2');
+
 const passport = require('passport');
 const {Strategy: LocalStrategy} = require('passport-local');
 
-const {con_pool} = require('../utils/database');
-const random = require('../utils/random');
 const {User} = require('../models/User.js');
 
 /* Controllers for the respective endpoints */

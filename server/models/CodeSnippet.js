@@ -1,4 +1,3 @@
-const mysql = require('mysql2');
 const {con_pool} = require('../utils/database');
 const random = require('../utils/random');
 
@@ -30,28 +29,26 @@ let CodeSnippet = class CodeSnippet {
     static async get_random(query) {
 
         function build_conditions(params) {
-            let conditions = [];
+            let conditions = "1 = 1";
             let values = [];
             if (typeof params.lang !== "undefined") {
-                conditions.push("language = ?");
+                conditions = "language = $1"
                 values.push(params.lang);
             }
 
-            return {conditions: conditions.length ? 
-                    conditions.join('AND') : '1',
-                values: values};
+            return {conditions: conditions, values: values};
         }
 
         const {conditions: cond, values: vals} = build_conditions(query);
         const count_query_result = await con_pool.query("SELECT COUNT(*) FROM code_snippet WHERE " + cond, vals);
-        
-        const code_snippet_count = count_query_result[0]["COUNT(*)"];
+        const code_snippet_count = count_query_result.rows[0]['count'];
         const id_to_retrieve = random.randint(0, code_snippet_count - 1);
-        const code_snippet = await con_pool.query("SELECT * FROM code_snippet WHERE " + cond + " LIMIT ?, 1", vals.concat([id_to_retrieve]));
-        if (!code_snippet) {
+        const statement = "SELECT * FROM code_snippet WHERE " + cond + " LIMIT 1 OFFSET " + String(id_to_retrieve);
+        const code_snippet = await con_pool.query(statement, vals);
+        if (!code_snippet.rows) {
             return [];
         } else {
-            const result = code_snippet[0];
+            const result = code_snippet.rows[0];
             return [new CodeSnippet(result.id, result.language, result.code)];
         }
     }
@@ -64,7 +61,7 @@ let CodeSnippet = class CodeSnippet {
      */
     static async upload(language, code) {
         const upload_snippet_result = await con_pool.query(
-            "INSERT INTO code_snippet SET language=?, code=?",
+            "INSERT INTO code_snippet (language, code) VALUES ($1, $2)",
             [language, code]
         );
         const id = upload_snippet_result.insertId;

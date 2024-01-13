@@ -1,5 +1,4 @@
 /* Module for handling user data. */
-const mysql = require('mysql2');
 const argon2 = require('argon2');
 const {con_pool} = require('../utils/database');
 
@@ -49,15 +48,15 @@ let User = class User {
      * Throws UsernameAlreadyExistsError.
      */
     static async register(username, password) {
-        const existing_usernames = await con_pool.query("SELECT COUNT(*) FROM user WHERE username = ?", username);
-        const existing_usernames_count = existing_usernames[0]["COUNT(*)"];
+        const existing_usernames = await con_pool.query("SELECT COUNT(*) FROM users WHERE username = $1", [username]);
+        const existing_usernames_count = existing_usernames.rows[0].count;
         if (existing_usernames_count > 0) {
             throw new UsernameAlreadyExistsError(username);
         } else {
-            const insert_user_result = await con_pool.query("INSERT INTO user SET username=?", username);
-            const new_user_id = insert_user_result.insertId;
+            const insert_user_result = await con_pool.query("INSERT INTO users (username) VALUES ($1)  RETURNING id", [username]);
+            const new_user_id = insert_user_result.rows[0].id;
             const hashed_pw = await argon2.hash(password);
-            const insert_pw_result = await con_pool.query("INSERT INTO user_password SET userid=?, password_hash=?", [new_user_id, hashed_pw]);
+            const insert_pw_result = await con_pool.query("INSERT INTO user_password VALUES ($1, $2)", [new_user_id, hashed_pw]);
             return new User(new_user_id, username);
         }
     }
@@ -66,11 +65,11 @@ let User = class User {
      * Throws NoUserExistsError.
      */
     static async from_username(username) {
-        const user_id_results = await con_pool.query("SELECT id FROM user WHERE username = ?", username);
-        if (user_id_results.length === 0) {
+        const user_id_results = await con_pool.query("SELECT id FROM users WHERE username = $1", [username]);
+        if (user_id_results.rows.length === 0) {
             throw new NoUserExistsError(username);
         } else {
-            const userid = user_id_results[0].id;
+            const userid = user_id_results.rows[0].id;
             return new User(userid, username);
         }
     }
@@ -83,8 +82,8 @@ let User = class User {
         if (!ids.length) {
             return new Map();
         }
-        const users_result = await con_pool.query("SELECT id, username FROM user WHERE id IN ?;", [[ids]]);
-        const user_map = new Map(users_result.map(res => [res.id, new User(res.id, res.username)]));
+        const users_result = await con_pool.query("SELECT id, username FROM users WHERE id = ANY($1)", [ids]);
+        const user_map = new Map(users_result.rows.map(res => [res.id, new User(res.id, res.username)]));
         return user_map;
     }
     /* Instantiate a User object from the given credentials.
@@ -93,10 +92,10 @@ let User = class User {
      */
     static async from_authentication(username, password) {
         const user = await User.from_username(username);
-        const saved_hash = await con_pool.query("SELECT password_hash FROM user_password WHERE userid = ?", user.id);
-        if (saved_hash.length !== 1) {
+        const saved_hash = await con_pool.query("SELECT password_hash FROM user_password WHERE userid = $1", [user.id]);
+        if (saved_hash.rows.length !== 1) {
             throw new Error("Internal error occurred");
-        } else if (await argon2.verify(saved_hash[0].password_hash, password)) {
+        } else if (await argon2.verify(saved_hash.rows[0].password_hash, password)) {
             return user;
         } else {
             throw new IncorrectPasswordError(username);
@@ -114,10 +113,10 @@ let User = class User {
             "SELECT COUNT(*) FROM user_role " +
             "INNER JOIN role_permission ON user_role.role_id = role_permission.role_id " +
             "INNER JOIN permission ON role_permission.permission_id = permission.id " +
-            "WHERE permission.permission_name=? AND user_role.user_id=?;",
+            "WHERE permission.permission_name=$1 AND user_role.user_id=$2;",
             [permission_name, this.id]
         );
-        return permission_query_result[0]["COUNT(*)"] > 0;
+        return permission_query_result.rows[0]["COUNT(*)"] > 0;
     }
     /** Get a list of all permissions the user has.
      * @returns {Promise<List<String>>}
@@ -128,22 +127,24 @@ let User = class User {
                 "SELECT DISTINCT permission.permission_name FROM user_role " +
                 "INNER JOIN role_permission ON user_role.role_id = role_permission.role_id " +
                 "INNER JOIN permission ON role_permission.permission_id = permission.id " +
-                "WHERE user_role.user_id=?;",
+                "WHERE user_role.user_id=$1;",
                 [this.id]
             );
-            return permission_query_result.map(res => res.permission_name);
+            return permission_query_result.rows.map(res => res.permission_name);
         };
         return async_wrapper();
     }
     build_scorelist_query_conditions(filters) {
-        let query = ['userid = ?'];
+        let query = ['userid = $1'];
         let params = [this.id];
+        let next_token = "$2";
         if (filters.lang) {
-            query.push('language = ?');
+            query.push('language = ' + next_token);
+            next_token = "$3";
             params.push(filters.lang);
         }
         if (filters.context) {
-            query.push('context = ?');
+            query.push('context = ' + next_token);
             params.push(filters.context);
         }
         return {conditions: query.join(' AND '), params: params};
@@ -153,11 +154,12 @@ let User = class User {
         let sub_query = "SELECT * FROM score WHERE " + sub_conditions + 
             " ORDER BY time DESC";
         if (typeof filters.recent_count !== "undefined") {
-            sub_query += " LIMIT 0, ?";
+            sub_query += " LIMIT 0 OFFSET $1";
             sub_params.push(filters.recent_count);
         }
-        const speed_query = await con_pool.query("SELECT AVG(speed), MAX(speed), AVG(accuracy), MAX(accuracy), COUNT(*) FROM (" +
+        const speed_query_result = await con_pool.query("SELECT AVG(speed), MAX(speed), AVG(accuracy), MAX(accuracy), COUNT(*) FROM (" +
             sub_query + ") AS sub_score", sub_params);
+        const speed_query = speed_query_result.rows;
         return {speed: {average: Number(speed_query[0]["AVG(speed)"]),
                         maximum: Number(speed_query[0]["MAX(speed)"])},
                 accuracy: {average: Number(speed_query[0]["AVG(accuracy)"]),
@@ -170,16 +172,17 @@ let User = class User {
             " INNER JOIN code_snippet ON score.snippetid = code_snippet.id " +
             " WHERE " + conditions,
             params);
-        return query_results[0].count;
+        return query_results.rows[0].count;
     }
     async get_scorelist(filters, from, count) {
         const {conditions, params} = this.build_scorelist_query_conditions(filters);
         const query_results = await con_pool.query("SELECT * FROM score " +
             " INNER JOIN code_snippet ON score.snippetid = code_snippet.id " +
             " WHERE " + conditions
-            + " ORDER BY time DESC LIMIT ?, ?",
+            + " ORDER BY time DESC LIMIT $ " + String(params.length + 1)
+            + "OFFSET $" + String(params.length + 2),
             params.concat([from, count]));
-        return query_results.map(res => Score.from_database_row(res));
+        return query_results.rows.map(res => Score.from_database_row(res));
     }
 };
 
@@ -202,10 +205,12 @@ let Score = class Score {
     }
     static async register(snippetid, speed, acc, isMultiplayer, userid = null) {
         // INSERT INTO score SET snippetid=? speed=? acc=? userid=? 
-        const insert_score_result = await con_pool.query("INSERT INTO score SET snippetid=?, speed=?, accuracy=?, userid=?, context=?",
+        const insert_score_result = await con_pool.query("INSERT INTO score (snippetid, speed, accuracy, userid, context) VALUES ($1, $2, $3, $4, $5) RETURNING playid",
             [snippetid, speed, acc, userid, (isMultiplayer ? "Multiplayer" : "Solo")]);
-        const server_timestamp = await con_pool.query("SELECT UNIX_TIMESTAMP(time) AS time FROM score WHERE playid=?", insert_score_result.insertId);
-        return new Score(insert_score_result.insertId, snippetid, speed, acc, server_timestamp[0].time, isMultiplayer ? "Multiplayer" : "Solo", userid);
+        const insertId = insert_score_result.rows[0].playid;
+        const server_timestamp = await con_pool.query("SELECT time FROM score WHERE playid=$1", [insertId]);
+        console.log(server_timestamp.rows[0].time);
+        return new Score(insert_score_result.insertId, snippetid, speed, acc, server_timestamp.rows[0].time, isMultiplayer ? "Multiplayer" : "Solo", userid);
     }
     /**
      * Construct a Score object from a full row of the Score database.
@@ -221,12 +226,12 @@ let Score = class Score {
      * @param {number} time_window 
      */
     static async all_recent_scores(time_window) {
-        const recent_scores = await con_pool.query("SELECT * FROM score " +
-         "INNER JOIN code_snippet ON score.snippetid = code_snippet.id " +
-         "WHERE time BETWEEN DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL ? SECOND) " +
-         "AND CURRENT_TIMESTAMP()",
-         [time_window]);
-        return recent_scores.map(res => Score.from_database_row(res));
+        const statement = "SELECT * FROM score " +
+        "INNER JOIN code_snippet ON score.snippetid = code_snippet.id " +
+        "WHERE time BETWEEN NOW() - INTERVAL '1 SECOND' * $1 " +
+        "AND NOW()";
+        const recent_scores = await con_pool.query(statement, [time_window]);
+        return recent_scores.rows.map(res => Score.from_database_row(res));
     }
 };
 

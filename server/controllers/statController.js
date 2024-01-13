@@ -1,5 +1,3 @@
-const mysql = require('mysql2');
-const {con_pool} = require('../utils/database');
 const {User, Score} = require('../models/User.js');
 
 module.exports.upload = async function(req, res) {

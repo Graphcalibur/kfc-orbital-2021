@@ -6,8 +6,8 @@ import Typing from "./components/Typing";
 import {
   getCodeLength,
   getPlayerProgress,
-  handleSubmitGeneric,
   handleInputChangeGeneric,
+  handleSubmitGeneric,
 } from "./HelperFunctions";
 
 class SoloTyping extends Component {
@@ -61,7 +61,7 @@ class SoloTyping extends Component {
       .then((res) => res[0])
       .then((data) => {
         this.setState({
-          code: data["code"].split("\n"),
+          code: data["code"].split("\\n"),
           language: data["language"],
           id: data["id"],
         });
