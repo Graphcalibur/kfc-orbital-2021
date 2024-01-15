@@ -10,14 +10,12 @@ var setup_app = (session) => {
   var logger = require("morgan");
   var cors = require("cors");
   var passport = require("passport");
-  var sslRedirect = require("heroku-ssl-redirect").default;
 
   var indexRouter = require("./routes/index");
   var usersRouter = require("./routes/users");
   var apiRouter = require("./routes/api");
 
   var app = express();
-  app.use(sslRedirect());
 
   // view engine setup
   //app.set("views", path.join(__dirname, "views"));
