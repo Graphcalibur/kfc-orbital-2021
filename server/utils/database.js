@@ -7,7 +7,8 @@ const con_pool = new Pool({
   user: process.env.DATABASE_USERNAME,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
-  port: process.env.DATABASE_PORT
+  port: process.env.DATABASE_PORT,
+  ssl: true
 });
 
 // Create an awaitable function that can make queries
