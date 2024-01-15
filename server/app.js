@@ -26,7 +26,7 @@ var setup_app = (session) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   //app.use(cookieParser(process.env.SESSION_SECRET));
-  app.use(express.static(path.join(__dirname, "..", "client", "build")));
+  //app.use(express.static(path.join(__dirname, "..", "client", "build")));
 
   app.use(session);
   app.use(passport.initialize());
@@ -45,9 +45,6 @@ var setup_app = (session) => {
   app.use("/users", usersRouter);
   app.use("/api", apiRouter);
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
-  });
 
   // catch 404 and forward to error handler
   app.use(function (req, res, next) {
