@@ -11,7 +11,7 @@ import {
 
 class Race extends Component {
   state = {
-    code: this.props.snippet["code"].split("\n"),
+    code: this.props.snippet["code"].split("\\n"),
     language: this.props.snippet["language"],
     id: this.props.snippet["id"],
 
